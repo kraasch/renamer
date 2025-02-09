@@ -1,0 +1,6 @@
+
+# docs: https://goreleaser.com/customization/builds/go/
+
+builds:
+  - main: ./cmd/
+
