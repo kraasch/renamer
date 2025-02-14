@@ -12,7 +12,7 @@ import (
   "flag"
 
   // local packages.
-  engine "github.com/kraasch/renamer/pkg/rname"
+  //engine "github.com/kraasch/renamer/pkg/rname"
 )
 
 var (
@@ -22,9 +22,9 @@ var (
   verbose  = false
   suppress = false
   // styles.
-  styleBox = lip.NewStyle().
-    BorderStyle(lip.NormalBorder()).
-    BorderForeground(lip.Color("56"))
+  // styleBox = lip.NewStyle().
+  //   BorderStyle(lip.NormalBorder()).
+  //   BorderForeground(lip.Color("56"))
 )
 
 type model struct {
@@ -54,11 +54,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
   var str string
-  if verbose {
-    str = engine.Toast("Hello!")
-  } else {
-    str = engine.Toast("Hi!")
-  }
+  // if verbose {
+  //   // str = engine.Toast("Hello!")
+  // } else {
+  //   // str = engine.Toast("Hi!")
+  // }
   return lip.Place(m.width, m.height, lip.Center, lip.Center, str)
 }
 
