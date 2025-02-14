@@ -1,7 +1,8 @@
 
 test:
 	go clean -testcache
-	go test -v ./...
+	go test ./...
+	@#go test -v ./...
 
 run:
 	go run ./cmd/renamer.go
