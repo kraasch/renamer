@@ -2,10 +2,13 @@
 package dir
 
 import (
+  // tests.
   "fmt"
   "testing"
-  "testing/fstest"
   gt "github.com/kraasch/gotest/gotest"
+
+  // local packages.
+  tu "github.com/kraasch/renamer/pkg/testutil"
 )
 
 var (
@@ -23,16 +26,8 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(in gt.TestList) (out string) {
-      testFs := fstest.MapFS{
-        "notes.txt":           {Data: []byte("")},
-        "fruits/apples.txt":   {Data: []byte("")},
-        "fruits/bananas.txt":  {Data: []byte("")},
-        "shapes/triangle.txt": {Data: []byte("")},
-        "fruits/coconuts.txt": {Data: []byte("")},
-        "shapes/square.txt":   {Data: []byte("")},
-        "shapes/circle.txt":   {Data: []byte("")},
-      }
-      out = DirList(testFs)
+      fs := tu.MakeTestFs()
+      out = DirList(fs)
       return
     },
     Tests:
@@ -54,16 +49,8 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(in gt.TestList) (out string) {
-      testFs := fstest.MapFS{
-        "notes.txt":           {Data: []byte("")},
-        "fruits/apples.txt":   {Data: []byte("")},
-        "fruits/bananas.txt":  {Data: []byte("")},
-        "shapes/triangle.txt": {Data: []byte("")},
-        "fruits/coconuts.txt": {Data: []byte("")},
-        "shapes/square.txt":   {Data: []byte("")},
-        "shapes/circle.txt":   {Data: []byte("")},
-      }
-      out = DirListTree(testFs)
+      fs := tu.MakeTestFs()
+      out = DirListTree(fs)
       return
     },
     Tests:

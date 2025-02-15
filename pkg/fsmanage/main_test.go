@@ -5,11 +5,11 @@ import (
   // tests.
   "fmt"
   "testing"
-  "testing/fstest"
   gt "github.com/kraasch/gotest/gotest"
 
   // local packages.
   dir "github.com/kraasch/renamer/pkg/dir"
+  tu "github.com/kraasch/renamer/pkg/testutil"
 )
 
 var (
@@ -27,18 +27,11 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(in gt.TestList) (out string) {
-      targetNames := in.InputArr[0]
-      testFs := fstest.MapFS{
-        "notes.txt":           {Data: []byte("")},
-        "fruits/apples.txt":   {Data: []byte("")},
-        "fruits/bananas.txt":  {Data: []byte("")},
-        "shapes/triangle.txt": {Data: []byte("")},
-        "fruits/coconuts.txt": {Data: []byte("")},
-        "shapes/square.txt":   {Data: []byte("")},
-        "shapes/circle.txt":   {Data: []byte("")},
-      }
-      DirRename(testFs, targetNames)
-      out = dir.DirListTree(testFs)
+      originalNames := in.InputArr[0]
+      targetNames   := in.InputArr[1]
+      fs := tu.MakeTestFs()
+      DirRename(fs, originalNames, targetNames)
+      out = dir.DirListTree(fs)
       return
     },
     Tests:
@@ -47,6 +40,9 @@ var suites = []gt.TestSuite{
         TestName: "dir_list-tree_00",
         IsMulti:  true,
         InputArr: []string{
+              "fruits/" + NL +
+              "notes.txt" + NL +
+              "shapes/",
               "FRUITS/" + NL +
               "NOTES.txt" + NL +
               "Shapes/",

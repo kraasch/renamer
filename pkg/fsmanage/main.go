@@ -3,23 +3,11 @@ package fsmanage
 
 import (
   "io/fs"
-  "strings"
+  // "strings"
+  // "path/filepath"
 )
 
-func DirRename(fileSystem fs.FS, targetNames string) (out string) {
-  dirEntries, err := fs.ReadDir(fileSystem, ".")
-  if err != nil {
-    return "" // TODO: handle errors appropriately.
-  }
-  var entries []string
-  for _, entry := range dirEntries {
-    name := entry.Name()
-    if entry.IsDir() {
-      name += "/" // add trailing slash for directories.
-    }
-    entries = append(entries, name)
-  }
-  out = strings.Join(entries, "\n")
-  return out
+func DirRename(fileSystem fs.FS, originalNames string, targetNames string) (out string) {
+  return "TODO: implement." // TODO: implement.
 }
 
