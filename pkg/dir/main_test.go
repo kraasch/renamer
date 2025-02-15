@@ -2,41 +2,27 @@
 package dir
 
 import (
-
-  // this is a test.
+  "fmt"
   "testing"
   "testing/fstest"
-
-  // printing and formatting.
-  "fmt"
-
-  // other imports.
-  "github.com/kraasch/godiff/godiff"
+  gt "github.com/kraasch/gotest/gotest"
 )
 
 var (
   NL = fmt.Sprintln()
 )
 
-type TestList struct {
-  testName          string
-  isMulti           bool
-  inputArr          []string
-  expectedValue     string
+func TestAll(t *testing.T) {
+  gt.DoTest(t, suites)
 }
 
-type TestSuite struct {
-  testingFunction   func(in TestList) string
-  tests             []TestList
-}
-
-var suites = []TestSuite{
+var suites = []gt.TestSuite{
   /*
   * Test for the DirList().
   */
   {
-    testingFunction:
-    func(in TestList) (out string) {
+    TestingFunction:
+    func(in gt.TestList) (out string) {
       testFs := fstest.MapFS{
         "notes.txt":           {Data: []byte("")},
         "fruits/apples.txt":   {Data: []byte("")},
@@ -49,13 +35,13 @@ var suites = []TestSuite{
       out = DirList(testFs)
       return
     },
-    tests:
-    []TestList{
+    Tests:
+    []gt.TestList{
       {
-        testName: "dir_test-01_list-tree_00",
-        isMulti:  true,
-        inputArr: []string{},
-        expectedValue:
+        TestName: "dir_list-dir_00",
+        IsMulti:  true,
+        InputArr: []string{},
+        ExpectedValue:
               "fruits/" + NL +
               "notes.txt" + NL +
               "shapes/",
@@ -66,8 +52,8 @@ var suites = []TestSuite{
   * Test for the DirListTree().
   */
   {
-    testingFunction:
-    func(in TestList) (out string) {
+    TestingFunction:
+    func(in gt.TestList) (out string) {
       testFs := fstest.MapFS{
         "notes.txt":           {Data: []byte("")},
         "fruits/apples.txt":   {Data: []byte("")},
@@ -80,13 +66,13 @@ var suites = []TestSuite{
       out = DirListTree(testFs)
       return
     },
-    tests:
-    []TestList{
+    Tests:
+    []gt.TestList{
       {
-        testName: "dir_test-01_list-tree_00",
-        isMulti:  true,
-        inputArr: []string{},
-        expectedValue:
+        TestName: "dir_list-tree_00",
+        IsMulti:  true,
+        InputArr: []string{},
+        ExpectedValue:
               "fruits/" + NL +
               "fruits/apples.txt" + NL +
               "fruits/bananas.txt" + NL +
@@ -100,27 +86,5 @@ var suites = []TestSuite{
     },
   },
   /* Fin test suite. */
-}
-
-func TestAll(t *testing.T) {
-  for _, suite := range suites {
-    for _, test := range suite.tests {
-      name := test.testName
-      t.Run(name, func(t *testing.T) {
-        exp := test.expectedValue
-        got := suite.testingFunction(test)
-        if exp != got {
-          if test.isMulti {
-            t.Errorf("In '%s':\n", name)
-            diff := godiff.CDiff(exp, got)
-            t.Errorf("\nExp: '%#v'\nGot: '%#v'\n", exp, got)
-            t.Errorf("exp/got:\n%s\n", diff)
-          } else {
-            t.Errorf("In '%s':\n  Exp: '%#v'\n  Got: '%#v'\n", name, exp, got)
-          }
-        }
-      })
-    }
-  }
 }
 

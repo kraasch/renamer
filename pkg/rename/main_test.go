@@ -1,35 +1,16 @@
 
-package rname
+package rename
 
 import (
-
-  // this is a test.
   "testing"
-
-  // printing and formatting.
-  "fmt"
-
-  // other imports.
-  "github.com/kraasch/godiff/godiff"
+  gt "github.com/kraasch/gotest/gotest"
 )
 
-var (
-  NL = fmt.Sprintln()
-)
-
-type TestList struct {
-  testName          string
-  isMulti           bool
-  inputArr          []string
-  expectedValue     string
+func TestAll(t *testing.T) {
+  gt.DoTest(t, suites)
 }
 
-type TestSuite struct {
-  testingFunction   func(in TestList) string
-  tests             []TestList
-}
-
-var suites = []TestSuite{
+var suites = []gt.TestSuite{
   // /*
   // * Test error states for the ApplyRenamingRules().
   // */
@@ -72,24 +53,24 @@ var suites = []TestSuite{
   * Test for the ApplyRenamingRules().
   */
   {
-    testingFunction:
-    func(in TestList) (out string) {
-      wordSeparators := in.inputArr[0]
-      deleteChars    := in.inputArr[1]
-      smallGapMark   := in.inputArr[2]
-      bigGapMark     := in.inputArr[3]
-      conversions    := in.inputArr[4]
-      modesString    := in.inputArr[5]
-      targetName     := in.inputArr[6]
+    TestingFunction:
+    func(in gt.TestList) (out string) {
+      wordSeparators := in.InputArr[0]
+      deleteChars    := in.InputArr[1]
+      smallGapMark   := in.InputArr[2]
+      bigGapMark     := in.InputArr[3]
+      conversions    := in.InputArr[4]
+      modesString    := in.InputArr[5]
+      targetName     := in.InputArr[6]
       out = ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString)
       return
     },
-    tests:
-    []TestList{
+    Tests:
+    []gt.TestList{
       {
-        testName: "rename-file_common-file-name_00",
-        isMulti:  false,
-        inputArr: []string{
+        TestName: "rename-file_common-file-name_00",
+        IsMulti:  false,
+        InputArr: []string{
           " ()", // word separators.
           "",    // delete characters.
           "-",   // small gap replacement.
@@ -98,13 +79,13 @@ var suites = []TestSuite{
           "",    // string of modes.
           "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
         },
-        expectedValue:
+        ExpectedValue:
         "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
       },
       {
-        testName: "rename-file_common-file-name_01",
-        isMulti:  false,
-        inputArr: []string{
+        TestName: "rename-file_common-file-name_01",
+        IsMulti:  false,
+        InputArr: []string{
           " ():", // word separators.
           "'",    // delete characters.
           "-",    // small gap replacement.
@@ -113,13 +94,13 @@ var suites = []TestSuite{
           "",     // string of modes.
           "Head First Software Architecture: A Learner's Guide to Architectural Thinking (English Edition--).pdf",
         },
-        expectedValue:
+        ExpectedValue:
         "head-first-software-architecture_a-learners-guide-to-architectural-thinking_english-edition.pdf",
       },
       {
-        testName: "rename-file_common-file-name_02",
-        isMulti:  false,
-        inputArr: []string{
+        TestName: "rename-file_common-file-name_02",
+        IsMulti:  false,
+        InputArr: []string{
           " ():", // word separators.
           ",.",   // delete characters.
           "-",    // small gap replacement.
@@ -128,13 +109,13 @@ var suites = []TestSuite{
           "",     // string of modes.
           "The Internal-Combustion Engine in Theory and Practice. Vol. I Thermodynamics, Fluid Flow, Performance ( PDFDrive ).pdf",
         },
-        expectedValue:
+        ExpectedValue:
         "the-internal-combustion-engine-in-theory-and-practice-vol-i-thermodynamics-fluid-flow-performance_pdfdrive.pdf",
       },
       {
-        testName: "rename-file_mode_replace-last-dot_00",
-        isMulti:  false,
-        inputArr: []string{
+        TestName: "rename-file_mode_replace-last-dot_00",
+        IsMulti:  false,
+        InputArr: []string{
           " ():", // word separators.
           ",.",   // delete characters.
           "-",    // small gap replacement.
@@ -143,33 +124,11 @@ var suites = []TestSuite{
           "D",    // string of modes.
           "The Internal-Combustion Engine in Theory and Practice. Vol. I Thermodynamics, Fluid Flow, Performance ( PDFDrive ).pdf",
         },
-        expectedValue:
+        ExpectedValue:
         "the-internal-combustion-engine-in-theory-and-practice-vol-i-thermodynamics-fluid-flow-performance_pdfdrive_pdf",
       },
     },
   },
   /* Fin test suite. */
-}
-
-func TestAll(t *testing.T) {
-  for _, suite := range suites {
-    for _, test := range suite.tests {
-      name := test.testName
-      t.Run(name, func(t *testing.T) {
-        exp := test.expectedValue
-        got := suite.testingFunction(test)
-        if exp != got {
-          if test.isMulti {
-            t.Errorf("In '%s':\n", name)
-            diff := godiff.CDiff(exp, got)
-            t.Errorf("\nExp: '%#v'\nGot: '%#v'\n", exp, got)
-            t.Errorf("exp/got:\n%s\n", diff)
-          } else {
-            t.Errorf("In '%s':\n  Exp: '%#v'\n  Got: '%#v'\n", name, exp, got)
-          }
-        }
-      })
-    }
-  }
 }
 

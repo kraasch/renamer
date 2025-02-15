@@ -1,5 +1,5 @@
 
-package rname
+package rename
 
 import (
   "regexp"
