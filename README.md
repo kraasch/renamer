@@ -5,6 +5,8 @@ This program doesn't work and can delete files.
 
 ## renamer
 
+  - [ ] use this for filesystem mocks: https://github.com/spf13/afero
+
 Idea: validate file names. (version 1)
 
 ```go
