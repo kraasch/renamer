@@ -12,11 +12,11 @@ func TestAll(t *testing.T) {
 
 var suites = []gt.TestSuite{
   // /*
-  // * Test error states for the ApplyRenamingRules().
+  // * Test ERROR states for the ApplyRenamingRules().
   // */
   // {
   //   testingFunction:
-  //   func(in TestList) (string) {
+  //   func(t *testing.T, in TestList) (string) {
   //     wordSeparators := in.inputArr[0]
   //     deleteChars    := in.inputArr[1]
   //     smallGapMark   := in.inputArr[2]
@@ -54,7 +54,7 @@ var suites = []gt.TestSuite{
   */
   {
     TestingFunction:
-    func(in gt.TestList) (out string) {
+    func(t *testing.T, in gt.TestList) (out string) {
       wordSeparators := in.InputArr[0]
       deleteChars    := in.InputArr[1]
       smallGapMark   := in.InputArr[2]

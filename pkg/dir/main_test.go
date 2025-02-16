@@ -6,6 +6,7 @@ import (
   "fmt"
   "testing"
   gt "github.com/kraasch/gotest/gotest"
+  "github.com/spf13/afero"
 
   // local packages.
   tu "github.com/kraasch/renamer/pkg/testutil"
@@ -25,9 +26,10 @@ var suites = []gt.TestSuite{
   */
   {
     TestingFunction:
-    func(in gt.TestList) (out string) {
-      fs := tu.MakeTestFs()
-      out = DirList(fs)
+    func(t *testing.T, in gt.TestList) (out string) {
+      fs1 := tu.MakeTestFs()
+      fs2 := afero.NewIOFS(fs1)
+      out = DirList(fs2)
       return
     },
     Tests:
@@ -48,9 +50,10 @@ var suites = []gt.TestSuite{
   */
   {
     TestingFunction:
-    func(in gt.TestList) (out string) {
-      fs := tu.MakeTestFs()
-      out = DirListTree(fs)
+    func(t *testing.T, in gt.TestList) (out string) {
+      fs1 := tu.MakeTestFs()
+      fs2 := afero.NewIOFS(fs1)
+      out = DirListTree(fs2)
       return
     },
     Tests:

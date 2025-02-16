@@ -5,11 +5,11 @@ package testutil
 import (
   "fmt"
   "github.com/spf13/afero"
-  "io/fs"
+  // "io/fs"
 )
 
-func MakeTestFs() fs.FS {
-  var fs = afero.NewMemMapFs()
+func MakeTestFs() afero.Fs {
+  var fileSystem = afero.NewMemMapFs()
   dirs := []string{
     "fruits/",
     "shapes/",
@@ -24,17 +24,18 @@ func MakeTestFs() fs.FS {
     "shapes/circle.txt",
   }
   for _, dir := range dirs {
-    if err := fs.MkdirAll(dir, 0755); err != nil {
+    if err := fileSystem.MkdirAll(dir, 0755); err != nil {
       fmt.Println("Setting up test failed.") // TODO: implement test failure.
       return nil
     }
   }
   for _, file := range files {
-    if err := afero.WriteFile(fs, file, []byte("Not empty."), 0644); err != nil {
+    if err := afero.WriteFile(fileSystem, file, []byte("Not empty."), 0644); err != nil {
       fmt.Println("Setting up test failed.") // TODO: implement test failure.
       return nil
     }
   }
-  return afero.NewIOFS(fs)
+  // return afero.NewIOFS(fileSystem)
+  return fileSystem
 }
 

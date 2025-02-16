@@ -8,12 +8,21 @@ import (
 
   // basics.
   "fmt"
+  // "github.com/spf13/afero"
   "os"
   "flag"
 
   // local packages.
   // rname "github.com/kraasch/renamer/pkg/rname"
 )
+
+// // Get the underlying os.FS
+// fs := os.FS
+// // Wrap it with Afero
+// aferoFs, err := afero.NewAfero(fs)
+// if err != nil {
+//   // handle error
+// }
 
 var (
   // return value.

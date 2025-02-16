@@ -6,6 +6,7 @@ import (
   "fmt"
   "testing"
   gt "github.com/kraasch/gotest/gotest"
+  "github.com/spf13/afero"
 
   // local packages.
   dir "github.com/kraasch/renamer/pkg/dir"
@@ -20,43 +21,45 @@ func TestAll(t *testing.T) {
   gt.DoTest(t, suites)
 }
 
+
 var suites = []gt.TestSuite{
   /*
   * Test for the DirRename().
   */
   {
     TestingFunction:
-    func(in gt.TestList) (out string) {
+    func(t *testing.T, in gt.TestList) (out string) {
       originalNames := in.InputArr[0]
       targetNames   := in.InputArr[1]
-      fs := tu.MakeTestFs()
-      DirRename(fs, originalNames, targetNames)
-      out = dir.DirListTree(fs)
+      fileSystem := tu.MakeTestFs()
+      DirRename(fileSystem, originalNames, targetNames)
+      fs2 := afero.NewIOFS(fileSystem)
+      out = dir.DirListTree(fs2)
       return
     },
     Tests:
     []gt.TestList{
       {
-        TestName: "dir_list-tree_00",
+        TestName: "use-afero_00",
         IsMulti:  true,
         InputArr: []string{
-              "fruits/" + NL +
-              "notes.txt" + NL +
-              "shapes/",
-              "FRUITS/" + NL +
-              "NOTES.txt" + NL +
-              "Shapes/",
+          "fruits/" + NL +
+          "notes.txt" + NL +
+          "shapes/",
+          "FRUITS/" + NL +
+          "NOTES.txt" + NL +
+          "Shapes/",
         },
         ExpectedValue:
-              "FRUITS/" + NL +
-              "FRUITS/apples.txt" + NL +
-              "FRUITS/bananas.txt" + NL +
-              "FRUITS/coconuts.txt" + NL +
-              "NOTES.txt" + NL +
-              "Shapes/" + NL +
-              "Shapes/circle.txt" + NL +
-              "Shapes/square.txt" + NL +
-              "Shapes/triangle.txt",
+        "FRUITS/" + NL +
+        "FRUITS/apples.txt" + NL +
+        "FRUITS/bananas.txt" + NL +
+        "FRUITS/coconuts.txt" + NL +
+        "NOTES.txt" + NL +
+        "Shapes/" + NL +
+        "Shapes/circle.txt" + NL +
+        "Shapes/square.txt" + NL +
+        "Shapes/triangle.txt",
       },
     },
   },
