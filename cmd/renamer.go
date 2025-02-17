@@ -71,7 +71,7 @@ func (m model) View() string {
 
 func main() {
 
-  // Use operating system's file system, wrapped in afero.
+  // use operating system's file system, wrapped in afero.
   fs := afero.NewOsFs()
 
   // parse flags.
