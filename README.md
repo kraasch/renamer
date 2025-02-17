@@ -60,6 +60,10 @@ Main functionality:
       - [ ] `renamer -recursive=files -profile music_ogg` as above, but recursive.
       - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
   - RENAMING.
+    - [ ] different ways of renaming.
+      - [ ] -edit opens editor
+      - [ ] -auto just applies the profile
+      - [ ] -interactive lets user choose a profile for each file or manually edit it
     - [ ] implement renaming profiles.
       - [ ] run `renamer -profile media` to rename media files with specified
             conversion (named `media`, for renaming music, video, etc).
