@@ -127,6 +127,60 @@ var suites = []gt.TestSuite{
         ExpectedValue:
         "the-internal-combustion-engine-in-theory-and-practice-vol-i-thermodynamics-fluid-flow-performance_pdfdrive_pdf",
       },
+      {
+        TestName: "rename-file_mode_latin_arabic-persian_delete_00",
+        IsMulti:  false,
+        InputArr: []string{
+          " []:",  // word separators.
+          ",.",    // delete characters.
+          "-",     // small gap replacement.
+          "_",     // big gap replacement.
+          "Aa,nd", // list of conversions.
+          "",      // string of modes.
+          "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue:
+        "mansour_ghararemoon-yadet-nareh_s_dk6e4-0hq.mp3",
+      },
+      {
+        TestName: "rename-file_mode_latin_arabic-persian_keep_00",
+        IsMulti:  false,
+        InputArr: []string{
+          " []:", // word separators.
+          ",.",   // delete characters.
+          "-",    // small gap replacement.
+          "_",    // big gap replacement.
+          "Aa",   // list of conversions.
+          "",     // string of modes.
+          "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue:
+        "mansour_ghararemoon-yadet-nareh-منصور_قرارمون-یادت-نره_s_dk6e4-0hq.mp3",
+      },
+      /*
+      * TODO: Use or make a transliteration package for:
+      *  - [ ] latin-diacritics
+      *  - [ ] cyrilic
+      *  - [ ] japanese
+      *  - [ ] arabic/persian
+      *  - [ ] korean
+      *  - [ ] chinese
+      */
+      // {
+      //   TestName: "rename-file_mode_latin_arabic-persian_transliterate_00",
+      //   IsMulti:  false,
+      //   InputArr: []string{
+      //     " ():", // word separators.
+      //     ",.",   // delete characters.
+      //     "-",    // small gap replacement.
+      //     "_",    // big gap replacement.
+      //     "Aa",   // list of conversions.
+      //     "T",     // string of modes.
+      //     "mansour_ghararemoon-yadet-nareh_mnsur_ghararmon-yadat-nareh_s_dk6e4-0hq.mp3",
+      //   },
+      //   ExpectedValue:
+      //   "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+      // },
     },
   },
   /* Fin test suite. */

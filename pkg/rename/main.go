@@ -4,12 +4,23 @@ package rename
 import (
   "regexp"
   "strings"
+  "unicode"
 )
 
 const (
   sectionDot = "."
   sectionSep = "|"
 )
+
+func DeleteNonAscii(s string) string {
+  var result strings.Builder
+  for _, r := range s {
+    if r < unicode.MaxASCII {
+      result.WriteRune(r)
+    }
+  }
+  return result.String()
+}
 
 func replaceLast(target, from, into string) (result string) {
   i := strings.LastIndex(target, from)
@@ -54,8 +65,11 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
     for _, conversion := range arr {
       from := conversion[0] // first rune.
       into := conversion[1] // second rune.
-      if from == 'A' && into == 'a' {
+      if from == 'A' && into == 'a' { // convert capital to lower.
         s = strings.ToLower(s)
+      }
+      if from == 'n' && into == 'd' { // delete non-ascii characters.
+        s = DeleteNonAscii(s)
       }
     }
   }
