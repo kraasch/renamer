@@ -46,6 +46,8 @@ rnmanage
 
   - [X] use this for filesystem mocks: https://github.com/spf13/afero
 
+## ideas
+
 Idea: validate file names. (version 1)
 
 ```go
