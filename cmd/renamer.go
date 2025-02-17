@@ -15,7 +15,7 @@ import (
   "os"
 
   // local packages.
-  // rname "github.com/kraasch/renamer/pkg/rname"
+  fsm "github.com/kraasch/renamer/pkg/fsmanage"
 )
 
 var (
@@ -48,6 +48,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     m.height = msg.Height
   case tea.KeyMsg:
     switch msg.String() {
+    case "enter":
+      fsm.DirRename(m.fs, "abc.txt", "xyz.txt")
     case "q":
       output = "You quit on me!"
       return m, tea.Quit
