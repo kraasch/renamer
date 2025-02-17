@@ -14,28 +14,21 @@ General structure of source files and their packages:
 ├── cmd
 │   └── renamer.go // CLI program
 └── pkg
+    ├── rnmanage   // orchestrate renaming (editing, automatic) and file system.
     ├── edit       // calls editor.
     ├── fsmanage   // deals with file system.
     ├── dir        // lists directories.
     ├── testutil   // creates mock file system.
-    ├── rnmanage   // TODO: ...
-    ├── autorn     // TODO: ...
-    ├── profiler   // TODO: ...
+    ├── autorn     // orchestrates renaming.
+    ├── profiler   // save renaming rules into profiles.
     └── rename     // renames strings.
 ```
 
-Dependencies of the CLI program `renamer`:
-
-```text
-renamer
-├── edit
-└── rnmanage
-```
-
-Dependencies of the core package `rnmanage`:
+Dependencies of the CLI program `renamer` through the core package `rnmanage`:
 
 ```text
 rnmanage
+├── edit
 ├── fsmanage
 │   ├── dir
 │   └── testutil
