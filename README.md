@@ -5,7 +5,46 @@ This program doesn't work and can delete files.
 
 ## renamer
 
-  - [ ] use this for filesystem mocks: https://github.com/spf13/afero
+## overview
+
+All source files and their packages:
+
+```text
+.
+├── cmd
+│   └── renamer.go // CLI program
+└── pkg
+    ├── edit       // calls editor.
+    ├── fsmanage   // deals with file system.
+    ├── dir        // lists directories.
+    ├── testutil   // creates mock file system.
+    ├── rnmanage   // TODO: ...
+    ├── autorn     // TODO: ...
+    └── rename     // renames things.
+```
+
+Dependencies of the CLI program `renamer`:
+
+```text
+renamer
+├── edit
+└── rnmanage
+```
+
+Dependencies of the core package `rnmanage`:
+
+```text
+rnmanage
+├── fsmanage
+│   ├── dir
+│   └── testutil
+└── autorn
+    └── rename
+```
+
+## tasks
+
+  - [X] use this for filesystem mocks: https://github.com/spf13/afero
 
 Idea: validate file names. (version 1)
 
