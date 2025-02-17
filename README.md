@@ -74,7 +74,17 @@ Features:
   - INPUT.
     - [ ] xxx.
   - RENAMING.
-    - [ ] xxx.
+    - [ ] automatically prefix, infix, suffix before file ending:
+      - [ ] individual files.
+        - [ ] add the current date or file creation date.
+          - [ ] yyyy-mm-dd.
+          - [ ] yyyy-mm-dd_HH-MM.
+          - [ ] precise nano-second-timestamp.
+        - [ ] add a random id (decimal, hexadecimal, alphanumerical)
+      - [ ] groups of files.
+        - [ ] add incrementing id to list of files, also with prefixed zeroes.
+        - [ ] rename in different order (`afbecd` to `abcdef`) for scanned
+              pages (first front side, then backsides in reverse).
   - OUTPUT.
     - [ ] xxx.
 
