@@ -1,5 +1,5 @@
 
-package rnmanage
+package main
 
 import (
   "fmt"
@@ -17,7 +17,7 @@ func TestAll(t *testing.T) {
 
 var suites = []gt.TestSuite{
   /*
-  * Test for the YYYYYYYYYYYYY().
+  * Test for the XXXXXXXXXXXX().
   */
   {
     TestingFunction:
@@ -25,11 +25,11 @@ var suites = []gt.TestSuite{
       // originalNames := in.InputArr[0]
       // targetNames   := in.InputArr[1]
       // fileSystem := tu.MakeTestFs()
-      // YYYYYYYYYYYYY(fileSystem, originalNames, targetNames)
+      // XXXXXXXXXXXX(fileSystem, originalNames, targetNames)
       // fs2 := afero.NewIOFS(fileSystem)
       // out = dir.DirListTree(fs2)
       // return out
-      return "YYYYYYYYYYYYY"
+      return "XXXXXXXXXXXX"
     },
     Tests:
     []gt.TestList{

@@ -1,4 +1,4 @@
-//go:build testing
+//g o:build testing // TODO: comment in again.
 
 package testutil
 
