@@ -63,6 +63,8 @@ Main functionality:
       - [ ] default to `renamer -profile default` if no profile is specified.
     - [ ] implement pure editor version (use native editor, eg vi, emacs)
       - [ ] run `renamer -edit` to rename with editor.
+    - [ ] implement interactive renaming.
+      - [ ] for each file choose method: edit, profile or apply some scripts.
   - OUTPUT.
     - [ ] allow a `-action` flag to specify how to apply a name change (profile/editor)
       - [ ] have a `-action=validate` flag which in conjunction with `-profile` checks if
