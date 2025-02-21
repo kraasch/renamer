@@ -1,8 +1,8 @@
 
 test:
 	go clean -testcache
-	go test -tags testing ./... -run=.*/full-test_pipe-test_00
-	@#go test -tags testing ./...
+	@#go test -tags testing ./... -run=.*/full-test_pipe-test_00
+	go test -tags testing ./...
 	@#go test -tags testing ./... -v
 
 run:

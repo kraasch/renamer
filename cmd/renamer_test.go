@@ -78,14 +78,12 @@ var suites = []gt.TestSuite{
       }
       finalPipeOutput := simulatePipe(cmds, path)
 
-      cmd := rn.Command(
+      output := rn.Command(
         configPath + "/" + configName, // config.
         "profile",       // type (profile/edit/interactive).
         profileName,     // profile.
         finalPipeOutput, // input.
       )
-      // output := cmd.Output()
-      output := cmd
 
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
