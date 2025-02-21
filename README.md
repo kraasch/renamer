@@ -108,6 +108,10 @@ Done:
 
   - [X] use this for filesystem mocks: https://github.com/spf13/afero
 
+## notes
+
+  - interesting project, file system mock for `os/exec` : https://github.com/schollii/go-test-mock-exec-command
+
 ## ideas
 
 Idea: validate file names. (version 1)
