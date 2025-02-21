@@ -104,14 +104,22 @@ Pitfalls:
   - OUTPUT.
     - [ ] xxx.
 
-Done:
+Misc:
 
   - [ ] create my own config manager at https://github.com/kraasch/goconf
-    - [ ] use this to parse config: https://github.com/pelletier/go-toml
+    - [ ] check if config file exists.
+    - [ ] if it doesn't create default config.
+    - [ ] if it does exist read it's content to text blob.
+
+Done:
+
+  - [X] use this to parse toml config: https://github.com/BurntSushi/toml/tree/master
   - [X] use this for filesystem mocks: https://github.com/spf13/afero
 
 ## notes
+
   - interesting project, file system mock for `os/exec` : https://github.com/schollii/go-test-mock-exec-command
+  - alternative package to parse toml config: https://github.com/pelletier/go-toml
 
 ## ideas
 
