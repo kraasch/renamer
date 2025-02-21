@@ -11,6 +11,7 @@ func TestAll(t *testing.T) {
 }
 
 var suites = []gt.TestSuite{
+
   // /*
   // * Test ERROR states for the ApplyRenamingRules().
   // */
@@ -41,7 +42,7 @@ var suites = []gt.TestSuite{
   //         "",     // delete characters.
   //         "-",    // small gap replacement.
   //         "_",    // big gap replacement.
-  //         "Aa",   // list of conversions.
+  //         "Aa",   // list of actions.
   //         "",     // string of modes.
   //         "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
   //       },
@@ -49,6 +50,7 @@ var suites = []gt.TestSuite{
   //     },
   //   },
   // },
+
   /*
   * Test for the ApplyRenamingRules().
   */
@@ -75,7 +77,7 @@ var suites = []gt.TestSuite{
           "",    // delete characters.
           "-",   // small gap replacement.
           "_",   // big gap replacement.
-          "Aa",  // list of conversions.
+          "cAa",  // list of actions.
           "",    // string of modes.
           "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
         },
@@ -90,7 +92,7 @@ var suites = []gt.TestSuite{
           "'",    // delete characters.
           "-",    // small gap replacement.
           "_",    // big gap replacement.
-          "Aa",   // list of conversions.
+          "cAa",   // list of actions.
           "",     // string of modes.
           "Head First Software Architecture: A Learner's Guide to Architectural Thinking (English Edition--).pdf",
         },
@@ -105,7 +107,7 @@ var suites = []gt.TestSuite{
           ",.",   // delete characters.
           "-",    // small gap replacement.
           "_",    // big gap replacement.
-          "Aa",   // list of conversions.
+          "cAa",   // list of actions.
           "",     // string of modes.
           "The Internal-Combustion Engine in Theory and Practice. Vol. I Thermodynamics, Fluid Flow, Performance ( PDFDrive ).pdf",
         },
@@ -120,7 +122,7 @@ var suites = []gt.TestSuite{
           ",.",   // delete characters.
           "-",    // small gap replacement.
           "_",    // big gap replacement.
-          "Aa",   // list of conversions.
+          "cAa",   // list of actions.
           "D",    // string of modes.
           "The Internal-Combustion Engine in Theory and Practice. Vol. I Thermodynamics, Fluid Flow, Performance ( PDFDrive ).pdf",
         },
@@ -135,7 +137,7 @@ var suites = []gt.TestSuite{
           ",.",    // delete characters.
           "-",     // small gap replacement.
           "_",     // big gap replacement.
-          "Aa,nd", // list of conversions.
+          "cAa,dna", // list of actions.
           "",      // string of modes.
           "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
         },
@@ -150,7 +152,7 @@ var suites = []gt.TestSuite{
           ",.",   // delete characters.
           "-",    // small gap replacement.
           "_",    // big gap replacement.
-          "Aa",   // list of conversions.
+          "cAa",   // list of actions.
           "",     // string of modes.
           "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
         },
@@ -174,7 +176,7 @@ var suites = []gt.TestSuite{
       //     ",.",   // delete characters.
       //     "-",    // small gap replacement.
       //     "_",    // big gap replacement.
-      //     "Aa",   // list of conversions.
+      //     "Aa",   // list of actions.
       //     "T",     // string of modes.
       //     "mansour_ghararemoon-yadet-nareh_mnsur_ghararmon-yadat-nareh_s_dk6e4-0hq.mp3",
       //   },

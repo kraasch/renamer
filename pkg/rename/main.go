@@ -59,17 +59,27 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
     s = strings.ReplaceAll(s, string(char), smallGapMark)
   }
 
-  // apply conversions.
+  // apply actions.
   {
+    actions := []struct {
+      Mnemonic string
+      Function   func(string) string
+    }{
+
+      // conversions.
+      {"cAa", strings.ToLower}, // convert capital to lower.
+      //{"caA", strings.ToUpper}, // convert lower to capital.
+
+      // deletions.
+      {"dna", DeleteNonAscii},  // delete non-ascii characters.
+
+    }
     arr := strings.Split(conversions, ",")
-    for _, conversion := range arr {
-      from := conversion[0] // first rune.
-      into := conversion[1] // second rune.
-      if from == 'A' && into == 'a' { // convert capital to lower.
-        s = strings.ToLower(s)
-      }
-      if from == 'n' && into == 'd' { // delete non-ascii characters.
-        s = DeleteNonAscii(s)
+    for _, actionStr := range arr {
+      for _, action := range actions {
+        if actionStr == action.Mnemonic {
+          s = action.Function(s)
+        }
       }
     }
   }
