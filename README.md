@@ -106,10 +106,11 @@ Pitfalls:
 
 Done:
 
+  - [ ] create my own config manager at https://github.com/kraasch/goconf
+    - [ ] use this to parse config: https://github.com/pelletier/go-toml
   - [X] use this for filesystem mocks: https://github.com/spf13/afero
 
 ## notes
-
   - interesting project, file system mock for `os/exec` : https://github.com/schollii/go-test-mock-exec-command
 
 ## ideas

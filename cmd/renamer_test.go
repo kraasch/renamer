@@ -55,6 +55,11 @@ var suites = []gt.TestSuite{
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
 
+      // set test variables.
+      configPath    := in.InputArr[0]
+      profileName   := in.InputArr[1]
+      configContent := in.InputArr[2]
+
       // run test setup.
       path := tu.MakeRealTestFs()
 
@@ -71,14 +76,11 @@ var suites = []gt.TestSuite{
       }
       finalPipeOutput := simulatePipe(cmds, path)
 
-      profile := rn.Profile( // TODO: create profile here.
-        in.InputArr[0], // PROFILE DATA 0
-        in.InputArr[1], // PROFILE DATA 1
-      )
       cmd := rn.Command(
-        finalPipeOutput, // stdin.
-        "profile",       // type.
-        profile,         // profile.
+        configPath,      // config.
+        "profile",       // type (profile/edit/interactive).
+        profileName,     // profile.
+        finalPipeOutput, // input.
       )
       // output := cmd.Output()
       output := cmd
@@ -95,8 +97,22 @@ var suites = []gt.TestSuite{
         TestName: "full-test_pipe-test_00",
         IsMulti:  true,
         InputArr: []string{
-          "PROFILE DATA 0",
-          "PROFILE DATA 1",
+          ".config/renamer/general.config", // config path.
+          "prettify-txt", // profile name.
+          // config content.
+          "# My config" + NL +
+          "" + NL +
+          "title = \"TOML Example\"" + NL +
+          "" + NL +
+          "[owner]" + NL +
+          "name = \"Tom Preston-Werner\"" + NL +
+          "dob = 1979-05-27T07:32:00-08:00" + NL +
+          "" + NL +
+          "[database]" + NL +
+          "enabled = true" + NL +
+          "ports = [ 8000, 8001, 8002 ]" + NL +
+          "data = [ [\"delta\", \"phi\"], [3.14] ]" + NL +
+          "temp_targets = { cpu = 79.5, case = 72.0 }",
         },
         ExpectedValue:
         "FRUITS/" + NL +
