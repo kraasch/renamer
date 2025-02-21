@@ -52,6 +52,72 @@ var suites = []gt.TestSuite{
   // },
 
   /*
+  * Test for different action strings.
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      actions    := in.InputArr[0]
+      targetName := in.InputArr[1]
+      out := ApplyRenamingRules(targetName, "", "", actions, "", "", "")
+      return out
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "action-strings_00",
+        IsMulti:  false,
+        InputArr: []string{
+          "CAa", // list of actions.
+          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
+        },
+        ExpectedValue:
+          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+      },
+      {
+        TestName: "action-strings_01",
+        IsMulti:  false,
+        InputArr: []string{
+          "cAa", // list of actions.
+          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
+        },
+        ExpectedValue:
+          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.MKV",
+      },
+      {
+        TestName: "action-strings_02",
+        IsMulti:  false,
+        InputArr: []string{
+          "caA", // list of actions.
+          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+        },
+        ExpectedValue:
+          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.mkv",
+      },
+      {
+        TestName: "action-strings_03",
+        IsMulti:  false,
+        InputArr: []string{
+          "CaA", // list of actions.
+          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+        },
+        ExpectedValue:
+          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
+      },
+      {
+        TestName: "action-strings_04",
+        IsMulti:  false,
+        InputArr: []string{
+          "dna", // list of actions.
+          "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue:
+          "Mansour - Ghararemoon Yadet Nareh  -    [s_DK6e4-0HQ].mp3",
+      },
+    },
+  },
+
+  /*
   * Test for ValidateRenamingRules().
   */
   {
@@ -74,7 +140,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "rename-file_common-file-name_00",
+        TestName: "validate-name_common-file-name_00",
         IsMulti:  false,
         InputArr: []string{
           " ()", // word separators.
@@ -88,7 +154,7 @@ var suites = []gt.TestSuite{
         ExpectedValue: "false",
       },
       {
-        TestName: "rename-file_common-file-name_01",
+        TestName: "validate-name_common-file-name_01",
         IsMulti:  false,
         InputArr: []string{
           " ()", // word separators.

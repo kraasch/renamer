@@ -7,6 +7,70 @@ import (
   "unicode"
 )
 
+var (
+  actions = []struct {
+    Mnemonic    string
+    Description string
+    Function    func(string) string
+  }{
+
+    /*
+    * conversions.
+    */
+    {
+      "cAa", "convert capital to lower (but not file ending)",
+      func(s string) string {
+        before := s
+        ending := ""
+        lastIndex := strings.LastIndex(s, ".")
+        if lastIndex != -1 {
+          before = s[:lastIndex]
+          ending = s[lastIndex:]
+        }
+        return strings.ToLower(before) + ending
+      },
+    },
+
+    {
+      "caA", "convert lower to capital (but not file ending)",
+      func(s string) string {
+        before := s
+        ending := ""
+        lastIndex := strings.LastIndex(s, ".")
+        if lastIndex != -1 {
+          before = s[:lastIndex]
+          ending = s[lastIndex:]
+        }
+        return strings.ToUpper(before) + ending
+      },
+    },
+
+    {
+      "CAa", "convert capital to lower (including file ending)",
+      func(s string) string {
+        return strings.ToLower(s)
+      },
+    },
+
+    {
+      "CaA", "convert lower to capital (including file ending)",
+      func(s string) string {
+        return strings.ToUpper(s)
+      },
+    },
+
+    /*
+    * deletions.
+    */
+    {
+      "dna", "delete non-ascii characters",
+      DeleteNonAscii,
+    },
+
+    // Fin of actions.
+  }
+)
+
 const (
   sectionDot = "."
   sectionSep = "|"
@@ -50,8 +114,10 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
 
   // modes.
   // mode: preserve last dot.
-  if !deleteLastDot {
-    s = replaceLast(s, sectionDot, sectionSep) // temporarily replace last dot with pipe.
+  if smallGapMark != "" && bigGapMark != "" {
+    if !deleteLastDot {
+      s = replaceLast(s, sectionDot, sectionSep) // temporarily replace last dot with pipe.
+    }
   }
 
   // delete characters.
@@ -60,25 +126,14 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
   }
 
   // find word separators.
-  for _, char := range wordSeparators {
-    s = strings.ReplaceAll(s, string(char), smallGapMark)
+  if smallGapMark != "" {
+    for _, char := range wordSeparators {
+      s = strings.ReplaceAll(s, string(char), smallGapMark)
+    }
   }
 
   // apply actions.
   {
-    actions := []struct {
-      Mnemonic string
-      Function   func(string) string
-    }{
-
-      // conversions.
-      {"cAa", strings.ToLower}, // convert capital to lower.
-      //{"caA", strings.ToUpper}, // convert lower to capital.
-
-      // deletions.
-      {"dna", DeleteNonAscii},  // delete non-ascii characters.
-
-    }
     arr := strings.Split(conversions, ",")
     for _, actionStr := range arr {
       for _, action := range actions {
@@ -90,18 +145,20 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
   }
 
   // find groups of small marks and make them into big marks.
-  {
+  if smallGapMark != "" && bigGapMark != "" {
     re, _ := regexp.Compile(smallGapMark + "[" + smallGapMark + "]+")
     s = re.ReplaceAllString(s, bigGapMark)
   }
 
   // treat dot (.) as section separator and swallow other gap markers that appear around it.
-  if !deleteLastDot {
-    s = replaceLast(s, sectionSep, sectionDot) // put dot back in.
-  }
-  {
-    re, _ := regexp.Compile("[" + bigGapMark + smallGapMark + "]*\\.[" + bigGapMark + smallGapMark + "]*")
-    s = re.ReplaceAllString(s, ".")
+  if smallGapMark != "" && bigGapMark != "" {
+    if !deleteLastDot {
+      s = replaceLast(s, sectionSep, sectionDot) // put dot back in.
+    }
+    {
+      re, _ := regexp.Compile("[" + bigGapMark + smallGapMark + "]*\\.[" + bigGapMark + smallGapMark + "]*")
+      s = re.ReplaceAllString(s, ".")
+    }
   }
 
   return
