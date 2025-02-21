@@ -34,7 +34,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "full-test_pipe-idea_00",
+        TestName: "stuff_00",
         IsMulti:  true,
         InputArr: []string{
           "fruits/" + NL +
