@@ -2,13 +2,16 @@
 package rnmanage
 
 import (
+  "os"
+  pro "github.com/kraasch/renamer/pkg/profiler"
 )
 
 func Command(configPath, commandType, profileName, input string) string {
-  return ""
-}
-
-func Toast(in string) string {
-  return "Smello " + in + "!"
+  dat, err := os.ReadFile("." + "/" + configPath)
+  if err != nil {
+    panic(err)
+  }
+  cfg := pro.ReadRawProfileConfig(string(dat))
+  return cfg.Profiles[profileName].Rule
 }
 
