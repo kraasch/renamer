@@ -23,7 +23,7 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      return "Toast"
+      return "the editor!"
     },
     Tests:
     []gt.TestList{
@@ -32,7 +32,7 @@ var suites = []gt.TestSuite{
         IsMulti:  true,
         InputArr: []string{},
         ExpectedValue:
-              "Toast!",
+              "Implement",
       },
     },
   },

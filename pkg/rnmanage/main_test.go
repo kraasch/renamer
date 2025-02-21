@@ -112,10 +112,10 @@ var suites = []gt.TestSuite{
           `                            ` + NL +
           `    [profiles.prettify-txt] ` + NL +
           `    name = "prettify-txt"   ` + NL +
-          `    rule = "BBB"            ` + NL +
+          `    rule = "more pipe tests"` + NL +
           `                            `,
         },
-        ExpectedValue: "CCC", // TODO: continue here.
+        ExpectedValue: "Implement", // TODO: continue here.
         // "fruits/"             + NL +
         // "fruits/APPLES.txt"   + NL +
         // "fruits/BANANAS.txt"  + NL +

@@ -18,21 +18,21 @@ func TestAll(t *testing.T) {
 
 var suites = []gt.TestSuite{
   /*
-  * Test for the DirList().
+  * Test for the xxx().
   */
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      return "Toast"
+      return "the auto-renamer"
     },
     Tests:
     []gt.TestList{
       {
-        TestName: "edit_stub_00",
+        TestName: "auto-renamer_stub_00",
         IsMulti:  true,
         InputArr: []string{},
         ExpectedValue:
-              "Toast!",
+              "Implement",
       },
     },
   },
