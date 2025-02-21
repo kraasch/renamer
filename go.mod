@@ -3,6 +3,7 @@ module github.com/kraasch/renamer
 go 1.23.5
 
 require (
+	github.com/BurntSushi/toml v1.4.0
 	github.com/charmbracelet/bubbletea v1.3.3
 	github.com/charmbracelet/lipgloss v1.0.0
 	github.com/kraasch/gotest v0.3.0

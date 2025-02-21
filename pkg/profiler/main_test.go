@@ -6,6 +6,7 @@ import (
   "fmt"
   "testing"
   gt "github.com/kraasch/gotest/gotest"
+
 )
 
 var (
@@ -18,21 +19,38 @@ func TestAll(t *testing.T) {
 
 var suites = []gt.TestSuite{
   /*
-  * Test for the DirList().
+  * Test for the ReadRawProfileConfig().
   */
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      return "Profiler"
+      configText := in.InputArr[0]
+      config := ReadRawProfileConfig(configText)
+      profile := config.Profiles["prettify-txt"]
+      return profile.Rule
     },
     Tests:
     []gt.TestList{
       {
-        TestName: "edit_stub_00",
+        TestName: "profiler_read-profiles_from-config_00",
         IsMulti:  true,
-        InputArr: []string{},
-        ExpectedValue:
-              "Profiler!",
+        InputArr: []string{
+          "# My config" + NL +
+          "" + NL +
+          "title = \"TOML Example\"" + NL +
+          "" + NL +
+          "[profiles]" + NL +
+          "" + NL +
+          "    [profiles.toast-txt]" + NL +
+          "    name = \"toast-txt\"" + NL +
+          "    rule = \"ZZZ\"" + NL +
+          "" + NL +
+          "    [profiles.prettify-txt]" + NL +
+          "    name = \"prettify-txt\"" + NL +
+          "    rule = \"YYY\"" + NL +
+          "",
+        },
+        ExpectedValue: "YYY",
       },
     },
   },
