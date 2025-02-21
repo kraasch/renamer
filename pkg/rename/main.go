@@ -30,6 +30,11 @@ func replaceLast(target, from, into string) (result string) {
   return target[:i] + into + target[i+len(from):]
 }
 
+func ValidateRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes string) (bool) {
+  resultOfApplyingRules := ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes)
+  return targetName == resultOfApplyingRules
+}
+
 func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes string) (s string) {
 
   // start with string to rename.

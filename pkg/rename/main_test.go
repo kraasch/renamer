@@ -52,6 +52,59 @@ var suites = []gt.TestSuite{
   // },
 
   /*
+  * Test for ValidateRenamingRules().
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      wordSeparators := in.InputArr[0]
+      deleteChars    := in.InputArr[1]
+      smallGapMark   := in.InputArr[2]
+      bigGapMark     := in.InputArr[3]
+      conversions    := in.InputArr[4]
+      modesString    := in.InputArr[5]
+      targetName     := in.InputArr[6]
+      isValid := ValidateRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString)
+      if isValid {
+        return "true"
+      } else {
+        return "false"
+      }
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "rename-file_common-file-name_00",
+        IsMulti:  false,
+        InputArr: []string{
+          " ()", // word separators.
+          "",    // delete characters.
+          "-",   // small gap replacement.
+          "_",   // big gap replacement.
+          "cAa", // list of actions.
+          "",    // string of modes.
+          "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
+        },
+        ExpectedValue: "false",
+      },
+      {
+        TestName: "rename-file_common-file-name_01",
+        IsMulti:  false,
+        InputArr: []string{
+          " ()", // word separators.
+          "",    // delete characters.
+          "-",   // small gap replacement.
+          "_",   // big gap replacement.
+          "cAa", // list of actions.
+          "",    // string of modes.
+          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+        },
+        ExpectedValue: "true",
+      },
+    },
+  },
+
+  /*
   * Test for the ApplyRenamingRules().
   */
   {
@@ -185,6 +238,7 @@ var suites = []gt.TestSuite{
       // },
     },
   },
+
   /* Fin test suite. */
 }
 
