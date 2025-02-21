@@ -6,7 +6,6 @@ import (
   "fmt"
   "testing"
   gt "github.com/kraasch/gotest/gotest"
-
 )
 
 var (
