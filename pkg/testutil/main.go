@@ -11,6 +11,11 @@ import (
   "path/filepath"
 )
 
+const (
+  DIRSPERM = 0755
+  FILEPERM = 0644
+)
+
 func MakeTestFs() afero.Fs {
   var fileSystem = afero.NewMemMapFs()
   dirs := []string{
@@ -27,13 +32,13 @@ func MakeTestFs() afero.Fs {
     "shapes/circle.txt",
   }
   for _, dir := range dirs {
-    if err := fileSystem.MkdirAll(dir, 0755); err != nil {
+    if err := fileSystem.MkdirAll(dir, DIRSPERM); err != nil {
       fmt.Println("Setting up test failed.") // TODO: implement test failure.
       return nil
     }
   }
   for _, file := range files {
-    if err := afero.WriteFile(fileSystem, file, []byte("Not empty."), 0644); err != nil {
+    if err := afero.WriteFile(fileSystem, file, []byte("Not empty."), FILEPERM); err != nil {
       fmt.Println("Setting up test failed.") // TODO: implement test failure.
       return nil
     }
@@ -71,21 +76,38 @@ func MakeRealTestFs() string {
   }
   for _, dir := range dirs {
     dirPath := filepath.Join(".", testdir, dir)
-    if err := os.MkdirAll(dirPath, 0755); err != nil {
+    if err := os.MkdirAll(dirPath, DIRSPERM); err != nil {
       panic("TEST SETUP: Creation of directory tree failed.")
     }
   }
   for _, file := range files {
-    filePath := filepath.Join(".", testdir, file)
-    if err := os.WriteFile(filePath, []byte("Not empty."), 0644); err != nil {
+    path := filepath.Join(".", testdir, file)
+    if err := os.WriteFile(path, []byte("Not empty."), FILEPERM); err != nil {
       panic("TEST SETUP: Creation of file tree failed.")
     }
   }
   return string(newpath)
 }
 
-func CleanUpRealTestFs(subdir string) {
-  path := filepath.Join(".", subdir)
+func CreateFile(testDir, fileDir, fileName, fileContent string) {
+  // TODO: Generallize, so far this function does not create file paths,
+  // can only create one subfolder (depth level = 1).
+  path := filepath.Join(".", testDir, fileDir)
+  fmt.Println("Try to create file at", path)
+  if err := os.MkdirAll(path, DIRSPERM); err != nil {
+    fmt.Println("NOPE 1")
+    {}
+  }
+  path = filepath.Join(".", testDir, fileDir, fileName)
+  if err := os.WriteFile(path, []byte(fileContent), FILEPERM); err != nil {
+    fmt.Println("NOPE 2")
+    {}
+  }
+  // TODO: report failure.
+}
+
+func CleanUpRealTestFs(testDir string) {
+  path := filepath.Join(".", testDir)
   // delete any old remains of test directory.
   os.RemoveAll(path) // NOTE: recursively deletes path.
   // TODO: report failure.

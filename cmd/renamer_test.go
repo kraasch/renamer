@@ -57,11 +57,13 @@ var suites = []gt.TestSuite{
 
       // set test variables.
       configPath    := in.InputArr[0]
-      profileName   := in.InputArr[1]
-      configContent := in.InputArr[2]
+      configName    := in.InputArr[1]
+      profileName   := in.InputArr[2]
+      configContent := in.InputArr[3]
 
       // run test setup.
       path := tu.MakeRealTestFs()
+      tu.CreateFile(path, configPath, configName, configContent)
 
       // simulate pipe.
       cmds := CommandList{
@@ -77,7 +79,7 @@ var suites = []gt.TestSuite{
       finalPipeOutput := simulatePipe(cmds, path)
 
       cmd := rn.Command(
-        configPath,      // config.
+        configPath + "/" + configName, // config.
         "profile",       // type (profile/edit/interactive).
         profileName,     // profile.
         finalPipeOutput, // input.
@@ -97,22 +99,24 @@ var suites = []gt.TestSuite{
         TestName: "full-test_pipe-test_00",
         IsMulti:  true,
         InputArr: []string{
-          ".config/renamer/general.config", // config path.
+          "config", // config path.
+          "general.config", // config name.
           "prettify-txt", // profile name.
           // config content.
           "# My config" + NL +
           "" + NL +
           "title = \"TOML Example\"" + NL +
           "" + NL +
-          "[owner]" + NL +
-          "name = \"Tom Preston-Werner\"" + NL +
-          "dob = 1979-05-27T07:32:00-08:00" + NL +
+          "[profiles]" + NL +
           "" + NL +
-          "[database]" + NL +
-          "enabled = true" + NL +
-          "ports = [ 8000, 8001, 8002 ]" + NL +
-          "data = [ [\"delta\", \"phi\"], [3.14] ]" + NL +
-          "temp_targets = { cpu = 79.5, case = 72.0 }",
+          "    [profiles.toast-txt]" + NL +
+          "    name = \"toast-txt\"" + NL +
+          "    rule = \"XXXXXXXXXXXXXXXXXXXXXXX\"" + NL +
+          "" + NL +
+          "    [profiles.prettify-txt]" + NL +
+          "    name = \"prettify-txt\"" + NL +
+          "    rule = \"XXXXXXXXXXXXXXXXXXXXXXX\"" + NL +
+          "",
         },
         ExpectedValue:
         "FRUITS/" + NL +

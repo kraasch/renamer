@@ -4,11 +4,7 @@ package rnmanage
 import (
 )
 
-func Profile(a,b string) string {
-  return ""
-}
-
-func Command(a,b,c string) string {
+func Command(configPath, commandType, profileName, input string) string {
   return ""
 }
 
