@@ -7,41 +7,28 @@ This program doesn't work and can delete files.
 
 ## overview
 
-General structure of source files and their packages:
+The CLI program is `cmd/renamer.go` and compiles to `renamer`.
+The main package is `rnmanage`.
+The `pkg` directory below is structured by dependency.
 
 ```text
 .
 ├── cmd
 │   └── renamer.go // CLI program
 └── pkg
-    ├── rnmanage   // orchestrate renaming (editing, automatic) and file system.
-    ├── edit       // calls editor.
-    ├── fsmanage   // deals with file system.
-    ├── dir        // lists directories.
-    ├── testutil   // creates mock file system.
-    ├── autorn     // orchestrates renaming.
-    ├── profiler   // save renaming rules into profiles.
-    └── rename     // renames strings.
-```
-
-Dependencies of the CLI program `renamer` through the core package `rnmanage`:
-
-```text
-rnmanage
-├── edit
-├── fsmanage
-│   ├── dir
-│   └── testutil
-└── autorn
-    ├── profiler
-    └── rename
+    └── rnmanage          // orchestrate renaming (editing, automatic) and file system. 
+        ├── edit          // calls editor.
+        ├── fsmanage      // deals with file system.
+        │   ├── dir       // lists directories.
+        │   └── testutil  // creates mock file system.
+        └── autorn        // orchestrates renaming.
+            ├── profiler  // save renaming rules into profiles.
+            └── rename    // renames strings.
 ```
 
 ## tasks
 
-Main functionality:
-
-  - INPUT.
+  - INPUT. Main functionality:
     - [ ] get file list from pipe, ie allow these inputs:
       - [ ] `ls | grep -E 'mp3$' | renamer -edit`
       - [ ] `find | grep -E '.ogg$' | renamer -profile music_ogg`
@@ -52,7 +39,8 @@ Main functionality:
       - [ ] `renamer -recursive=all   -profile music_ogg` as above, but recursive (default)
       - [ ] `renamer -recursive=files -profile music_ogg` as above, but recursive.
       - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
-  - RENAMING.
+
+  - RENAMING. Main functionality:
     - [ ] different ways of renaming.
       - [ ] -edit opens editor
       - [ ] -auto just applies the profile
@@ -65,17 +53,8 @@ Main functionality:
       - [ ] run `renamer -edit` to rename with editor.
     - [ ] implement interactive renaming.
       - [ ] for each file choose method: edit, profile or apply some scripts.
-  - OUTPUT.
-    - [ ] allow a `-action` flag to specify how to apply a name change (profile/editor)
-      - [ ] have a `-action=validate` flag which in conjunction with `-profile` checks if
-            any file breaks the profile, but doesn't apply the profile.
-      - [ ] default to `-action=apply` flag which applies the renaming rules specified in profile.
 
-Features:
-
-  - INPUT.
-    - [ ] xxx.
-  - RENAMING.
+  - RENAMING. Features:
     - [ ] automatically prefix, infix, suffix before file ending:
       - [ ] individual files.
         - [ ] add the current date or file creation date.
@@ -87,29 +66,26 @@ Features:
         - [ ] add incrementing id to list of files, also with prefixed zeroes.
         - [ ] rename in different order (`afbecd` to `abcdef`) for scanned
               pages (first front side, then backsides in reverse).
-  - OUTPUT.
-    - [ ] xxx.
 
-Pitfalls:
-
-  - INPUT.
-    - [ ] xxx.
-  - RENAMING.
+  - RENAMING. Pitfalls:
     - [ ] test various types circular renames: eg `(a->b,b->a)`
           should not delete anything, but should execute.
     - [ ] test over-naming renames: `(a->c,c->c)`,
           should not delete anything, should not execute.
     - [ ] test colliding renames: `(a->c,b->c)`
           should not delete anything, should not execute.
-  - OUTPUT.
-    - [ ] xxx.
 
-Misc:
+  - OUTPUT. Main functionality:
+    - [ ] allow a `-action` flag to specify how to apply a name change (profile/editor)
+      - [ ] have a `-action=validate` flag which in conjunction with `-profile` checks if
+            any file breaks the profile, but doesn't apply the profile.
+      - [ ] default to `-action=apply` flag which applies the renaming rules specified in profile.
 
-  - [ ] create my own config manager at https://github.com/kraasch/goconf
-    - [ ] check if config file exists.
-    - [ ] if it doesn't create default config.
-    - [ ] if it does exist read it's content to text blob.
+  - MISC:
+    - [ ] create my own config manager at https://github.com/kraasch/goconf
+      - [ ] check if config file exists.
+      - [ ] if it doesn't create default config.
+      - [ ] if it does exist read it's content to text blob.
 
 Done:
 
@@ -159,26 +135,4 @@ func isValidFileName(name string) bool {
 	return true
 }
 ```
-
-Idea: avoid deleting by renaming.
-
- - [ ] The program should not delete files by accident by moving or renaming them into already existing files.
- - [ ] The program should be able to rename two files into each other.
-
-Note: The directory could be this, for example...
-
-```text
-a
-b
-```
-
-but the edited lines could be
-
-```text
-b
-a
-```
-
-In this case both files collide and cannot be renamed unless the other file has been renamed.
-The program should be able to deal with some conflicts, either by having an intermediate name or detecting such collisions and renaming in a smart way.
 
