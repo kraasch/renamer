@@ -115,18 +115,20 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
+      profileName := "prettify-txt"
       config1 := ReadRawProfileConfig(in.InputArr[0])
       config2 := ReadRawProfileConfig(in.InputArr[1])
-      profile := config2.Profiles["prettify-txt"]
-      config3 := config1.AddProfileToConfig(profile)
-      return config.ToToml()
+      profile := config2.Profiles[profileName]
+      config3 := config1.AddProfileToConfig(profile, profileName)
+      return config3.ToToml()
     },
     Tests:
     []gt.TestList{
       {
         TestName: "profiler_create-profiles_from-code_00",
-        IsMulti:  false,
+        IsMulti:  true,
         InputArr: []string{
+          `title               = "abc"              ` + NL +
           `[profiles]                               ` + NL +
           `[profiles.toast-txt]                     ` + NL +
           `    name            = "n0"               ` + NL +
@@ -137,6 +139,7 @@ var suites = []gt.TestSuite{
           `    big_gap_mark    = "D"                ` + NL +
           `    conversions     = "E"                ` + NL +
           `    modes_string    = "F"                `,
+          `title               = "xyz"              ` + NL +
           `[profiles]                               ` + NL +
           `[profiles.prettify-txt]                  ` + NL +
           `    name            = "n1"               ` + NL +
@@ -150,26 +153,28 @@ var suites = []gt.TestSuite{
           `                                         `,
         },
         ExpectedValue: 
-          `[profiles]                               ` + NL +
-          `[profiles.toast-txt]                     ` + NL +
-          `    name            = "n0"               ` + NL +
-          `    [profiles.toast-txt.profile_rule]    ` + NL +
-          `    word_separators = "A"                ` + NL +
-          `    delete_chars    = "B"                ` + NL +
-          `    small_gap_mark  = "C"                ` + NL +
-          `    big_gap_mark    = "D"                ` + NL +
-          `    conversions     = "E"                ` + NL +
-          `    modes_string    = "F"                ` + NL +
-          `[profiles.prettify-txt]                  ` + NL +
-          `    name            = "n1"               ` + NL +
-          `    [profiles.prettify-txt.profile_rule] ` + NL +
-          `    word_separators = "YYY"              ` + NL +
-          `    delete_chars    = "b"                ` + NL +
-          `    small_gap_mark  = "c"                ` + NL +
-          `    big_gap_mark    = "d"                ` + NL +
-          `    conversions     = "e"                ` + NL +
-          `    modes_string    = "f"                ` + NL +
-          `                                         `,
+          `title = "abc"` + NL +
+          `` + NL +
+          `[profiles]` + NL +
+          `  [profiles.prettify-txt]` + NL +
+          `    name = "n1"` + NL +
+          `    [profiles.prettify-txt.profile_rule]` + NL +
+          `      word_separators = "YYY"` + NL +
+          `      delete_chars = "b"` + NL +
+          `      small_gap_mark = "c"` + NL +
+          `      big_gap_mark = "d"` + NL +
+          `      conversions = "e"` + NL +
+          `      modes_string = "f"` + NL +
+          `  [profiles.toast-txt]` + NL +
+          `    name = "n0"` + NL +
+          `    [profiles.toast-txt.profile_rule]` + NL +
+          `      word_separators = "A"` + NL +
+          `      delete_chars = "B"` + NL +
+          `      small_gap_mark = "C"` + NL +
+          `      big_gap_mark = "D"` + NL +
+          `      conversions = "E"` + NL +
+          `      modes_string = "F"` + NL +
+          ``,
       },
     },
   },

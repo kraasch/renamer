@@ -6,7 +6,7 @@ import (
   toml "github.com/BurntSushi/toml"
 
   // other packages.
-  // "fmt"
+  "bytes"
 
   // local packages.
   rn "github.com/kraasch/renamer/pkg/rename"
@@ -31,6 +31,11 @@ type Rule struct {
   ModesString    string        `toml:"modes_string"`
 }
 
+func (c *Config) AddProfileToConfig(p *Profile, name string) Config {
+  c.Profiles[name] = p
+  return *c
+}
+
 func (p *Profile) Apply(input string) string {
   r := p.ProfileRule
   return rn.ApplyRenamingRules(
@@ -44,16 +49,21 @@ func (p *Profile) Apply(input string) string {
   )
 }
 
+func (c *Config) ToToml() string {
+  var buf bytes.Buffer
+  if err := toml.NewEncoder(&buf).Encode(c); err != nil {
+    panic(err)
+  }
+  return buf.String()
+}
 
 func ReadRawProfileConfig(tomlBlob string) Config {
-
   // decode toml.
   var c Config
 	_, err := toml.Decode(tomlBlob, &c)
 	if err != nil {
 		panic("Failed to decode TOML.")
 	}
-
   return c
 }
 
