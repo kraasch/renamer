@@ -12,6 +12,8 @@ func Command(configPath, commandType, profileName, input string) string {
     panic(err)
   }
   cfg := pro.ReadRawProfileConfig(string(dat))
-  return cfg.Profiles[profileName].Rule
+  profile := cfg.Profiles[profileName]
+  rule := profile.ProfileRule
+  return rule.WordSeparators
 }
 

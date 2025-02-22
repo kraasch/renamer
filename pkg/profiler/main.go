@@ -7,17 +7,43 @@ import (
 
   // other packages.
   // "fmt"
+
+  // local packages.
+  rn "github.com/kraasch/renamer/pkg/rename"
 )
 
 type Config struct {
-  Title    string
-  Profiles map[string]Profile
+  Title    string              `toml:"title"`
+  Profiles map[string]*Profile `toml:"profiles"`
 }
 
 type Profile struct {
-  Name string
-  Rule string
+  Name        string           `toml:"name"`
+  ProfileRule Rule             `toml:"profile_rule"`
 }
+
+type Rule struct {
+  WordSeparators string        `toml:"word_separators"`
+  DeleteChars    string        `toml:"delete_chars"`
+  SmallGapMark   string        `toml:"small_gap_mark"`
+  BigGapMark     string        `toml:"big_gap_mark"`
+  Conversions    string        `toml:"conversions"`
+  ModesString    string        `toml:"modes_string"`
+}
+
+func (p *Profile) Apply(input string) string {
+  r := p.ProfileRule
+  return rn.ApplyRenamingRules(
+    input,
+    r.WordSeparators,
+    r.DeleteChars,
+    r.Conversions,
+    r.SmallGapMark,
+    r.BigGapMark,
+    r.ModesString,
+  )
+}
+
 
 func ReadRawProfileConfig(tomlBlob string) Config {
 

@@ -24,10 +24,12 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      configText := in.InputArr[0]
-      config := ReadRawProfileConfig(configText)
-      profile := config.Profiles["prettify-txt"]
-      return profile.Rule
+      profileName := in.InputArr[0]
+      configText  := in.InputArr[1]
+      config      := ReadRawProfileConfig(configText)
+      profile     := config.Profiles[profileName]
+      rule        := profile.ProfileRule
+      return rule.WordSeparators
     },
     Tests:
     []gt.TestList{
@@ -35,20 +37,31 @@ var suites = []gt.TestSuite{
         TestName: "profiler_read-profiles_from-config_00",
         IsMulti:  true,
         InputArr: []string{
-          "# My config" + NL +
-          "" + NL +
-          "title = \"TOML Example\"" + NL +
-          "" + NL +
-          "[profiles]" + NL +
-          "" + NL +
-          "    [profiles.toast-txt]" + NL +
-          "    name = \"toast-txt\"" + NL +
-          "    rule = \"ZZZ\"" + NL +
-          "" + NL +
-          "    [profiles.prettify-txt]" + NL +
-          "    name = \"prettify-txt\"" + NL +
-          "    rule = \"YYY\"" + NL +
-          "",
+          "prettify-txt",
+          `# Some comment                           ` + NL +
+          `                                         ` + NL +
+          `title = "Some Example"                   ` + NL +
+          `                                         ` + NL +
+          `[profiles]                               ` + NL +
+          `[profiles.toast-txt]                     ` + NL +
+          `    name            = "n0"               ` + NL +
+          `    [profiles.toast-txt.profile_rule]    ` + NL +
+          `    word_separators = "A"                ` + NL +
+          `    delete_chars    = "B"                ` + NL +
+          `    small_gap_mark  = "C"                ` + NL +
+          `    big_gap_mark    = "D"                ` + NL +
+          `    conversions     = "E"                ` + NL +
+          `    modes_string    = "F"                ` + NL +
+          `[profiles.prettify-txt]                  ` + NL +
+          `    name            = "n1"               ` + NL +
+          `    [profiles.prettify-txt.profile_rule] ` + NL +
+          `    word_separators = "YYY"              ` + NL +
+          `    delete_chars    = "b"                ` + NL +
+          `    small_gap_mark  = "c"                ` + NL +
+          `    big_gap_mark    = "d"                ` + NL +
+          `    conversions     = "e"                ` + NL +
+          `    modes_string    = "f"                ` + NL +
+          `                                         `,
         },
         ExpectedValue: "YYY",
       },
@@ -61,15 +74,18 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      // wordSeparators := in.InputArr[0]
-      // deleteChars    := in.InputArr[1]
-      // smallGapMark   := in.InputArr[2]
-      // bigGapMark     := in.InputArr[3]
-      // conversions    := in.InputArr[4]
-      // modesString    := in.InputArr[5]
-      // targetName     := in.InputArr[6]
-      // p := pro.CreateProfile
-      output := "Toast"
+      r := Rule{
+        WordSeparators: in.InputArr[0],
+        DeleteChars:    in.InputArr[1],
+        SmallGapMark:   in.InputArr[2],
+        BigGapMark:     in.InputArr[3],
+        Conversions:    in.InputArr[4],
+        ModesString:    in.InputArr[5],
+      }
+      profileName    := in.InputArr[6]
+      testName       := in.InputArr[7]
+      p := Profile{ profileName, r }
+      output := p.Apply(testName)
       return output
     },
     Tests:
@@ -84,10 +100,11 @@ var suites = []gt.TestSuite{
           "_",   // big gap replacement.
           "cAa", // list of actions.
           "",    // string of modes.
+          "SomeProfile", // profile name.
           "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
         },
-        ExpectedValue: "false",
+        ExpectedValue:
+        "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
       },
     },
   },
