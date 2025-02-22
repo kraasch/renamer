@@ -112,6 +112,30 @@ var suites = []gt.TestSuite{
         },
         ExpectedValue: "Mansour-GhararemoonYadetNarehمنصور-قرارمونیادتنرهs_DK6e4-0HQ.mp3",
       },
+      {
+        TestName: "action-strings_06",
+        IsMulti:  false,
+        InputArr: []string{
+          "id^", "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue: "2020-12-20_Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+      },
+      {
+        TestName: "action-strings_07",
+        IsMulti:  false,
+        InputArr: []string{
+          "id$", "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue: "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3_2020-12-20",
+      },
+      {
+        TestName: "action-strings_08",
+        IsMulti:  false,
+        InputArr: []string{
+          "id.", "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue: "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ]_2020-12-20.mp3",
+      },
     },
   },
 

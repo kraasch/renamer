@@ -88,6 +88,67 @@ var (
       },
     },
 
+    /*
+    * insertions.
+    */
+    {
+      "id^", "insert current date in beginning",
+      func(s string) string {
+        var result strings.Builder
+        date := "2020-12-20" // TODO: get current date.
+        date += "_"
+        for _, r := range date {
+          result.WriteRune(r)
+        }
+        for _, r := range s {
+          result.WriteRune(r)
+        }
+        return result.String()
+      },
+    },
+
+    {
+      "id$", "insert current date in end",
+      func(s string) string {
+        var result strings.Builder
+        date := "_"
+        date += "2020-12-20" // TODO: get current date.
+        for _, r := range s {
+          result.WriteRune(r)
+        }
+        for _, r := range date {
+          result.WriteRune(r)
+        }
+        return result.String()
+      },
+    },
+
+    {
+      "id.", "insert current date before file ending",
+      func(s string) string {
+        before := s
+        ending := ""
+        lastIndex := strings.LastIndex(s, ".")
+        if lastIndex != -1 {
+          before = s[:lastIndex]
+          ending = s[lastIndex:]
+        }
+        var result strings.Builder
+        date := "_"
+        date += "2020-12-20" // TODO: get current date.
+        for _, r := range before {
+          result.WriteRune(r)
+        }
+        for _, r := range date {
+          result.WriteRune(r)
+        }
+        for _, r := range ending {
+          result.WriteRune(r)
+        }
+        return result.String()
+      },
+    },
+
     // Fin of actions.
   }
 )
