@@ -110,6 +110,59 @@ var suites = []gt.TestSuite{
   },
 
   /*
+  * Test for ToToml().
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      r := Rule{
+        WordSeparators: in.InputArr[0],
+        DeleteChars:    in.InputArr[1],
+        SmallGapMark:   in.InputArr[2],
+        BigGapMark:     in.InputArr[3],
+        Conversions:    in.InputArr[4],
+        ModesString:    in.InputArr[5],
+      }
+      profileName    := in.InputArr[6]
+      p := Profile{ profileName, r }
+      ps := make(map[string]*Profile)
+      ps["prettify-txt"] = &p
+      c := Config{ "My Conf", ps}
+      return c.ToToml()
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "profiler_create-profiles_from-code_01",
+        IsMulti:  true,
+        InputArr: []string{
+          " ()", // word separators.
+          "",    // delete characters.
+          "-",   // small gap replacement.
+          "_",   // big gap replacement.
+          "cAa", // list of actions.
+          "",    // string of modes.
+          "SomeProfile", // profile name.
+        },
+        ExpectedValue: 
+          `title = "My Conf"` + NL +
+          `` + NL +
+          `[profiles]` + NL +
+          `  [profiles.prettify-txt]` + NL +
+          `    name = "SomeProfile"` + NL +
+          `    [profiles.prettify-txt.profile_rule]` + NL +
+          `      word_separators = " ()"` + NL +
+          `      delete_chars = ""` + NL +
+          `      small_gap_mark = "-"` + NL +
+          `      big_gap_mark = "_"` + NL +
+          `      conversions = "cAa"` + NL +
+          `      modes_string = ""` + NL +
+          ``,
+      },
+    },
+  },
+
+  /*
   * Test for AddProfileToConfig().
   */
   {
