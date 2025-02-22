@@ -91,7 +91,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "xxx_00",
+        TestName: "profiler_create-profiles_from-code_00",
         IsMulti:  false,
         InputArr: []string{
           " ()", // word separators.
@@ -115,33 +115,61 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      // wordSeparators := in.InputArr[0]
-      // deleteChars    := in.InputArr[1]
-      // smallGapMark   := in.InputArr[2]
-      // bigGapMark     := in.InputArr[3]
-      // conversions    := in.InputArr[4]
-      // modesString    := in.InputArr[5]
-      // targetName     := in.InputArr[6]
-      // p := pro.CreateProfile
-      output := "Toast"
-      return output
+      config1 := ReadRawProfileConfig(in.InputArr[0])
+      config2 := ReadRawProfileConfig(in.InputArr[1])
+      profile := config2.Profiles["prettify-txt"]
+      config3 := config1.AddProfileToConfig(profile)
+      return config.ToToml()
     },
     Tests:
     []gt.TestList{
       {
-        TestName: "xxx_00",
+        TestName: "profiler_create-profiles_from-code_00",
         IsMulti:  false,
         InputArr: []string{
-          " ()", // word separators.
-          "",    // delete characters.
-          "-",   // small gap replacement.
-          "_",   // big gap replacement.
-          "cAa", // list of actions.
-          "",    // string of modes.
-          "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+          `[profiles]                               ` + NL +
+          `[profiles.toast-txt]                     ` + NL +
+          `    name            = "n0"               ` + NL +
+          `    [profiles.toast-txt.profile_rule]    ` + NL +
+          `    word_separators = "A"                ` + NL +
+          `    delete_chars    = "B"                ` + NL +
+          `    small_gap_mark  = "C"                ` + NL +
+          `    big_gap_mark    = "D"                ` + NL +
+          `    conversions     = "E"                ` + NL +
+          `    modes_string    = "F"                `,
+          `[profiles]                               ` + NL +
+          `[profiles.prettify-txt]                  ` + NL +
+          `    name            = "n1"               ` + NL +
+          `    [profiles.prettify-txt.profile_rule] ` + NL +
+          `    word_separators = "YYY"              ` + NL +
+          `    delete_chars    = "b"                ` + NL +
+          `    small_gap_mark  = "c"                ` + NL +
+          `    big_gap_mark    = "d"                ` + NL +
+          `    conversions     = "e"                ` + NL +
+          `    modes_string    = "f"                ` + NL +
+          `                                         `,
         },
-        ExpectedValue: "false",
+        ExpectedValue: 
+          `[profiles]                               ` + NL +
+          `[profiles.toast-txt]                     ` + NL +
+          `    name            = "n0"               ` + NL +
+          `    [profiles.toast-txt.profile_rule]    ` + NL +
+          `    word_separators = "A"                ` + NL +
+          `    delete_chars    = "B"                ` + NL +
+          `    small_gap_mark  = "C"                ` + NL +
+          `    big_gap_mark    = "D"                ` + NL +
+          `    conversions     = "E"                ` + NL +
+          `    modes_string    = "F"                ` + NL +
+          `[profiles.prettify-txt]                  ` + NL +
+          `    name            = "n1"               ` + NL +
+          `    [profiles.prettify-txt.profile_rule] ` + NL +
+          `    word_separators = "YYY"              ` + NL +
+          `    delete_chars    = "b"                ` + NL +
+          `    small_gap_mark  = "c"                ` + NL +
+          `    big_gap_mark    = "d"                ` + NL +
+          `    conversions     = "e"                ` + NL +
+          `    modes_string    = "f"                ` + NL +
+          `                                         `,
       },
     },
   },
