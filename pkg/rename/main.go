@@ -64,7 +64,28 @@ var (
     */
     {
       "dna", "delete non-ascii characters",
-      DeleteNonAscii,
+      func(s string) string {
+        var result strings.Builder
+        for _, r := range s {
+          if r < unicode.MaxASCII {
+            result.WriteRune(r)
+          }
+        }
+        return result.String()
+      },
+    },
+
+    {
+      "dnr", "delete non-readable characters (not letters, digits or in {.-_})",
+      func(s string) string {
+        var result strings.Builder
+        for _, r := range s {
+          if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '.' || r == '-' || r == '_' {
+            result.WriteRune(r)
+          }
+        }
+        return result.String()
+      },
     },
 
     // Fin of actions.
@@ -75,16 +96,6 @@ const (
   sectionDot = "."
   sectionSep = "|"
 )
-
-func DeleteNonAscii(s string) string {
-  var result strings.Builder
-  for _, r := range s {
-    if r < unicode.MaxASCII {
-      result.WriteRune(r)
-    }
-  }
-  return result.String()
-}
 
 func replaceLast(target, from, into string) (result string) {
   i := strings.LastIndex(target, from)

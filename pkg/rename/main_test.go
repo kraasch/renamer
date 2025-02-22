@@ -68,51 +68,49 @@ var suites = []gt.TestSuite{
         TestName: "action-strings_00",
         IsMulti:  false,
         InputArr: []string{
-          "CAa", // list of actions.
-          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
+          "CAa", "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
         },
-        ExpectedValue:
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+        ExpectedValue: "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
       },
       {
         TestName: "action-strings_01",
         IsMulti:  false,
         InputArr: []string{
-          "cAa", // list of actions.
-          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
+          "cAa", "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
         },
-        ExpectedValue:
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.MKV",
+        ExpectedValue: "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.MKV",
       },
       {
         TestName: "action-strings_02",
         IsMulti:  false,
         InputArr: []string{
-          "caA", // list of actions.
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+          "caA", "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
         },
-        ExpectedValue:
-          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.mkv",
+        ExpectedValue: "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.mkv",
       },
       {
         TestName: "action-strings_03",
         IsMulti:  false,
         InputArr: []string{
-          "CaA", // list of actions.
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
+          "CaA", "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
         },
-        ExpectedValue:
-          "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
+        ExpectedValue: "THE-WALKING-DEAD-S05E01-NO-SANCTUARY_1080P-X265-JOY.MKV",
       },
       {
         TestName: "action-strings_04",
         IsMulti:  false,
         InputArr: []string{
-          "dna", // list of actions.
-          "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+          "dna", "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
         },
-        ExpectedValue:
-          "Mansour - Ghararemoon Yadet Nareh  -    [s_DK6e4-0HQ].mp3",
+        ExpectedValue: "Mansour - Ghararemoon Yadet Nareh  -    [s_DK6e4-0HQ].mp3",
+      },
+      {
+        TestName: "action-strings_05",
+        IsMulti:  false,
+        InputArr: []string{
+          "dnr", "Mansour - Ghararemoon Yadet Nareh منصور - قرارمون یادت نره [s_DK6e4-0HQ].mp3",
+        },
+        ExpectedValue: "Mansour-GhararemoonYadetNarehمنصور-قرارمونیادتنرهs_DK6e4-0HQ.mp3",
       },
     },
   },
