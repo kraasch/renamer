@@ -59,7 +59,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "full-test_pipe-test_00",
+        TestName: "configurator_basic-test_00",
         IsMulti:  true,
         InputArr: []string{
           "config",         // config path.
