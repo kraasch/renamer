@@ -30,14 +30,14 @@ type CommandList []struct {
 
 func simulatePipe(commands CommandList, path string) string {
   var output []byte
-  // for i, c := range commands { // NOTE: for logging or something.
+  // for i, c := range commands { // TODO: for logging.
   for _, c := range commands {
     cmd := exec.Command(c.Name, c.Args...)
     cmd.Dir = path // execute within diretory of test file system.
     cmd.Stdin = strings.NewReader(string(output))
     output, _ = cmd.Output()
-    // fmt.Printf("%d > %s %v \t==> %s\n", i, c.Name, c.Args, output) // TODO:
-    // make this into a log or something.
+    // TODO: make this into a log or something.
+    // fmt.Printf("%d > %s %v \t==> %s\n", i, c.Name, c.Args, output)
   }
   return string(output)
 }
