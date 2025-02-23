@@ -147,7 +147,7 @@ var suites = []gt.TestSuite{
         "shapes/"               + NL +
         "shapes/CIRCLE.txt"     + NL +
         "shapes/SQUARE.txt"     + NL +
-        "shapes/TRIANGLE.txt"   + NL,
+        "shapes/TRIANGLE.txt",
       },
     },
   },

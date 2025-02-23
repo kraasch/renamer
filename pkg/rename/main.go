@@ -184,6 +184,18 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
     }
   }
 
+  // apply actions.
+  {
+    arr := strings.Split(conversions, ",")
+    for _, actionStr := range arr {
+      for _, action := range actions {
+        if actionStr == action.Mnemonic {
+          s = action.Function(s)
+        }
+      }
+    }
+  }
+
   // modes.
   // mode: preserve last dot.
   if smallGapMark != "" && bigGapMark != "" {
@@ -203,19 +215,6 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
       s = strings.ReplaceAll(s, string(char), smallGapMark)
     }
   }
-
-  // apply actions.
-  {
-    arr := strings.Split(conversions, ",")
-    for _, actionStr := range arr {
-      for _, action := range actions {
-        if actionStr == action.Mnemonic {
-          s = action.Function(s)
-        }
-      }
-    }
-  }
-
   // find groups of small marks and make them into big marks.
   if smallGapMark != "" && bigGapMark != "" {
     re, _ := regexp.Compile(smallGapMark + "[" + smallGapMark + "]+")
