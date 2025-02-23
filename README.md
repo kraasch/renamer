@@ -5,6 +5,14 @@ This program doesn't work and can delete files.
 
 ## renamer
 
+## demo
+
+coming up.
+
+## features
+
+coming up.
+
 ## overview
 
 The CLI program is `cmd/renamer.go` and compiles to `renamer`.
