@@ -2,8 +2,10 @@
 package rnmanage
 
 import (
-  "os"
   pro "github.com/kraasch/renamer/pkg/profiler"
+  "os"
+  "strings"
+  "bytes"
 )
 
 func Command(configPath, commandType, profileName, input string) string {
@@ -13,7 +15,16 @@ func Command(configPath, commandType, profileName, input string) string {
   }
   cfg := pro.ReadRawProfileConfig(string(dat))
   profile := cfg.Profiles[profileName]
-  rule := profile.ProfileRule
-  return rule.WordSeparators
+
+  // get results.
+  var buf bytes.Buffer
+  lines := strings.Split(input, "\n")
+  for i, line := range lines {
+    if i == len(lines) - 1 && line == "" { // NOTE: remove last line break from pipe.
+      break
+    }
+    buf.WriteString(profile.Apply(line) + "\n")
+  }
+  return buf.String()
 }
 
