@@ -19,7 +19,7 @@ func TestAll(t *testing.T) {
 var suites = []gt.TestSuite{
 
   /*
-  * Test for xxx.
+  * Test for AutoRenamer, Parse(), ConvertWith().
   */
   {
     TestingFunction:
