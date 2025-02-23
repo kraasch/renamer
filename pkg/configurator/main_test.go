@@ -45,7 +45,9 @@ var suites = []gt.TestSuite{
       configContent := in.InputArr[3]
       // run test setup.
       path := tu.MakeRealTestFs()
-      // TODO: make a copy of CreateFile() and make it part of the configurator package, make it take a path to config, not only single folder.
+      // TODO: make a copy of CreateFile():
+      // - make it part of the configurator package.
+      // - make it take a path to config, not only single folder.
       tu.CreateFile(path, configPath, configName, configContent)
       // start test.
       output := Toast(configPath + configName + profileName)
