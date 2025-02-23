@@ -2,6 +2,7 @@
 package edit
 
 import (
+  "errors"
   // "fmt"
   // "bufio"
   // "os"
@@ -9,6 +10,26 @@ import (
   // "strings"
   // "log"
 )
+
+type Editor struct {
+  editHistory []func(string) (string, error)
+  i           int
+}
+
+func NewEditor(hist []func(string) (string, error)) Editor {
+  return Editor{
+    hist,
+    0,
+  }
+}
+
+func (e *Editor) Edit(in string) (string, error) {
+  i := e.i
+  if i < len(e.editHistory) {
+    return e.editHistory[i](in)
+  }
+  return "", errors.New("Edit history exhausted.")
+}
 
 /* TODO: make this into a sub module, ie package. */
 
