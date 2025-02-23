@@ -6,9 +6,6 @@ import (
   "fmt"
   "testing"
   gt "github.com/kraasch/gotest/gotest"
-
-  // local packages.
-  // pro "github.com/kraasch/renamer/pkg/profiler"
 )
 
 var (
