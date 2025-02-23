@@ -16,6 +16,13 @@ func TestAll(t *testing.T) {
   gt.DoTest(t, suites)
 }
 
+/*
+* TODO: use exec.Command(name, args...) with
+* vim in order to do automated tests with mocks.
+*   - "vim --headless +qa"
+*   - "vi -c 'normal gg0llllrxu' some-file.txt || (echo 'Error!')"
+*/
+
 var suites = []gt.TestSuite{
 
   /*
@@ -24,14 +31,14 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      editor := NewEditor(
+      mEditor := NewMockEditor(
         []func(string) (string, error) {
           func(string) (string, error) { return "1st editing result", nil },
           func(string) (string, error) { return "2nd editing result", nil },
           func(string) (string, error) { return "3rd editing result", nil },
         },
       )
-      s, _ := editor.Edit("abc")
+      s, _ := mEditor.editor.Edit("abc")
       return s
     },
     Tests:

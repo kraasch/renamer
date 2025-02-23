@@ -16,10 +16,17 @@ type Editor struct {
   i           int
 }
 
-func NewEditor(hist []func(string) (string, error)) Editor {
-  return Editor{
-    hist,
-    0,
+type MockEditor struct {
+  editor Editor
+}
+
+// type RealEditor struct { // TODO: implement.
+//   editor Editor
+// }
+
+func NewMockEditor(hist []func(string) (string, error)) MockEditor {
+  return MockEditor{
+    Editor{ hist, 0 },
   }
 }
 
