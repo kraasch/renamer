@@ -5,6 +5,7 @@ import (
   // unit testing.
   "testing"
   gt "github.com/kraasch/gotest/gotest"
+  "github.com/spf13/afero"
 
   // cli testing.
   "fmt"
@@ -13,6 +14,7 @@ import (
 
   // local packages.
   tu "github.com/kraasch/renamer/pkg/testutil"
+  dir "github.com/kraasch/renamer/pkg/dir"
 )
 
 var (
@@ -81,16 +83,25 @@ var suites = []gt.TestSuite{
         },
       }
       finalPipeOutput := simulatePipe(cmds, path)
-      output := Command(
+      // create test file system.
+      fs := afero.NewOsFs()
+      // main test.
+      // TODO: implement command types: profile, edit, interactive.
+      _ = Command(
+        fs, // file system.
         "testfs/" + configPath + "/" + configName, // config.
-        "profile",       // type (profile/edit/interactive).
         profileName,     // profile.
         finalPipeOutput, // input.
       )
+      // get file listing.
+      fs2 := afero.NewIOFS(fs)
+      fs3,_ := fs2.Sub("testfs")
+      listing := dir.DirListTree(fs3)
+      // listing := tu.ListFs(fs, "testfs/") // TODO: remove later.
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.
-      return output
+      return listing
     },
     Tests:
     []gt.TestList{
@@ -117,15 +128,17 @@ var suites = []gt.TestSuite{
           `                                         `,
         },
         ExpectedValue:
-          "./fruits/"             + NL +
-          "./fruits/APPLES.txt"   + NL +
-          "./fruits/BANANAS.txt"  + NL +
-          "./fruits/COCONUTS.txt" + NL +
-          "./NOTES.txt"           + NL +
-          "./shapes/"             + NL +
-          "./shapes/CIRCLE.txt"   + NL +
-          "./shapes/SQUARE.txt"   + NL +
-          "./shapes/TRIANGLE.txt" + NL,
+        "config/"               + NL +
+        "config/general.config" + NL +
+        "fruits/"               + NL +
+        "fruits/APPLES.txt"     + NL +
+        "fruits/BANANAS.txt"    + NL +
+        "fruits/COCONUTS.txt"   + NL +
+        "NOTES.txt"             + NL +
+        "shapes/"               + NL +
+        "shapes/CIRCLE.txt"     + NL +
+        "shapes/SQUARE.txt"     + NL +
+        "shapes/TRIANGLE.txt"   + NL,
       },
     },
   },

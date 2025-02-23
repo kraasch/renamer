@@ -5,19 +5,29 @@ import (
   // local packages.
   auto "github.com/kraasch/renamer/pkg/autorn"
   ctor "github.com/kraasch/renamer/pkg/configurator"
+  fsmg "github.com/kraasch/renamer/pkg/fsmanage"
+
+  // external packages.
+  "github.com/spf13/afero"
 
   // other packages.
   // "fmt"
 )
 
-func Command(configPath, commandType, profileName, input string) string {
+func Command(fileSystem afero.Fs, configPath, profileName, input string) string {
+
   // open raw content.
   rawToml := ctor.ReadConfig(configPath)
+
   // parse TOML and apply defined profiles.
   var a auto.AutoRenamer
   a.Parse(rawToml)
-  output := a.ConvertWith(profileName, input)
+  targetNames := a.ConvertWith(profileName, input)
+
+  // apply renames to file system.
+  fsmg.DirRename(fileSystem, input, targetNames)
+
   // return result.
-  return output
+  return ""
 }
 

@@ -6,15 +6,36 @@ import (
   // create fake file system.
   "fmt"
   "github.com/spf13/afero"
+
   // create real file system.
   "os"
   "path/filepath"
+
+  // list files in directory.
+  "strings"
+  iofs "io/fs"
 )
 
 const (
   DIRSPERM = 0755
   FILEPERM = 0644
 )
+
+func ListFs(fs afero.Fs, path string) string {
+  var builder strings.Builder
+  _ = afero.GetTempDir(fs, path)
+  err := afero.Walk(fs, path, func(filePath string, info iofs.FileInfo, err error) error {
+    if err != nil {
+      return err
+    }
+    builder.WriteString(filePath + "\n")
+    return nil
+  })
+  if err != nil {
+    panic(err)
+  }
+  return builder.String()
+}
 
 func MakeTestFs() afero.Fs {
   var fileSystem = afero.NewMemMapFs()
