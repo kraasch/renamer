@@ -37,10 +37,10 @@ var suites = []gt.TestSuite{
               `      conversions = "cAa"` + NL +
               `      modes_string = ""` + NL +
               ``
-      name := in.InputArr[0]
+      targetString := in.InputArr[0]
       var auto AutoRenamer
       auto.Parse(toml)
-      output := auto.ConvertWith("prettify-txt", name)
+      output := auto.ConvertWith("prettify-txt", targetString)
       return output
     },
     Tests:

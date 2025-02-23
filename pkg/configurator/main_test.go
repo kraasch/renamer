@@ -1,18 +1,16 @@
 
-package rnmanage
+package configurator
 
 import (
   // unit testing.
   "testing"
   gt "github.com/kraasch/gotest/gotest"
 
-  // cli testing.
-  "fmt"
-  "os/exec"
-  "strings"
-
   // local packages.
   tu "github.com/kraasch/renamer/pkg/testutil"
+
+  // misc packages.
+  "fmt"
 )
 
 var (
@@ -23,70 +21,34 @@ func TestAll(t *testing.T) {
   gt.DoTest(t, suites)
 }
 
-type CommandList []struct {
-  Name string
-  Args []string
-}
-
-func simulatePipe(commands CommandList, path string) string {
-  var output []byte
-  // for i, c := range commands { // TODO: for logging.
-  for _, c := range commands {
-    cmd := exec.Command(c.Name, c.Args...)
-    cmd.Dir = path // execute within diretory of test file system.
-    cmd.Stdin = strings.NewReader(string(output))
-    output, _ = cmd.Output()
-    // TODO: make this into a log or something.
-    // fmt.Printf("%d > %s %v \t==> %s\n", i, c.Name, c.Args, output)
-  }
-  return string(output)
-}
-
 /*
-* TODO: do not make too many pipe tests, but eventually implement some e2e tests.
-*/
-
-/*
-* NOTE: PIPE TEST IDEAS:
-* Pipe test: ls | grep -E 'mp3$' | renamer -edit // TODO: test.
-* Pipe test: find | grep -E '.ogg$' | renamer -profile music_ogg // TODO: test.
+* TODO: create tests:
+* - [ ] OpenDefaultConfig():
+*   - provide with default config.
+*   - provide with default config location.
+*   - create config if not exists.
+*   - read config file text as raw string.
 */
 
 var suites = []gt.TestSuite{
 
   /*
-  * Pipe test: ls | grep -E 'txt$' | renamer -profile files_txt
+  * Test configurator xxx.
   */
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
       // set test variables.
-      firstCommand  := in.InputArr[0]
-      configPath    := in.InputArr[1]
-      configName    := in.InputArr[2]
-      profileName   := in.InputArr[3]
-      configContent := in.InputArr[4]
+      configPath    := in.InputArr[0]
+      configName    := in.InputArr[1]
+      profileName   := in.InputArr[2]
+      configContent := in.InputArr[3]
       // run test setup.
       path := tu.MakeRealTestFs()
+      // TODO: make a copy of CreateFile() and make it part of the configurator package, make it take a path to config, not only single folder.
       tu.CreateFile(path, configPath, configName, configContent)
-      // simulate pipe.
-      cmds := CommandList{
-        {
-          firstCommand,
-          []string{},
-        },
-        {
-          "grep",
-          []string{"-E", ".txt$"},
-        },
-      }
-      finalPipeOutput := simulatePipe(cmds, path)
-      output := Command(
-        "testfs/" + configPath + "/" + configName, // config.
-        "profile",       // type (profile/edit/interactive).
-        profileName,     // profile.
-        finalPipeOutput, // input.
-      )
+      // start test.
+      output := Toast(configPath + configName + profileName)
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.
@@ -98,7 +60,6 @@ var suites = []gt.TestSuite{
         TestName: "full-test_pipe-test_00",
         IsMulti:  true,
         InputArr: []string{
-          "find",           // first command.
           "config",         // config path.
           "general.config", // config name.
           "prettify-txt",   // profile name.

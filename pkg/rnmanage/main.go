@@ -2,10 +2,13 @@
 package rnmanage
 
 import (
+  // local packages.
   pro "github.com/kraasch/renamer/pkg/profiler"
+  // autorn "github.com/kraasch/renamer/pkg/autorn"
+  // other packages.
   "os"
-  "strings"
-  "bytes"
+  // misc packages.
+  "fmt"
 )
 
 func Command(configPath, commandType, profileName, input string) string {
@@ -15,16 +18,13 @@ func Command(configPath, commandType, profileName, input string) string {
   }
   cfg := pro.ReadRawProfileConfig(string(dat))
   profile := cfg.Profiles[profileName]
+  fmt.Println("CONFIG:", cfg)
 
-  // get results.
-  var buf bytes.Buffer
-  lines := strings.Split(input, "\n")
-  for i, line := range lines {
-    if i == len(lines) - 1 && line == "" { // NOTE: remove last line break from pipe.
-      break
-    }
-    buf.WriteString(profile.Apply(line) + "\n")
-  }
-  return buf.String()
+  // parse TOML and apply defined profiles.
+  // var auto AutoRenamer
+  // auto.Parse(toml)
+  // output := auto.ConvertWith(profileName, name)
+  // return output
+  return fmt.Sprintf("%#v\n", profile)
 }
 
