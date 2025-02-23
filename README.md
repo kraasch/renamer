@@ -39,6 +39,10 @@ The `pkg` directory below is structured by dependency.
       - [ ] `renamer -recursive=all   -profile music_ogg` as above, but recursive (default)
       - [ ] `renamer -recursive=files -profile music_ogg` as above, but recursive.
       - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
+      - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
+    - [ ] allow a way to rename by providing a rule string on CLI.
+      - [ ] ie `renamer -rule " (),,-,_,caA,"`
+      - [ ] ie `renamer -rule " ();;-;_;caA;" -separator=";"` for a different separator than a comma.
 
   - RENAMING. Main functionality:
     - [ ] different ways of renaming.
