@@ -12,6 +12,10 @@ import (
   "os/exec"
   "strings"
 
+  // misc.
+  "path/filepath"
+  "os"
+
   // local packages.
   tu "github.com/kraasch/renamer/pkg/testutil"
   dir "github.com/kraasch/renamer/pkg/dir"
@@ -84,11 +88,16 @@ var suites = []gt.TestSuite{
       }
       finalPipeOutput := simulatePipe(cmds, path)
       // create test file system.
+
       fs := afero.NewOsFs()
+      currentDir, _ := os.Getwd()
+      targetDir := filepath.Join(currentDir, "testfs")
+      fs4 := afero.NewBasePathFs(fs, targetDir)
+
       // main test.
       // TODO: implement command types: profile, edit, interactive.
       _ = Command(
-        fs, // file system.
+        fs4, // file system.
         "testfs/" + configPath + "/" + configName, // config.
         profileName,     // profile.
         finalPipeOutput, // input.
@@ -128,13 +137,13 @@ var suites = []gt.TestSuite{
           `                                         `,
         },
         ExpectedValue:
+        "NOTES.txt"             + NL +
         "config/"               + NL +
         "config/general.config" + NL +
         "fruits/"               + NL +
         "fruits/APPLES.txt"     + NL +
         "fruits/BANANAS.txt"    + NL +
         "fruits/COCONUTS.txt"   + NL +
-        "NOTES.txt"             + NL +
         "shapes/"               + NL +
         "shapes/CIRCLE.txt"     + NL +
         "shapes/SQUARE.txt"     + NL +
