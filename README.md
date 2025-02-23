@@ -9,7 +9,7 @@ This program doesn't work and can delete files.
 
 The CLI program is `cmd/renamer.go` and compiles to `renamer`.
 The main package is `rnmanage`.
-The `pkg` directory below is structured by dependency.
+In the below tree, the `pkg` tree is loosely representing the packages' dependencies.
 
 ```text
 .
