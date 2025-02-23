@@ -96,7 +96,7 @@ var suites = []gt.TestSuite{
 
       // main test.
       // TODO: implement command types: profile, edit, interactive.
-      _ = Command(
+      _ = Command( // profile command: "renamer -profile 'profileName'"
         fs4, // file system.
         "testfs/" + configPath + "/" + configName, // config.
         profileName,     // profile.
