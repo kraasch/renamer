@@ -21,6 +21,10 @@ func TestAll(t *testing.T) {
 * vim in order to do automated tests with mocks.
 *   - "vim --headless +qa"
 *   - "vi -c 'normal gg0llllrxu' some-file.txt || (echo 'Error!')"
+* Tasks:
+*   - [ ] test for successful edits.
+*   - [ ] test for empty edits.
+*   - [ ] test for aborted edits.
 */
 
 var suites = []gt.TestSuite{
