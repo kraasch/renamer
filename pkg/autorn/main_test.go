@@ -27,33 +27,36 @@ var suites = []gt.TestSuite{
   {
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
-      // wordSeparators := in.InputArr[0]
-      // deleteChars    := in.InputArr[1]
-      // smallGapMark   := in.InputArr[2]
-      // bigGapMark     := in.InputArr[3]
-      // conversions    := in.InputArr[4]
-      // modesString    := in.InputArr[5]
-      // targetName     := in.InputArr[6]
-      // p := pro.CreateProfile
-      output := "Toast"
+      toml := in.InputArr[0]
+      name := in.InputArr[1]
+      var auto AutoRenamer
+      auto.Parse(toml)
+      output := auto.ConvertWith("prettify-txt", name)
       return output
     },
     Tests:
     []gt.TestList{
       {
-        TestName: "xxx_00",
+        TestName: "autorn_apply-profile_00",
         IsMulti:  false,
         InputArr: []string{
-          " ()", // word separators.
-          "",    // delete characters.
-          "-",   // small gap replacement.
-          "_",   // big gap replacement.
-          "cAa", // list of actions.
-          "",    // string of modes.
+          `title = "My Conf"` + NL +
+          `` + NL +
+          `[profiles]` + NL +
+          `  [profiles.prettify-txt]` + NL +
+          `    name = "SomeProfile"` + NL +
+          `    [profiles.prettify-txt.profile_rule]` + NL +
+          `      word_separators = " ()"` + NL +
+          `      delete_chars = ""` + NL +
+          `      small_gap_mark = "-"` + NL +
+          `      big_gap_mark = "_"` + NL +
+          `      conversions = "cAa"` + NL +
+          `      modes_string = ""` + NL +
+          ``,
           "The Walking Dead S05E01 No Sanctuary (1080p x265 Joy).mkv",
-          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
         },
-        ExpectedValue: "false",
+        ExpectedValue:
+          "the-walking-dead-s05e01-no-sanctuary_1080p-x265-joy.mkv",
       },
     },
   },
