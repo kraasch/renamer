@@ -17,6 +17,7 @@ The `pkg` directory below is structured by dependency.
 │   └── renamer.go // CLI program
 └── pkg
     └── rnmanage          // orchestrate renaming (editing, automatic) and file system. 
+        ├── configurator  // reads the config file.
         ├── edit          // calls editor.
         ├── fsmanage      // deals with file system.
         │   ├── dir       // lists directories.
