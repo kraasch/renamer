@@ -6,9 +6,11 @@ import (
   tea "github.com/charmbracelet/bubbletea"
   lip "github.com/charmbracelet/lipgloss"
 
+  // argument parser.
+  arg "github.com/alexflint/go-arg"
+
   // basics.
   "fmt"
-  "flag"
 
   // file system.
   "github.com/spf13/afero"
@@ -18,12 +20,14 @@ import (
   fsm "github.com/kraasch/renamer/pkg/fsmanage"
 )
 
+var args struct {
+	Suppress bool `arg:"required"`
+	Verbose  bool
+}
+
 var (
   // return value.
   output = ""
-  // flags.
-  verbose  = false
-  suppress = false
   // styles.
   styleBox = lip.NewStyle().
      BorderStyle(lip.NormalBorder()).
@@ -31,9 +35,9 @@ var (
 )
 
 type model struct {
-  width     int
-  height    int
-  fs        afero.Fs
+  width  int
+  height int
+  fs     afero.Fs
 }
 
 func (m model) Init() tea.Cmd {
@@ -60,11 +64,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
   var str string
-  if verbose {
-    str = "Hello"
-  } else {
-    str = "Hi"
-  }
+  str += fmt.Sprintf("Verbose:  %#v (%[1]T)\n", args.Verbose)
+  str += fmt.Sprintf("Suppress: %#v (%[1]T)", args.Suppress)
   str = styleBox.Render(str)
   return lip.Place(m.width, m.height, lip.Center, lip.Center, str)
 }
@@ -75,9 +76,7 @@ func main() {
   fs := afero.NewOsFs()
 
   // parse flags.
-  flag.BoolVar(&verbose,  "verbose",   false, "Show info")
-  flag.BoolVar(&suppress, "suppress",  false, "Print nothing")
-  flag.Parse()
+  arg.MustParse(&args)
 
   // init model.
   m := model{0, 0, fs}
@@ -89,7 +88,7 @@ func main() {
   }
 
   // print the last highlighted value in calendar to stdout.
-  if !suppress {
+  if !args.Suppress {
     fmt.Println(output)
   }
 
