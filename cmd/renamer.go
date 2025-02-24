@@ -17,7 +17,7 @@ import (
   "os"
 
   // local packages.
-  fsm "github.com/kraasch/renamer/pkg/fsmanage"
+  // fsm "github.com/kraasch/renamer/pkg/fsmanage"
 )
 
 // TODO: implement the following args:
