@@ -20,9 +20,24 @@ import (
   fsm "github.com/kraasch/renamer/pkg/fsmanage"
 )
 
+// TODO: implement the following args:
+// NOTE: sketch of the args.
+//
+// 1) InputMode      (req) = {pipe,dir[+selection],recursive[+selection]}.
+// 2) ConversionMode (req) = {rule[+ruleString],profile[+profileName],editor,interactive}.
+// 3) OutputMode     (req) = {apply,validate}.
+//               selection = {all,files,dirs}.
+//              ruleString = STRING
+//             profileName = STRING
 var args struct {
-	Suppress bool `arg:"required"`
-	Verbose  bool
+  Suppress       bool   `arg:"-u"`
+  Verbose        bool   `arg:"-v"`
+	InputMode      string `arg:"-i,required"`
+	ConversionMode string `arg:"-c,required"`
+	OutputMode     string `arg:"-o,required"`
+  SelectionMode  string `arg:"-s"`
+  RuleString     string `arg:"-r"`
+  ProfileName    string `arg:"-p"`
 }
 
 var (
@@ -76,7 +91,25 @@ func main() {
   fs := afero.NewOsFs()
 
   // parse flags.
-  arg.MustParse(&args)
+  p := arg.MustParse(&args)
+  if args.InputMode != "pipe" && args.InputMode != "dir" && args.InputMode != "recursive" {
+    p.Fail("InputMode must be one of {pipe,dir,recursive}")
+  }
+  if args.ConversionMode != "rule" && args.ConversionMode != "profile" && args.ConversionMode != "editor" && args.ConversionMode != "interactive" {
+    p.Fail("ConversionMode must be one of {rule,profile,editor,interactive}")
+  }
+  if args.OutputMode != "apply" && args.OutputMode != "validate" {
+    p.Fail("OutputMode must be one of {apply,validate}")
+  }
+  if (args.InputMode == "dir" || args.InputMode != "recursive") && args.SelectionMode == "" {
+    p.Fail("InputModes {dir,recursive} need a SelectionMode {all,files,dirs}")
+  }
+  if args.ConversionMode != "rule" && args.RuleString == "" {
+    p.Fail("ConversionMode {rule} needs a RuleString argument")
+  }
+  if args.ConversionMode != "profile" && args.ProfileName == "" {
+    p.Fail("ConversionMode {profile} needs a ProfileName argument")
+  }
 
   // init model.
   m := model{0, 0, fs}
