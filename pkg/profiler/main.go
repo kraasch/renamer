@@ -36,7 +36,7 @@ func (c *Config) AddProfileToConfig(p *Profile, name string) Config {
   return *c
 }
 
-func (p *Profile) Apply(input string) string {
+func (p *Profile) Apply(input string, metaInfo rn.MetaInfo) string {
   r := p.ProfileRule
   return rn.ApplyRenamingRules(
     input,
@@ -46,6 +46,7 @@ func (p *Profile) Apply(input string) string {
     r.SmallGapMark,
     r.BigGapMark,
     r.ModesString,
+    metaInfo,
   )
 }
 

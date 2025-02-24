@@ -10,6 +10,18 @@ func TestAll(t *testing.T) {
   gt.DoTest(t, suites)
 }
 
+type TestInfo struct {
+  // empty.
+}
+
+func (ti TestInfo) CurrentDate() string {
+  return "2020-12-20"
+}
+
+func (ti TestInfo) CreationDate() string {
+  return "2020-12-20"
+}
+
 var suites = []gt.TestSuite{
 
   // /*
@@ -25,7 +37,7 @@ var suites = []gt.TestSuite{
   //     conversions    := in.inputArr[4]
   //     modesString    := in.inputArr[5]
   //     targetName     := in.inputArr[6]
-  //     out, err := ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString)
+  //     out, err := ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString, TestInfo{})
   //     if (err != nil) {
   //        out = fmt.Sprint(err) // successfully received and error, thus compare error message string.
   //     }
@@ -59,7 +71,7 @@ var suites = []gt.TestSuite{
     func(t *testing.T, in gt.TestList) string {
       actions    := in.InputArr[0]
       targetName := in.InputArr[1]
-      out := ApplyRenamingRules(targetName, "", "", actions, "", "", "")
+      out := ApplyRenamingRules(targetName, "", "", actions, "", "", "", TestInfo{})
       return out
     },
     Tests:
@@ -152,7 +164,7 @@ var suites = []gt.TestSuite{
       conversions    := in.InputArr[4]
       modesString    := in.InputArr[5]
       targetName     := in.InputArr[6]
-      isValid := ValidateRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString)
+      isValid := ValidateRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString, TestInfo{})
       if isValid {
         return "true"
       } else {
@@ -205,7 +217,7 @@ var suites = []gt.TestSuite{
       conversions    := in.InputArr[4]
       modesString    := in.InputArr[5]
       targetName     := in.InputArr[6]
-      out = ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString)
+      out = ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modesString, TestInfo{})
       return
     },
     Tests:

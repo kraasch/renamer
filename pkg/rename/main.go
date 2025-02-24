@@ -7,11 +7,16 @@ import (
   "unicode"
 )
 
+type MetaInfo interface {
+  CurrentDate()  string
+  CreationDate() string
+}
+
 var (
   actions = []struct {
     Mnemonic    string
     Description string
-    Function    func(string) string
+    Function    func(string, MetaInfo) string
   }{
 
     /*
@@ -19,7 +24,7 @@ var (
     */
     {
       "cAa", "convert capital to lower (but not file ending)",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         before := s
         ending := ""
         lastIndex := strings.LastIndex(s, ".")
@@ -33,7 +38,7 @@ var (
 
     {
       "caA", "convert lower to capital (but not file ending)",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         before := s
         ending := ""
         lastIndex := strings.LastIndex(s, ".")
@@ -47,14 +52,14 @@ var (
 
     {
       "CAa", "convert capital to lower (including file ending)",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         return strings.ToLower(s)
       },
     },
 
     {
       "CaA", "convert lower to capital (including file ending)",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         return strings.ToUpper(s)
       },
     },
@@ -64,7 +69,7 @@ var (
     */
     {
       "dna", "delete non-ascii characters",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         var result strings.Builder
         for _, r := range s {
           if r < unicode.MaxASCII {
@@ -77,7 +82,7 @@ var (
 
     {
       "dnr", "delete non-readable characters (not letters, digits or in {.-_})",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         var result strings.Builder
         for _, r := range s {
           if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '.' || r == '-' || r == '_' {
@@ -93,10 +98,12 @@ var (
     */
     {
       "id^", "insert current date in beginning",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         var result strings.Builder
-        date := "2020-12-20" // TODO: get current date.
+        // create date.
+        date := mi.CurrentDate()
         date += "_"
+        // write rest.
         for _, r := range date {
           result.WriteRune(r)
         }
@@ -109,10 +116,12 @@ var (
 
     {
       "id$", "insert current date in end",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         var result strings.Builder
+        // create date.
         date := "_"
-        date += "2020-12-20" // TODO: get current date.
+        date += mi.CurrentDate()
+        // write rest.
         for _, r := range s {
           result.WriteRune(r)
         }
@@ -125,7 +134,7 @@ var (
 
     {
       "id.", "insert current date before file ending",
-      func(s string) string {
+      func(s string, mi MetaInfo) string {
         before := s
         ending := ""
         lastIndex := strings.LastIndex(s, ".")
@@ -134,8 +143,10 @@ var (
           ending = s[lastIndex:]
         }
         var result strings.Builder
+        // create date.
         date := "_"
-        date += "2020-12-20" // TODO: get current date.
+        date += mi.CurrentDate()
+        // write rest.
         for _, r := range before {
           result.WriteRune(r)
         }
@@ -166,12 +177,12 @@ func replaceLast(target, from, into string) (result string) {
   return target[:i] + into + target[i+len(from):]
 }
 
-func ValidateRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes string) (bool) {
-  resultOfApplyingRules := ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes)
+func ValidateRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes string, mi MetaInfo) (bool) {
+  resultOfApplyingRules := ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes, mi)
   return targetName == resultOfApplyingRules
 }
 
-func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes string) (s string) {
+func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, smallGapMark, bigGapMark, modes string, mi MetaInfo) (s string) {
 
   // start with string to rename.
   s = targetName
@@ -190,7 +201,7 @@ func ApplyRenamingRules(targetName, wordSeparators, deleteChars, conversions, sm
     for _, actionStr := range arr {
       for _, action := range actions {
         if actionStr == action.Mnemonic {
-          s = action.Function(s)
+          s = action.Function(s, mi)
         }
       }
     }

@@ -22,7 +22,7 @@ func Command(fileSystem afero.Fs, configPath, profileName, input string) string 
   // parse TOML and apply defined profiles.
   var a auto.AutoRenamer
   a.Parse(rawToml)
-  targetNames := a.ConvertWith(profileName, input)
+  targetNames := a.ConvertWith(profileName, input, fileSystem)
 
   // apply renames to file system.
   fsmg.DirRename(fileSystem, input, targetNames)

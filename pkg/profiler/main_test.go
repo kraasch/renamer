@@ -16,6 +16,18 @@ func TestAll(t *testing.T) {
   gt.DoTest(t, suites)
 }
 
+type TestInfo struct {
+  // empty.
+}
+
+func (ti TestInfo) CurrentDate() string {
+  return "2020-12-20"
+}
+
+func (ti TestInfo) CreationDate() string {
+  return "2020-12-20"
+}
+
 var suites = []gt.TestSuite{
 
   /*
@@ -85,7 +97,7 @@ var suites = []gt.TestSuite{
       profileName    := in.InputArr[6]
       testName       := in.InputArr[7]
       p := Profile{ profileName, r }
-      output := p.Apply(testName)
+      output := p.Apply(testName, TestInfo{})
       return output
     },
     Tests:
