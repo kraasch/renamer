@@ -5,9 +5,20 @@ import (
   "io/fs"
   "strings"
   "sort"
+  "os"
+  "io"
 )
 
-func DirList(fileSystem fs.FS) (out string) {
+func Pipe() string {
+  data, err := io.ReadAll(os.Stdin) // Read all data from Stdin
+  if err != nil {
+    // fmt.Fprintln("Error reading from stdin:", err) // TODO: implement error.
+    panic(err)
+  }
+  return string(data)
+}
+
+func DirList(fileSystem fs.FS) string {
   dirEntries, err := fs.ReadDir(fileSystem, ".")
   if err != nil {
     return "" // TODO: handle errors appropriately.
@@ -20,11 +31,11 @@ func DirList(fileSystem fs.FS) (out string) {
     }
     entries = append(entries, name)
   }
-  out = strings.Join(entries, "\n")
+  out := strings.Join(entries, "\n")
   return out
 }
 
-func DirListTree(fileSystem fs.FS) (out string) {
+func DirListTree(fileSystem fs.FS) string {
   var fileList []string
   err := fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
     if err != nil {
@@ -44,7 +55,7 @@ func DirListTree(fileSystem fs.FS) (out string) {
       return "" // TODO: handle errors appropriately.
   }
   sort.Strings(fileList) // sort alphabetically.
-  out = strings.Join(fileList, "\n")
+  out := strings.Join(fileList, "\n")
   return out
 }
 

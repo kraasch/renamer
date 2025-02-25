@@ -17,7 +17,8 @@ import (
   "os"
 
   // local packages.
-  // fsm "github.com/kraasch/renamer/pkg/fsmanage"
+  dir "github.com/kraasch/renamer/pkg/dir"
+  // rnm "github.com/kraasch/renamer/pkg/rnmanage"
 )
 
 // TODO: implement the following args:
@@ -29,6 +30,7 @@ import (
 //               selection = {all,files,dirs}.
 //              ruleString = STRING
 //             profileName = STRING
+//              configPath = STRING
 var args struct {
   Verbose        bool   `arg:"-v"`
 	InputMode      string `arg:"-i,required"`
@@ -37,6 +39,7 @@ var args struct {
   SelectionMode  string `arg:"-s"`
   RuleString     string `arg:"-r"`
   ProfileName    string `arg:"-p"`
+	ConfigPath     string `arg:"-C"`
 }
 
 var (
@@ -98,7 +101,8 @@ func StartInteractiveGui(fs afero.Fs, in string) string {
 
 func main() {
   // use operating system's file system, wrapped in afero.
-  fs := afero.NewOsFs()
+  fs   := afero.NewOsFs()
+  iofs := afero.NewIOFS(fs)
 
   // parse flags.
   p := arg.MustParse(&args)
@@ -119,6 +123,9 @@ func main() {
   if args.ConversionMode == "profile" && args.ProfileName == "" {
     p.Fail("ConversionMode {profile} needs a ProfileName argument")
   }
+  if args.ConversionMode != "profile" && args.ConfigPath != "" {
+    p.Fail("Only ConversionMode {profile} needs a ConfigPath argument")
+  }
   // output.
   if args.OutputMode != "apply" && args.OutputMode != "validate" && args.OutputMode != "print" {
     p.Fail("OutputMode must be one of {apply,validate}")
@@ -128,14 +135,14 @@ func main() {
   input := ""
   switch args.InputMode {
   case "pipe":
-    input = "" // TODO: implement.
     fmt.Println("Get input from pipe")
+    input = dir.Pipe()
   case "dir":
-    input = "" // TODO: implement.
     fmt.Println("Get input dir")
+    input = dir.DirList(iofs)
   case "recursive":
-    input = "" // TODO: implement.
-    fmt.Println("Get input recursive")
+    fmt.Println("Get input recursively")
+    input = dir.DirListTree(iofs)
   }
 
   // make conversion.
@@ -159,13 +166,20 @@ func main() {
   switch args.OutputMode {
   case "apply":
     fmt.Println("Give output by applying")
-    // fsm.DirRename(fs, input, conversion)
+    // NOTE: problem: profile and apply must be set.
+
+    // _ = rnm.Command(    // profile command: "renamer -profile 'profileName'"
+    //   fs,               // file system.
+    //   args.ConfigPath,  // config.
+    //   args.ProfileName, // profile.
+    //   input,            // input.
+    // )
   case "print":
     fmt.Println("Give output by printing")
     fmt.Println(conversion) // TODO: implement.
   case "validate":
     fmt.Println("Give output by validating")
-    fmt.Println(conversion) // TODO: implement.
+    // fsm.DirRename(fs, input, conversion) // TODO: implement.
   }
 
 } // fin.
