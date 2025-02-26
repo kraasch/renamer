@@ -15,8 +15,7 @@ const (
 func ReadConfig(configPath string) string {
   dat, err := os.ReadFile(configPath)
   if err != nil {
-    {}
-    // panic(err)
+    {} // TODO: report failure.
   }
   return string(dat)
 }
