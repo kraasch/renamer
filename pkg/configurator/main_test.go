@@ -33,7 +33,7 @@ func TestAll(t *testing.T) {
 var suites = []gt.TestSuite{
 
   /*
-  * Test configurator xxx.
+  * Test configurator CreateFile(), ReadConfig().
   */
   {
     TestingFunction:

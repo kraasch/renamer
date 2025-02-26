@@ -22,8 +22,6 @@ func ReadConfig(configPath string) string {
 }
 
 func CreateFile(pathToFile, fileName, fileContent string) {
-  // TODO: Generallize, so far this function does not create file paths,
-  // can only create one subfolder (depth level = 1).
   dirs := strings.Split(pathToFile, "/") // TODO: change for windows.
   dirBuf := ""
   for _, dir := range dirs {
