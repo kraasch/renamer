@@ -6,11 +6,11 @@ import (
   // create fake file system.
   "fmt"
   afero "github.com/spf13/afero"
-  iofs "io/fs"
 
   // create real file system.
   "os"
   "path/filepath"
+  iofs "io/fs"
 
   // list files in directory.
   "strings"
