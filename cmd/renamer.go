@@ -18,7 +18,7 @@ import (
 
   // local packages.
   dir "github.com/kraasch/renamer/pkg/dir"
-  // rnm "github.com/kraasch/renamer/pkg/rnmanage"
+  rnm "github.com/kraasch/renamer/pkg/rnmanage"
 )
 
 // TODO: implement the following args:
@@ -99,6 +99,10 @@ func StartInteractiveGui(fs afero.Fs, in string) string {
   return output
 }
 
+func StartInteractiveEditor() string {
+  return "Have to implement." // TODO: implement.
+}
+
 func main() {
   // use operating system's file system, wrapped in afero.
   fs   := afero.NewOsFs()
@@ -150,36 +154,31 @@ func main() {
   switch args.ConversionMode {
   case "rule":
     fmt.Println("Convert by rule")
-    conversion = "" // TODO: implement.
+    rnm.ConvertByRule(args.RuleString, input)
   case "profile":
     fmt.Println("Convert by profile")
-    conversion = "" // TODO: implement.
+    rnm.AutoConvertByProfile(fs, args.ConfigPath, args.ProfileName, input)
   case "editor":
     fmt.Println("Convert by editor")
-    conversion = "" // TODO: implement.
+    conversion = StartInteractiveEditor()
+    rnm.ConvertByPathList(conversion, input)
   case "interactive":
     fmt.Println("Convert interactively")
     conversion = StartInteractiveGui(fs, input)
+    rnm.ConvertByPathList(conversion, input)
   }
 
   // give output.
   switch args.OutputMode {
   case "apply":
     fmt.Println("Give output by applying")
-    // NOTE: problem: profile and apply must be set.
-
-    // _ = rnm.Command(    // profile command: "renamer -profile 'profileName'"
-    //   fs,               // file system.
-    //   args.ConfigPath,  // config.
-    //   args.ProfileName, // profile.
-    //   input,            // input.
-    // )
+    rnm.ExecuteByApplying()
   case "print":
     fmt.Println("Give output by printing")
-    fmt.Println(conversion) // TODO: implement.
+    rnm.ExecuteByPrinting()
   case "validate":
     fmt.Println("Give output by validating")
-    // fsm.DirRename(fs, input, conversion) // TODO: implement.
+    rnm.ExecuteByValidating()
   }
 
 } // fin.

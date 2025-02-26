@@ -87,8 +87,8 @@ var suites = []gt.TestSuite{
         },
       }
       finalPipeOutput := simulatePipe(cmds, path)
-      // create test file system.
 
+      // create test file system. // TODO: refactor.
       fs := afero.NewOsFs()
       currentDir, _ := os.Getwd()
       targetDir := filepath.Join(currentDir, "testfs")
@@ -96,17 +96,19 @@ var suites = []gt.TestSuite{
 
       // main test.
       // TODO: implement command types: profile, edit, interactive.
-      _ = Command( // profile command: "renamer -profile 'profileName'"
+      _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
         fs4, // file system.
         "testfs/" + configPath + "/" + configName, // config.
         profileName,     // profile.
         finalPipeOutput, // input.
       )
-      // get file listing.
+      ExecuteByApplying()
+
+      // get file listing. // TODO: refactor.
       fs2 := afero.NewIOFS(fs)
       fs3,_ := fs2.Sub("testfs")
       listing := dir.DirListTree(fs3)
-      // listing := tu.ListFs(fs, "testfs/") // TODO: remove later.
+
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.

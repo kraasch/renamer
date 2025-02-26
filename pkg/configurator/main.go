@@ -12,6 +12,10 @@ const (
   FILEPERM = 0644
 )
 
+func PathToDefaultConfig() string {
+  return "Have to implement" // TODO: test and implement.
+}
+
 func ReadConfig(configPath string) string {
   dat, err := os.ReadFile(configPath)
   if err != nil {
