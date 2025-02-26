@@ -87,8 +87,6 @@ var suites = []gt.TestSuite{
       mdir := tu.ManageDir()
       mdir.FillFile(configPath, configName, configContent)
 
-      // mdir := tu.ManageDir()
-      // mdir.FillFile(configPath, configName, configContent)
       // inputListing := mdir.ListTree()
       fs            := afero.NewOsFs()
       currentDir, _ := os.Getwd()
