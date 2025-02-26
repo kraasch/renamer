@@ -17,18 +17,55 @@ import (
 
 var (
   NL = fmt.Sprintln()
-  BASIC_CONF = `title = "Basic Conf"                     ` + NL +
-               `[profiles]                               ` + NL +
-               `  [profiles.prettify-txt]                ` + NL +
-               `    name = "SomeProfile"                 ` + NL +
-               `    [profiles.prettify-txt.profile_rule] ` + NL +
-               `      word_separators = " ()"            ` + NL +
-               `      delete_chars    = ""               ` + NL +
-               `      small_gap_mark  = "-"              ` + NL +
-               `      big_gap_mark    = "_"              ` + NL +
-               `      conversions     = "caA"            ` + NL +
-               `      modes_string    = ""               ` + NL +
-               `                                         `
+  BASIC_CONF =
+  `title = "Basic Conf"                     ` + NL +
+  `[profiles]                               ` + NL +
+  `  [profiles.prettify-txt]                ` + NL +
+  `    name = "SomeProfile"                 ` + NL +
+  `    [profiles.prettify-txt.profile_rule] ` + NL +
+  `      word_separators = " ()"            ` + NL +
+  `      delete_chars    = ""               ` + NL +
+  `      small_gap_mark  = "-"              ` + NL +
+  `      big_gap_mark    = "_"              ` + NL +
+  `      conversions     = "caA"            ` + NL +
+  `      modes_string    = ""               ` + NL +
+  `                                         `
+  OUT_FIND_ANY_FILE_ALLCAPS =
+  "NOTES.txt"             + NL +
+  "config/"               + NL +
+  "config/GENERAL.config" + NL +
+  "fruits/"               + NL +
+  "fruits/APPLES.txt"     + NL +
+  "fruits/BANANAS.txt"    + NL +
+  "fruits/COCONUTS.txt"   + NL +
+  "shapes/"               + NL +
+  "shapes/CIRCLE.txt"     + NL +
+  "shapes/SQUARE.txt"     + NL +
+  "shapes/TRIANGLE.txt"
+  OUT_FIND_TXTFILES_ALLCAPS =
+  "NOTES.txt"             + NL +
+  "config/"               + NL +
+  "config/general.config" + NL +
+  "fruits/"               + NL +
+  "fruits/APPLES.txt"     + NL +
+  "fruits/BANANAS.txt"    + NL +
+  "fruits/COCONUTS.txt"   + NL +
+  "shapes/"               + NL +
+  "shapes/CIRCLE.txt"     + NL +
+  "shapes/SQUARE.txt"     + NL +
+  "shapes/TRIANGLE.txt"
+  OUT_LS_TXTFILES_ALLCAPS =
+  "NOTES.txt"             + NL +
+  "config/"               + NL +
+  "config/general.config" + NL +
+  "fruits/"               + NL +
+  "fruits/apples.txt"     + NL +
+  "fruits/bananas.txt"    + NL +
+  "fruits/coconuts.txt"   + NL +
+  "shapes/"               + NL +
+  "shapes/circle.txt"     + NL +
+  "shapes/square.txt"     + NL +
+  "shapes/triangle.txt"
 )
 
 func TestAll(t *testing.T) {
@@ -71,15 +108,10 @@ var suites = []gt.TestSuite{
       inputListing  := mdir.ListTree()
       conf          := mdir.SubPath(configPath + "/" + configName)
       // main test.
-      _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
-        mdir.FsSub,         // file system.
-        conf,               // path to config.
-        profileName,        // profile.
-        inputListing,       // input.
-      )
+      ConvertByProfile(mdir.FsSub, conf, profileName, inputListing)
       ExecuteByApplying()
       // remove test file system.
-      outputListing := mdir.ListTreeOsfs()
+      outputListing := mdir.ListTree()
       mdir.CleanUp()
       // return.
       return outputListing
@@ -95,18 +127,7 @@ var suites = []gt.TestSuite{
           "prettify-txt",   // profile name.
           BASIC_CONF,       // config content.
         },
-        ExpectedValue:
-        "NOTES.txt"             + NL +
-        "config/"               + NL +
-        "config/GENERAL.config" + NL +
-        "fruits/"               + NL +
-        "fruits/APPLES.txt"     + NL +
-        "fruits/BANANAS.txt"    + NL +
-        "fruits/COCONUTS.txt"   + NL +
-        "shapes/"               + NL +
-        "shapes/CIRCLE.txt"     + NL +
-        "shapes/SQUARE.txt"     + NL +
-        "shapes/TRIANGLE.txt",
+        ExpectedValue: OUT_FIND_ANY_FILE_ALLCAPS,
       },
     },
   },
@@ -170,18 +191,7 @@ var suites = []gt.TestSuite{
           "prettify-txt",   // profile name.
           BASIC_CONF,       // config content.
         },
-        ExpectedValue:
-        "NOTES.txt"             + NL +
-        "config/"               + NL +
-        "config/general.config" + NL +
-        "fruits/"               + NL +
-        "fruits/apples.txt"     + NL +
-        "fruits/bananas.txt"    + NL +
-        "fruits/coconuts.txt"   + NL +
-        "shapes/"               + NL +
-        "shapes/circle.txt"     + NL +
-        "shapes/square.txt"     + NL +
-        "shapes/triangle.txt",
+        ExpectedValue: OUT_FIND_TXTFILES_ALLCAPS,
       },
       {
         TestName: "full-test_pipe-test_00",
@@ -193,18 +203,7 @@ var suites = []gt.TestSuite{
           "prettify-txt",   // profile name.
           BASIC_CONF,       // config content.
         },
-        ExpectedValue:
-        "NOTES.txt"             + NL +
-        "config/"               + NL +
-        "config/general.config" + NL +
-        "fruits/"               + NL +
-        "fruits/APPLES.txt"     + NL +
-        "fruits/BANANAS.txt"    + NL +
-        "fruits/COCONUTS.txt"   + NL +
-        "shapes/"               + NL +
-        "shapes/CIRCLE.txt"     + NL +
-        "shapes/SQUARE.txt"     + NL +
-        "shapes/TRIANGLE.txt",
+        ExpectedValue: OUT_LS_TXTFILES_ALLCAPS,
       },
     },
   },
