@@ -30,23 +30,7 @@ var (
   `      conversions     = "caA"            ` + NL +
   `      modes_string    = ""               ` + NL +
   `                                         `
-<<<<<<< Updated upstream
-  OUT_FIND_ANY_FILE_ALLCAPS =
-  "NOTES.txt"             + NL +
-  "config/"               + NL +
-  "config/GENERAL.config" + NL +
-  "fruits/"               + NL +
-  "fruits/APPLES.txt"     + NL +
-  "fruits/BANANAS.txt"    + NL +
-  "fruits/COCONUTS.txt"   + NL +
-  "shapes/"               + NL +
-  "shapes/CIRCLE.txt"     + NL +
-  "shapes/SQUARE.txt"     + NL +
-  "shapes/TRIANGLE.txt"
-  OUT_FIND_TXTFILES_ALLCAPS =
-=======
   FIND_TXT =
->>>>>>> Stashed changes
   "NOTES.txt"             + NL +
   "config/"               + NL +
   "config/general.config" + NL +
@@ -58,11 +42,7 @@ var (
   "shapes/CIRCLE.txt"     + NL +
   "shapes/SQUARE.txt"     + NL +
   "shapes/TRIANGLE.txt"
-<<<<<<< Updated upstream
-  OUT_LS_TXTFILES_ALLCAPS =
-=======
   LS_TXT =
->>>>>>> Stashed changes
   "NOTES.txt"             + NL +
   "config/"               + NL +
   "config/general.config" + NL +
@@ -74,8 +54,6 @@ var (
   "shapes/circle.txt"     + NL +
   "shapes/square.txt"     + NL +
   "shapes/triangle.txt"
-<<<<<<< Updated upstream
-=======
   FIND_ALL =
   "NOTES.txt"             + NL +
   "config/"               + NL +
@@ -88,7 +66,6 @@ var (
   "shapes/CIRCLE.txt"     + NL +
   "shapes/SQUARE.txt"     + NL +
   "shapes/TRIANGLE.txt"
->>>>>>> Stashed changes
 )
 
 func TestAll(t *testing.T) {
@@ -150,11 +127,7 @@ var suites = []gt.TestSuite{
           "prettify-txt",   // profile name.
           BASIC_CONF,       // config content.
         },
-<<<<<<< Updated upstream
-        ExpectedValue: OUT_FIND_ANY_FILE_ALLCAPS,
-=======
         ExpectedValue: FIND_ALL,
->>>>>>> Stashed changes
       },
     },
   },
@@ -218,11 +191,7 @@ var suites = []gt.TestSuite{
           "prettify-txt",   // profile name.
           BASIC_CONF,       // config content.
         },
-<<<<<<< Updated upstream
-        ExpectedValue: OUT_FIND_TXTFILES_ALLCAPS,
-=======
         ExpectedValue: LS_TXT,
->>>>>>> Stashed changes
       },
       {
         TestName: "full-test_pipe-test_00",
@@ -234,11 +203,7 @@ var suites = []gt.TestSuite{
           "prettify-txt",   // profile name.
           BASIC_CONF,       // config content.
         },
-<<<<<<< Updated upstream
-        ExpectedValue: OUT_LS_TXTFILES_ALLCAPS,
-=======
         ExpectedValue: FIND_TXT,
->>>>>>> Stashed changes
       },
     },
   },
