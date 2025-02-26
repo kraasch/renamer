@@ -21,12 +21,9 @@ import (
   rnm "github.com/kraasch/renamer/pkg/rnmanage"
 )
 
-// TODO: implement the following args:
-// NOTE: sketch of the args.
-//
 // 1) InputMode      (req) = {pipe,dir[+selection],recursive[+selection]}.
 // 2) ConversionMode (req) = {rule[+ruleString],profile[+profileName],editor,interactive}.
-// 3) OutputMode     (req) = {apply,validate}.
+// 3) OutputMode     (req) = {apply,validate,print}.
 //               selection = {all,files,dirs}.
 //              ruleString = STRING
 //             profileName = STRING
@@ -99,7 +96,7 @@ func StartInteractiveGui(fs afero.Fs, in string) string {
   return output
 }
 
-func StartInteractiveEditor() string {
+func StartEditor(in string) string {
   return "Have to implement." // TODO: implement.
 }
 
@@ -160,7 +157,7 @@ func main() {
     rnm.AutoConvertByProfile(fs, args.ConfigPath, args.ProfileName, input)
   case "editor":
     fmt.Println("Convert by editor")
-    conversion = StartInteractiveEditor()
+    conversion = StartEditor(input)
     rnm.ConvertByPathList(conversion, input)
   case "interactive":
     fmt.Println("Convert interactively")
