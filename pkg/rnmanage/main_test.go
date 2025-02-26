@@ -92,7 +92,8 @@ var suites = []gt.TestSuite{
       currentDir, _ := os.Getwd()
       targetDir     := filepath.Join(currentDir, "testfs")
       fs4           := afero.NewBasePathFs(fs, targetDir)
-      inputListing  := dir.DirListTree(afero.NewIOFS(fs4))
+      // inputListing  := dir.DirListTree(afero.NewIOFS(fs4))
+      inputListing  := mdir.ListTree(fs4)
 
       conf          := "testfs/" + configPath + "/" + configName // TODO: refactor.
 

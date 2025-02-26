@@ -41,6 +41,11 @@ func (md *ManagedDir) CleanUp() {
   CleanUpRealTestFs(md.path)
 }
 
+func (md *ManagedDir) ListTree(fs afero.Fs) string {
+  listing := DirListTree(afero.NewIOFS(fs))
+  return listing
+}
+
 // func (md *ManagedDir) ListTree() string {
 //   md.AferoFs     = afero.NewOsFs()
 //   currentDir, _ := os.Getwd()
