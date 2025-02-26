@@ -83,15 +83,21 @@ var suites = []gt.TestSuite{
       configName    := in.InputArr[1]
       profileName   := in.InputArr[2]
       configContent := in.InputArr[3]
-      // create test file system. // TODO: refactor.
-      path          := tu.MakeRealTestFs()
-      tu.CreateFile(path, configPath, configName, configContent)
+      // create test file system.
+      mdir := tu.ManageDir()
+      mdir.FillFile(configPath, configName, configContent)
+
+      // mdir := tu.ManageDir()
+      // mdir.FillFile(configPath, configName, configContent)
+      // inputListing := mdir.ListTree()
       fs            := afero.NewOsFs()
       currentDir, _ := os.Getwd()
       targetDir     := filepath.Join(currentDir, "testfs")
       fs4           := afero.NewBasePathFs(fs, targetDir)
       inputListing  := dir.DirListTree(afero.NewIOFS(fs4))
+
       conf          := "testfs/" + configPath + "/" + configName // TODO: refactor.
+
       // main test.
       _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
         fs4,                // file system.
@@ -100,12 +106,17 @@ var suites = []gt.TestSuite{
         inputListing,       // input.
       )
       ExecuteByApplying()
-      // get file listing. // TODO: refactor.
+      // remove test file system.
+
+      // fs2           := afero.NewIOFS(mdir.AferoFs)
+      // fs3, _        := fs2.Sub("testfs")
+      // outputListing := dir.DirListTree(fs3)
+      // mdir.CleanUp()
       fs2           := afero.NewIOFS(fs)
       fs3, _        := fs2.Sub("testfs")
       outputListing := dir.DirListTree(fs3)
-      // clean up test setup.
-      tu.CleanUpRealTestFs(path)
+
+      mdir.CleanUp()
       // return.
       return outputListing
     },

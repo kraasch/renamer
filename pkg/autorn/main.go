@@ -10,6 +10,7 @@ import (
   pro "github.com/kraasch/renamer/pkg/profiler"
   // external packages.
   "github.com/spf13/afero"
+  "fmt"
 )
 
 type FileInfo struct {
@@ -43,6 +44,8 @@ func (a *AutoRenamer) ConvertWith(profileName, targetString string, fs afero.Fs)
   // TODO: implement FileInfo.
   // - for [id^], [id.] and [id$] add the CurrentDate().
   // - for [ic^], [ic.] and [ic$] add the CreationDate() from the file system.
+  fmt.Println("TOAST PN ", profileName)
+  fmt.Println("TOAST TAR", targetString)
   metaInfo := FileInfo{}
   profile := a.config.Profiles[profileName]
   // apply profile line by line.

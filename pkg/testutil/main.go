@@ -14,12 +14,41 @@ import (
   // list files in directory.
   "strings"
   iofs "io/fs"
+  "sort"
 )
 
 const (
   DIRSPERM = 0755
   FILEPERM = 0644
 )
+
+type ManagedDir struct {
+  path    string
+  AferoFs afero.Fs
+}
+
+func ManageDir() ManagedDir {
+  var md ManagedDir
+  md.path = MakeRealTestFs()
+  return md
+}
+
+func (md *ManagedDir) FillFile(path, name, content string) {
+  CreateFile(md.path, path, name, content)
+}
+
+func (md *ManagedDir) CleanUp() {
+  CleanUpRealTestFs(md.path)
+}
+
+// func (md *ManagedDir) ListTree() string {
+//   md.AferoFs     = afero.NewOsFs()
+//   currentDir, _ := os.Getwd()
+//   targetDir     := filepath.Join(currentDir, "testfs")
+//   tempFs        := afero.NewBasePathFs(md.AferoFs, targetDir)
+//   listing       := DirListTree(afero.NewIOFS(tempFs))
+//   return listing
+// }
 
 func ListFs(fs afero.Fs, path string) string {
   var builder strings.Builder
@@ -148,5 +177,46 @@ func CleanUpRealTestFs(testDir string) {
   // delete any old remains of test directory.
   os.RemoveAll(path) // NOTE: recursively deletes path.
   // TODO: report failure.
+}
+
+func DirList(fileSystem iofs.FS) string {
+  dirEntries, err := iofs.ReadDir(fileSystem, ".")
+  if err != nil {
+    return "" // TODO: handle errors appropriately.
+  }
+  var entries []string
+  for _, entry := range dirEntries {
+    name := entry.Name()
+    if entry.IsDir() {
+      name += "/" // add trailing slash for directories.
+    }
+    entries = append(entries, name)
+  }
+  out := strings.Join(entries, "\n")
+  return out
+}
+
+func DirListTree(fileSystem iofs.FS) string {
+  var fileList []string
+  err := iofs.WalkDir(fileSystem, ".", func(path string, d iofs.DirEntry, err error) error {
+    if err != nil {
+      return err // TODO: handle errors appropriately.
+    }
+    if path == "." {
+      return nil // TODO: skip the root directory itself.
+    }
+    if d.IsDir() {
+      fileList = append(fileList, path + "/") // add trailing slash for directories.
+    } else {
+      fileList = append(fileList, path)
+    }
+    return nil
+  })
+  if err != nil {
+      return "" // TODO: handle errors appropriately.
+  }
+  sort.Strings(fileList) // sort alphabetically.
+  out := strings.Join(fileList, "\n")
+  return out
 }
 
