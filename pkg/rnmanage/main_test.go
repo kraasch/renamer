@@ -23,6 +23,18 @@ import (
 
 var (
   NL = fmt.Sprintln()
+  BASIC_CONF = `title = "Basic Conf"                     ` + NL +
+               `[profiles]                               ` + NL +
+               `  [profiles.prettify-txt]                ` + NL +
+               `    name = "SomeProfile"                 ` + NL +
+               `    [profiles.prettify-txt.profile_rule] ` + NL +
+               `      word_separators = " ()"            ` + NL +
+               `      delete_chars    = ""               ` + NL +
+               `      small_gap_mark  = "-"              ` + NL +
+               `      big_gap_mark    = "_"              ` + NL +
+               `      conversions     = "caA"            ` + NL +
+               `      modes_string    = ""               ` + NL +
+               `                                         `
 )
 
 func TestAll(t *testing.T) {
@@ -61,6 +73,70 @@ func simulatePipe(commands CommandList, path string) string {
 var suites = []gt.TestSuite{
 
   /*
+  * Test ConvertByProfile()
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      // set test variables.
+      configPath    := in.InputArr[0]
+      configName    := in.InputArr[1]
+      profileName   := in.InputArr[2]
+      configContent := in.InputArr[3]
+      // create test file system. // TODO: refactor.
+      path          := tu.MakeRealTestFs()
+      tu.CreateFile(path, configPath, configName, configContent)
+      fs            := afero.NewOsFs()
+      currentDir, _ := os.Getwd()
+      targetDir     := filepath.Join(currentDir, "testfs")
+      fs4           := afero.NewBasePathFs(fs, targetDir)
+      inputListing  := dir.DirListTree(afero.NewIOFS(fs4))
+      conf          := "testfs/" + configPath + "/" + configName // TODO: refactor.
+      // main test.
+      _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
+        fs4,                // file system.
+        conf,               // path to config.
+        profileName,        // profile.
+        inputListing,       // input.
+      )
+      ExecuteByApplying()
+      // get file listing. // TODO: refactor.
+      fs2           := afero.NewIOFS(fs)
+      fs3, _        := fs2.Sub("testfs")
+      outputListing := dir.DirListTree(fs3)
+      // clean up test setup.
+      tu.CleanUpRealTestFs(path)
+      // return.
+      return outputListing
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "main_convert-by-profile_00",
+        IsMulti:  true,
+        InputArr: []string{
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue:
+        "NOTES.txt"             + NL +
+        "config/"               + NL +
+        "config/GENERAL.config" + NL +
+        "fruits/"               + NL +
+        "fruits/APPLES.txt"     + NL +
+        "fruits/BANANAS.txt"    + NL +
+        "fruits/COCONUTS.txt"   + NL +
+        "shapes/"               + NL +
+        "shapes/CIRCLE.txt"     + NL +
+        "shapes/SQUARE.txt"     + NL +
+        "shapes/TRIANGLE.txt",
+      },
+    },
+  },
+
+  /*
   * Pipe test: ls | grep -E 'txt$' | renamer -profile files_txt
   */
   {
@@ -87,13 +163,11 @@ var suites = []gt.TestSuite{
         },
       }
       finalPipeOutput := simulatePipe(cmds, path)
-
       // create test file system. // TODO: refactor.
       fs := afero.NewOsFs()
       currentDir, _ := os.Getwd()
       targetDir := filepath.Join(currentDir, "testfs")
       fs4 := afero.NewBasePathFs(fs, targetDir)
-
       // main test.
       // TODO: implement command types: profile, edit, interactive.
       _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
@@ -103,12 +177,10 @@ var suites = []gt.TestSuite{
         finalPipeOutput, // input.
       )
       ExecuteByApplying()
-
       // get file listing. // TODO: refactor.
       fs2 := afero.NewIOFS(fs)
       fs3,_ := fs2.Sub("testfs")
       listing := dir.DirListTree(fs3)
-
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.
@@ -124,19 +196,7 @@ var suites = []gt.TestSuite{
           "config",         // config path.
           "general.config", // config name.
           "prettify-txt",   // profile name.
-          // config content.
-          `title = "Basic Conf"                     ` + NL +
-          `[profiles]                               ` + NL +
-          `  [profiles.prettify-txt]                ` + NL +
-          `    name = "SomeProfile"                 ` + NL +
-          `    [profiles.prettify-txt.profile_rule] ` + NL +
-          `      word_separators = " ()"            ` + NL +
-          `      delete_chars    = ""               ` + NL +
-          `      small_gap_mark  = "-"              ` + NL +
-          `      big_gap_mark    = "_"              ` + NL +
-          `      conversions     = "caA"            ` + NL +
-          `      modes_string    = ""               ` + NL +
-          `                                         `,
+          BASIC_CONF,       // config content.
         },
         ExpectedValue:
         "NOTES.txt"             + NL +
