@@ -18,12 +18,12 @@ var (
   conversion string
 )
 
-func ConvertByPathList(conversion, input string) string {
+func ConvertByPathList(fs afero.Fs, conversion, input string) string {
   fmt.Println() // TODO: remove this line later.
   return "Have to implement" // TODO: test and implement.
 }
 
-func ConvertByRule(ruleString, input string) string {
+func ConvertByRule(fs afero.Fs, ruleString, input string) string {
   fmt.Println() // TODO: remove this line later.
   return "Have to implement" // TODO: test and implement.
 }

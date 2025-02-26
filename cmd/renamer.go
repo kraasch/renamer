@@ -151,18 +151,18 @@ func main() {
   switch args.ConversionMode {
   case "rule":
     fmt.Println("Convert by rule")
-    rnm.ConvertByRule(args.RuleString, input)
+    rnm.ConvertByRule(fs, args.RuleString, input)
   case "profile":
     fmt.Println("Convert by profile")
     rnm.AutoConvertByProfile(fs, args.ConfigPath, args.ProfileName, input)
   case "editor":
     fmt.Println("Convert by editor")
     conversion = StartEditor(input)
-    rnm.ConvertByPathList(conversion, input)
+    rnm.ConvertByPathList(fs, conversion, input)
   case "interactive":
     fmt.Println("Convert interactively")
     conversion = StartInteractiveGui(fs, input)
-    rnm.ConvertByPathList(conversion, input)
+    rnm.ConvertByPathList(fs, conversion, input)
   }
 
   // give output.
