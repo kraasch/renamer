@@ -3,18 +3,38 @@ package configurator
 
 import (
   "os"
-  "fmt"
+  "path/filepath"
+  "strings"
+)
+
+const (
+  DIRSPERM = 0755
+  FILEPERM = 0644
 )
 
 func ReadConfig(configPath string) string {
-  dat, err := os.ReadFile("." + "/" + configPath)
+  dat, err := os.ReadFile(configPath)
   if err != nil {
-    panic(err)
+    {}
+    // panic(err)
   }
   return string(dat)
 }
 
-func Toast(in string) string {
-  return fmt.Sprintf("This is %s!\n", in)
+func CreateFile(pathToFile, fileName, fileContent string) {
+  // TODO: Generallize, so far this function does not create file paths,
+  // can only create one subfolder (depth level = 1).
+  dirs := strings.Split(pathToFile, "/") // TODO: change for windows.
+  dirBuf := ""
+  for _, dir := range dirs {
+    dirBuf += dir + "/"
+    if err := os.MkdirAll(dirBuf, DIRSPERM); err != nil {
+      {} // TODO: report failure.
+    }
+  }
+  full := filepath.Join(pathToFile, fileName)
+  if err := os.WriteFile(full, []byte(fileContent), FILEPERM); err != nil {
+    {} // TODO: report failure.
+  }
 }
 

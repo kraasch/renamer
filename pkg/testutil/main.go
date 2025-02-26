@@ -37,8 +37,11 @@ func ListFs(fs afero.Fs, path string) string {
   return builder.String()
 }
 
+func MakeEmptyTestFs() afero.Fs {
+  return MakeFs([]string{}, []string{})
+}
+
 func MakeTestFs() afero.Fs {
-  var fileSystem = afero.NewMemMapFs()
   dirs := []string{
     "fruits/",
     "shapes/",
@@ -52,6 +55,11 @@ func MakeTestFs() afero.Fs {
     "shapes/square.txt",
     "shapes/circle.txt",
   }
+  return MakeFs(dirs, files)
+}
+
+func MakeFs(dirs, files []string) afero.Fs {
+  var fileSystem = afero.NewMemMapFs()
   for _, dir := range dirs {
     if err := fileSystem.MkdirAll(dir, DIRSPERM); err != nil {
       fmt.Println("Setting up test failed.") // TODO: implement test failure.
@@ -69,19 +77,6 @@ func MakeTestFs() afero.Fs {
 }
 
 func MakeRealTestFs() string {
-  testdir := "testfs"
-  newpath := filepath.Join(".", testdir)
-  // delete any old remains of test directory.
-  os.RemoveAll(newpath) // NOTE: recursively deletes path.
-  // create test directory.
-  if _, err := os.Stat(newpath); err == nil  {
-    // directory already existed, therefore stop testing.
-    panic("TEST SETUP: Directory 'testfs' already exists.")
-  }
-  if err := os.MkdirAll(newpath, os.ModePerm); err != nil {
-    panic("TEST SETUP: Directory 'testfs' could not be made.")
-  }
-  // create test dir tree.
   dirs := []string{
     "fruits/",
     "shapes/",
@@ -95,6 +90,27 @@ func MakeRealTestFs() string {
     "shapes/square.txt",
     "shapes/circle.txt",
   }
+  return MakeRealFs(dirs, files)
+}
+
+func MakeEmptyRealTestFs() string {
+  return MakeRealFs([]string{},[]string{})
+}
+
+func MakeRealFs(dirs, files []string) string {
+  testdir := "testfs"
+  newpath := filepath.Join(".", testdir)
+  // delete any old remains of test directory.
+  os.RemoveAll(newpath) // NOTE: recursively deletes path.
+  // create test directory.
+  if _, err := os.Stat(newpath); err == nil  {
+    // directory already existed, therefore stop testing.
+    panic("TEST SETUP: Directory 'testfs' already exists.")
+  }
+  if err := os.MkdirAll(newpath, os.ModePerm); err != nil {
+    panic("TEST SETUP: Directory 'testfs' could not be made.")
+  }
+  // create test dir tree.
   for _, dir := range dirs {
     dirPath := filepath.Join(".", testdir, dir)
     if err := os.MkdirAll(dirPath, DIRSPERM); err != nil {

@@ -41,16 +41,13 @@ var suites = []gt.TestSuite{
       // set test variables.
       configPath    := in.InputArr[0]
       configName    := in.InputArr[1]
-      profileName   := in.InputArr[2]
-      configContent := in.InputArr[3]
+      configContent := in.InputArr[2]
       // run test setup.
-      path := tu.MakeRealTestFs()
-      // TODO: make a copy of CreateFile():
-      // - make it part of the configurator package.
-      // - make it take a path to config, not only single folder.
-      tu.CreateFile(path, configPath, configName, configContent)
+      path := tu.MakeEmptyRealTestFs()
+      full := path + "/" + configPath
+      CreateFile(full, configName, configContent)
       // start test.
-      output := Toast(configPath + configName + profileName)
+      output := ReadConfig(full + "/" + configName)
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.
@@ -64,7 +61,6 @@ var suites = []gt.TestSuite{
         InputArr: []string{
           "config",         // config path.
           "general.config", // config name.
-          "prettify-txt",   // profile name.
           // config content.
           `title = "Basic Conf"                     ` + NL +
           `[profiles]                               ` + NL +
@@ -80,15 +76,18 @@ var suites = []gt.TestSuite{
           `                                         `,
         },
         ExpectedValue:
-          "./fruits/"             + NL +
-          "./fruits/APPLES.txt"   + NL +
-          "./fruits/BANANAS.txt"  + NL +
-          "./fruits/COCONUTS.txt" + NL +
-          "./NOTES.txt"           + NL +
-          "./shapes/"             + NL +
-          "./shapes/CIRCLE.txt"   + NL +
-          "./shapes/SQUARE.txt"   + NL +
-          "./shapes/TRIANGLE.txt" + NL,
+          `title = "Basic Conf"                     ` + NL +
+          `[profiles]                               ` + NL +
+          `  [profiles.prettify-txt]                ` + NL +
+          `    name = "SomeProfile"                 ` + NL +
+          `    [profiles.prettify-txt.profile_rule] ` + NL +
+          `      word_separators = " ()"            ` + NL +
+          `      delete_chars    = ""               ` + NL +
+          `      small_gap_mark  = "-"              ` + NL +
+          `      big_gap_mark    = "_"              ` + NL +
+          `      conversions     = "caA"            ` + NL +
+          `      modes_string    = ""               ` + NL +
+          `                                         `,
       },
     },
   },
