@@ -5,20 +5,14 @@ import (
   // unit testing.
   "testing"
   gt "github.com/kraasch/gotest/gotest"
-  "github.com/spf13/afero"
 
   // cli testing.
   "fmt"
   "os/exec"
   "strings"
 
-  // misc.
-  "path/filepath"
-  "os"
-
   // local packages.
   tu "github.com/kraasch/renamer/pkg/testutil"
-  dir "github.com/kraasch/renamer/pkg/dir"
 )
 
 var (
@@ -46,29 +40,17 @@ type CommandList []struct {
   Args []string
 }
 
-func simulatePipe(commands CommandList, path string) string {
+func simulatePipe(commands CommandList, path string, t *testing.T) string {
   var output []byte
-  // for i, c := range commands { // TODO: for logging.
-  for _, c := range commands {
+  for i, c := range commands {
     cmd := exec.Command(c.Name, c.Args...)
     cmd.Dir = path // execute within diretory of test file system.
     cmd.Stdin = strings.NewReader(string(output))
     output, _ = cmd.Output()
-    // TODO: make this into a log or something.
-    // fmt.Printf("%d > %s %v \t==> %s\n", i, c.Name, c.Args, output)
+    t.Logf("%d > %s %v \t==> %s\n", i, c.Name, c.Args, output)
   }
   return string(output)
 }
-
-/*
-* TODO: do not make too many pipe tests, but eventually implement some e2e tests.
-*/
-
-/*
-* NOTE: PIPE TEST IDEAS:
-* Pipe test: ls | grep -E 'mp3$' | renamer -edit // TODO: test.
-* Pipe test: find | grep -E '.ogg$' | renamer -profile music_ogg // TODO: test.
-*/
 
 var suites = []gt.TestSuite{
 
@@ -130,7 +112,9 @@ var suites = []gt.TestSuite{
   },
 
   /*
-  * Pipe test: ls | grep -E 'txt$' | renamer -profile files_txt
+  * NOTE: this actually should be a E2E test.
+  * Pipe test: ls   | grep -E 'txt$' | renamer -profile files_txt
+  * Pipe test: find | grep -E 'txt$' | renamer -profile files_txt
   */
   {
     TestingFunction:
@@ -155,32 +139,50 @@ var suites = []gt.TestSuite{
           []string{"-E", ".txt$"},
         },
       }
-      finalPipeOutput := simulatePipe(cmds, path)
-      // create test file system. // TODO: refactor.
-      fs := afero.NewOsFs()
-      currentDir, _ := os.Getwd()
-      targetDir := filepath.Join(currentDir, "testfs")
-      fs4 := afero.NewBasePathFs(fs, targetDir)
+      inputListing := simulatePipe(cmds, path, t)
+      // create test file system.
+      mdir          := tu.ManageDir()
+      mdir.FillFile(configPath, configName, configContent)
+      conf          := mdir.SubPath(configPath + "/" + configName)
       // main test.
-      // TODO: implement command types: profile, edit, interactive.
       _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
-        fs4, // file system.
-        "testfs/" + configPath + "/" + configName, // config.
-        profileName,     // profile.
-        finalPipeOutput, // input.
+        mdir.FsSub,         // file system.
+        conf,               // path to config.
+        profileName,        // profile.
+        inputListing,       // input.
       )
       ExecuteByApplying()
-      // get file listing. // TODO: refactor.
-      fs2 := afero.NewIOFS(fs)
-      fs3,_ := fs2.Sub("testfs")
-      listing := dir.DirListTree(fs3)
-      // clean up test setup.
-      tu.CleanUpRealTestFs(path)
+      // remove test file system.
+      outputListing := mdir.ListTreeOsfs()
+      mdir.CleanUp()
       // return.
-      return listing
+      return outputListing
     },
     Tests:
     []gt.TestList{
+      {
+        TestName: "full-test_pipe-test_00",
+        IsMulti:  true,
+        InputArr: []string{
+          "ls",             // first command.
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue:
+        "NOTES.txt"             + NL +
+        "config/"               + NL +
+        "config/general.config" + NL +
+        "fruits/"               + NL +
+        "fruits/apples.txt"     + NL +
+        "fruits/bananas.txt"    + NL +
+        "fruits/coconuts.txt"   + NL +
+        "shapes/"               + NL +
+        "shapes/circle.txt"     + NL +
+        "shapes/square.txt"     + NL +
+        "shapes/triangle.txt",
+      },
       {
         TestName: "full-test_pipe-test_00",
         IsMulti:  true,
