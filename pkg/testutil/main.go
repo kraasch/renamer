@@ -5,7 +5,8 @@ package testutil
 import (
   // create fake file system.
   "fmt"
-  "github.com/spf13/afero"
+  afero "github.com/spf13/afero"
+  iofs "io/fs"
 
   // create real file system.
   "os"
@@ -13,7 +14,6 @@ import (
 
   // list files in directory.
   "strings"
-  iofs "io/fs"
   "sort"
 )
 
@@ -23,13 +23,20 @@ const (
 )
 
 type ManagedDir struct {
-  path    string
-  AferoFs afero.Fs
+  path       string
+  FsOriginal afero.Fs
+  FsSub      afero.Fs
 }
 
 func ManageDir() ManagedDir {
   var md ManagedDir
   md.path = MakeRealTestFs()
+  // init fs.
+  md.FsOriginal  = afero.NewOsFs()
+  currentDir, _ := os.Getwd()
+  targetDir     := filepath.Join(currentDir, "testfs")
+  md.FsSub       = afero.NewBasePathFs(md.FsOriginal, targetDir)
+  // return.
   return md
 }
 
@@ -41,9 +48,20 @@ func (md *ManagedDir) CleanUp() {
   CleanUpRealTestFs(md.path)
 }
 
-func (md *ManagedDir) ListTree(fs afero.Fs) string {
-  listing := DirListTree(afero.NewIOFS(fs))
+func (md *ManagedDir) ListTree() string {
+  listing       := DirListTree(afero.NewIOFS(md.FsSub))
   return listing
+}
+
+func (md *ManagedDir) ListTreeOsfs() string {
+  fs2     := afero.NewIOFS(md.FsOriginal)
+  fs3, _  := fs2.Sub("testfs")
+  listing := DirListTree(fs3)
+  return listing
+}
+
+func (md *ManagedDir) SubPath(path string) string {
+      return "testfs/" + path
 }
 
 // func (md *ManagedDir) ListTree() string {
