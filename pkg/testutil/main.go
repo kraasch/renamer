@@ -53,6 +53,9 @@ func (md *ManagedDir) ListTree() string {
   return listing
 }
 
+/*
+* NOTE: essentially does the same as ListTree().
+*/
 func (md *ManagedDir) ListTreeOsfs() string {
   fs2     := afero.NewIOFS(md.FsOriginal)
   fs3, _  := fs2.Sub("testfs")
@@ -63,15 +66,6 @@ func (md *ManagedDir) ListTreeOsfs() string {
 func (md *ManagedDir) SubPath(path string) string {
       return "testfs/" + path
 }
-
-// func (md *ManagedDir) ListTree() string {
-//   md.AferoFs     = afero.NewOsFs()
-//   currentDir, _ := os.Getwd()
-//   targetDir     := filepath.Join(currentDir, "testfs")
-//   tempFs        := afero.NewBasePathFs(md.AferoFs, targetDir)
-//   listing       := DirListTree(afero.NewIOFS(tempFs))
-//   return listing
-// }
 
 func ListFs(fs afero.Fs, path string) string {
   var builder strings.Builder
