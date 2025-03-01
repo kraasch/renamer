@@ -1,9 +1,12 @@
 
 test:
 	go clean -testcache
-	@#go test -tags testing ./... -run=.*/full-test_pipe-test_00
-	go test -tags testing ./...
-	@#go test -tags testing ./... -v
+	@#go test -tags testing ./pkg/... -run=.*/full-test_pipe-test_00
+	go test -tags testing ./pkg/...
+	@#go test -tags testing ./pkg/... -v
+
+endtoend:
+	go test ./e2e/... -v
 
 run:
 	go run ./cmd/renamer.go
