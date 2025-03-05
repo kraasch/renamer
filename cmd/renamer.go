@@ -98,7 +98,7 @@ func StartInteractiveGui(fs afero.Fs, in string) string {
   return output
 }
 
-func StartEditor(in string) string {
+func StartEditor(in, workDir string) string {
   return "Have to implement." // TODO: implement.
 }
 
@@ -153,7 +153,12 @@ func main() {
   switch args.ConversionMode {
   case "rule":
     fmt.Println("Convert by rule")
-    rnm.ConvertByRule(fs, args.RuleString, input)
+    rnm.ConvertByRule(
+      fs,
+      args.TargetDir,
+      args.RuleString,
+      input,
+    )
   case "profile":
     fmt.Println("Convert by profile")
     rnm.ConvertByProfile(
@@ -165,12 +170,25 @@ func main() {
     )
   case "editor":
     fmt.Println("Convert by editor")
-    conversion = StartEditor(input)
-    rnm.ConvertByPathList(fs, conversion, input)
+    conversion = StartEditor(
+      args.TargetDir,
+      input,
+    )
+    rnm.ConvertByPathList(
+      fs,
+      args.TargetDir,
+      conversion,
+      input,
+    )
   case "interactive":
     fmt.Println("Convert interactively")
     conversion = StartInteractiveGui(fs, input)
-    rnm.ConvertByPathList(fs, conversion, input)
+    rnm.ConvertByPathList(
+      fs,
+      args.TargetDir,
+      conversion,
+      input,
+    )
   }
 
   // give output.
