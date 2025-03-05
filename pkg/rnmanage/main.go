@@ -44,11 +44,11 @@ func ConvertByProfile(fs afero.Fs, workDir, configPath, profileName, input strin
   return ""
 }
 
-func ExecuteByValidating() string {
-  return "Have to implement" // TODO: test and implement.
+func ExecuteByValidating() bool {
+  return false // TODO: test and implement.
 }
 
-func ExecuteByPrinting() string {
+func ExecuteByFormatting() string {
   return "Have to implement" // TODO: test and implement.
 }
 

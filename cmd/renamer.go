@@ -197,11 +197,16 @@ func main() {
     fmt.Println("Give output by applying")
     rnm.ExecuteByApplying()
   case "print":
-    fmt.Println("Give output by printing")
-    rnm.ExecuteByPrinting()
+    fmt.Println("Give output by formatting")
+    fmt.Println(rnm.ExecuteByFormatting())
   case "validate":
-    fmt.Println("Give output by validating")
-    rnm.ExecuteByValidating()
+    fmt.Print("Give output by validating")
+    valid := rnm.ExecuteByValidating()
+    if valid {
+      fmt.Println("valid.")
+    } else {
+      fmt.Println("invalid.")
+    }
   }
 
 } // fin.

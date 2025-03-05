@@ -176,7 +176,7 @@ func CreateFile(testDir, fileDir, fileName, fileContent string) {
   // TODO: Generallize, so far this function does not create file paths,
   // can only create one subfolder (depth level = 1).
   path := filepath.Join(".", testDir, fileDir)
-  fmt.Println("Try to create file at", path)
+  // fmt.Println("Try to create file at", path) // TODO: remove later.
   if err := os.MkdirAll(path, DIRSPERM); err != nil {
     fmt.Println("NOPE 1")
     {}
