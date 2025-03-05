@@ -6,6 +6,9 @@ test:
 	go test -tags testing ./cmd/...
 	@#go test -tags testing ./pkg/... -v
 
+test_short:
+	make test | grep -E '^(FAIL|ok)'
+
 endtoend:
 	go test ./e2e/... -v
 
@@ -23,4 +26,3 @@ build:
 
 hub_update:
 	@hub_ctrl ${HUB_MODE} ln "$(realpath ./build/renamer)"
-
