@@ -50,7 +50,7 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
       - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
       - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
     - [ ] allow a way to rename by providing a rule string on CLI.
-      - [ ] ie `renamer -rule " (),,-,_,caA,"`
+      - [ ] ie `renamer -rule " ()||-|_|caA|"`
       - [ ] ie `renamer -rule " ();;-;_;caA;" -separator=";"` for a different separator than a comma.
 
   - RENAMING. Main functionality:
