@@ -7,11 +7,11 @@ import (
   "strings"
   "time"
   "path/filepath"
+  "fmt"
   // local packages.
   pro "github.com/kraasch/renamer/pkg/profiler"
   // external packages.
   "github.com/spf13/afero"
-  "fmt"
 )
 
 type FileInfo struct {
@@ -28,8 +28,8 @@ func (ti FileInfo) CreationDate() string {
 }
 
 var (
-  // NL = fmt.Sprintln() // TODO: use this if it works for all OS'es.
-  PS = string(os.PathSeparator)
+  NLine = fmt.Sprintln() // TODO: use this if it works for all OS'es.
+  PS    = string(os.PathSeparator)
 )
 
 type AutoRenamer struct {
@@ -42,21 +42,30 @@ func (a *AutoRenamer) Parse(toml string) {
 }
 
 func normalizePath(path string) string {
-
-  // TODO:work with the absoluate path,
-  // if wrapping the filesystem in afero.Fs permits it.
-  // // get the absolute path.
-  // absPath, err := filepath.Abs(p)
-  // if err != nil {
-  //   fmt.Printf("Error getting absolute path for %q: %v\n", path, err)
-  //   continue
-  // }
-  // normalizedPath := filepath.Clean(absPath)
-  // fmt.Printf("Original: %s, Absolute: %s, Normalized: %s\n", path, absPath, normalizedPath)
-
-  // normalize the path.
-  normalizedPath := filepath.Clean(path)
+  normalizedPath := filepath.Clean(path) // normalize the path.
   return normalizedPath
+}
+
+func convertLine(line, workDir string, profile *pro.Profile, metaInfo FileInfo) string {
+  // split line into path part and file name part.
+  lastIndex  := strings.LastIndex(line, PS)
+  normWdir   := normalizePath(workDir)
+  normLine   := normalizePath(line)
+  isPrefixed := strings.HasPrefix(normLine, normWdir)
+  isRoot     := normWdir == "."
+  hasSep     := lastIndex != -1
+  if hasSep && (isRoot || isPrefixed) {
+    // apply profile to file name only.
+    path     := line[:lastIndex]
+    fileName := line[lastIndex+1:]
+    return path + PS + profile.Apply(fileName, metaInfo)
+  }
+  if !hasSep && isRoot {
+    // do only apply rule to root files if the workdir path is the root.
+    // apply profile to full line.
+    return profile.Apply(line, metaInfo)
+  }
+  return line
 }
 
 func (a *AutoRenamer) ConvertWith(workDir, profileName, targetString string, fs afero.Fs) string {
@@ -69,38 +78,9 @@ func (a *AutoRenamer) ConvertWith(workDir, profileName, targetString string, fs 
   var buf bytes.Buffer
   lines := strings.Split(targetString, "\n")
   for i, line := range lines {
-    // split line into path part and file name part.
-    lastIndex := strings.LastIndex(line, PS)
-    normalizedPathWd   := normalizePath(workDir)
-    normalizedPathLine := normalizePath(line)
-    isPrefixed := strings.HasPrefix(normalizedPathLine, normalizedPathWd)
-    isRoot     := normalizedPathWd == "."
-    if lastIndex != -1 { // has path separator.
-      // TODO: evaluate workDir path, in order to also allow paths like:
-      // - [ ] "./abc/.."
-      // - [ ] "./"
-      // - [ ] "."
-      if isRoot || isPrefixed {
-        // apply profile to file name only.
-        path     := line[:lastIndex]
-        fileName := line[lastIndex+1:]
-        buf.WriteString(path + PS + profile.Apply(fileName, metaInfo))
-      } else {
-        fmt.Printf("workdir: '%s', line: '%s'\n", normalizedPathWd, normalizedPathLine)
-        buf.WriteString(line)
-      }
-    } else { // has no path separator.
-      // do only apply rule to root files if the workdir path is the root.
-      if isRoot {
-        // apply profile to full line.
-        buf.WriteString(profile.Apply(line, metaInfo))
-      } else {
-        // copy full line.
-        buf.WriteString(line)
-      }
-    }
-    if i < len(lines) - 1 { // no line break for the last line.
-      buf.WriteString("\n")
+    buf.WriteString(convertLine(line, workDir, profile, metaInfo))
+    if i < len(lines) - 1 {  // no line break for the last line.
+      buf.WriteString(NLine) // break line.
     }
   }
   // return result.
