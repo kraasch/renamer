@@ -154,7 +154,7 @@ func main() {
     rnm.ConvertByRule(fs, args.RuleString, input)
   case "profile":
     fmt.Println("Convert by profile")
-    rnm.AutoConvertByProfile(fs, args.ConfigPath, args.ProfileName, input)
+    rnm.ConvertByProfile(fs, ".", args.ConfigPath, args.ProfileName, input)
   case "editor":
     fmt.Println("Convert by editor")
     conversion = StartEditor(input)

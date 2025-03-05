@@ -28,16 +28,10 @@ func ConvertByRule(fs afero.Fs, ruleString, input string) string {
   return "Have to implement" // TODO: test and implement.
 }
 
-func AutoConvertByProfile(fs afero.Fs, configPath, profileName, input string) string {
-  path := configPath
-  if path == "" {
-    path = ctor.PathToDefaultConfig()
+func ConvertByProfile(fs afero.Fs, workDir, configPath, profileName, input string) string {
+  if configPath == "" {
+    configPath = ctor.PathToDefaultConfig()
   }
-  output := ConvertByProfile(fs, path, profileName, input)
-  return output
-}
-
-func ConvertByProfile(fs afero.Fs, configPath, profileName, input string) string {
   theFs    = fs
   theInput = input
   // open raw content.
@@ -45,7 +39,7 @@ func ConvertByProfile(fs afero.Fs, configPath, profileName, input string) string
   // parse TOML and apply defined profiles.
   var a auto.AutoRenamer
   a.Parse(rawToml)
-  conversion = a.ConvertWith(profileName, input, fs)
+  conversion = a.ConvertWith(workDir, profileName, input, fs)
   // return result.
   return ""
 }

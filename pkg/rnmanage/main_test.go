@@ -98,17 +98,23 @@ var suites = []gt.TestSuite{
     TestingFunction:
     func(t *testing.T, in gt.TestList) string {
       // set test variables.
-      configPath    := in.InputArr[0]
-      configName    := in.InputArr[1]
-      profileName   := in.InputArr[2]
-      configContent := in.InputArr[3]
+      workingDir    := in.InputArr[0]
+      configPath    := in.InputArr[1]
+      configName    := in.InputArr[2]
+      profileName   := in.InputArr[3]
+      configContent := in.InputArr[4]
       // create test file system.
       mdir          := tu.ManageDir()
       mdir.FillFile(configPath, configName, configContent)
       inputListing  := mdir.ListTree()
       conf          := mdir.SubPath(configPath + "/" + configName)
       // main test.
-      ConvertByProfile(mdir.FsSub, conf, profileName, inputListing)
+      ConvertByProfile(
+        mdir.FsSub,
+        workingDir,
+        conf,
+        profileName,
+        inputListing)
       ExecuteByApplying()
       // remove test file system.
       outputListing := mdir.ListTree()
@@ -122,6 +128,7 @@ var suites = []gt.TestSuite{
         TestName: "main_convert-by-profile_00",
         IsMulti:  true,
         InputArr: []string{
+          ".",              // path to working directory.
           "config",         // config path.
           "general.config", // config name.
           "prettify-txt",   // profile name.
@@ -168,6 +175,7 @@ var suites = []gt.TestSuite{
       // main test.
       _ = ConvertByProfile( // profile command: "renamer -profile 'profileName'"
         mdir.FsSub,         // file system.
+        ".",                // path to working directory.
         conf,               // path to config.
         profileName,        // profile.
         inputListing,       // input.

@@ -40,7 +40,7 @@ var suites = []gt.TestSuite{
       targetString := in.InputArr[0]
       var auto AutoRenamer
       auto.Parse(toml)
-      output := auto.ConvertWith("prettify-txt", targetString, nil)
+      output := auto.ConvertWith(".", "prettify-txt", targetString, nil)
       return output
     },
     Tests:
@@ -145,7 +145,7 @@ var suites = []gt.TestSuite{
       targetString := in.InputArr[0]
       var auto AutoRenamer
       auto.Parse(toml)
-      output := auto.ConvertWith("prettify-txt", targetString, nil)
+      output := auto.ConvertWith(".", "prettify-txt", targetString, nil)
       return output
     },
     Tests:

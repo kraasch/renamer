@@ -40,7 +40,7 @@ func (a *AutoRenamer) Parse(toml string) {
   a.config = cfg
 }
 
-func (a *AutoRenamer) ConvertWith(profileName, targetString string, fs afero.Fs) string {
+func (a *AutoRenamer) ConvertWith(workDir, profileName, targetString string, fs afero.Fs) string {
   // TODO: implement FileInfo.
   // - for [id^], [id.] and [id$] add the CurrentDate().
   // - for [ic^], [ic.] and [ic$] add the CreationDate() from the file system.
