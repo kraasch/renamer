@@ -185,7 +185,19 @@ var suites = []gt.TestSuite{
         ExpectedValue: FIND_TXT_SHAPES_ONLY,
       },
       {
-        TestName: "main_convert-by-profile_no-dir-dot_00",
+        TestName: "main_convert-by-profile_no-wdir-dot_00",
+        IsMulti:  true,
+        InputArr: []string{
+          "",               // path to working directory.
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue: FIND_ALL,
+      },
+      {
+        TestName: "main_convert-by-profile_no-wdir-dot_01",
         IsMulti:  true,
         InputArr: []string{
           "fruits",         // path to working directory.
@@ -197,7 +209,7 @@ var suites = []gt.TestSuite{
         ExpectedValue: FIND_TXT_FRUITS_ONLY,
       },
       {
-        TestName: "main_convert-by-profile_no-dir-dot_01",
+        TestName: "main_convert-by-profile_no-wdir-dot_02",
         IsMulti:  true,
         InputArr: []string{
           "shapes",         // path to working directory.
@@ -207,6 +219,30 @@ var suites = []gt.TestSuite{
           BASIC_CONF,       // config content.
         },
         ExpectedValue: FIND_TXT_SHAPES_ONLY,
+      },
+      {
+        TestName: "main_convert-by-profile_confusing-root-path_00",
+        IsMulti:  true,
+        InputArr: []string{
+          "./fruits/..",    // path to working directory.
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue: FIND_ALL,
+      },
+      {
+        TestName: "main_convert-by-profile_confusing-root-path_01",
+        IsMulti:  true,
+        InputArr: []string{
+          "./ABC/..",       // path to working directory.
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue: FIND_ALL,
       },
     },
   },
