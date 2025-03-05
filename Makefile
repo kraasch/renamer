@@ -3,6 +3,7 @@ test:
 	go clean -testcache
 	@#go test -tags testing ./pkg/... -run=.*/full-test_pipe-test_00
 	go test -tags testing ./pkg/...
+	go test -tags testing ./cmd/...
 	@#go test -tags testing ./pkg/... -v
 
 endtoend:
