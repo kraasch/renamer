@@ -28,6 +28,7 @@ import (
 //              ruleString = STRING
 //             profileName = STRING
 //              configPath = STRING
+//              targetDir = STRING
 var args struct {
   Verbose        bool   `arg:"-v"`
 	InputMode      string `arg:"-i,required"`
@@ -37,6 +38,7 @@ var args struct {
   RuleString     string `arg:"-r"`
   ProfileName    string `arg:"-p"`
 	ConfigPath     string `arg:"-C"`
+	TargetDir      string `arg:"-t"`
 }
 
 var (
@@ -154,7 +156,13 @@ func main() {
     rnm.ConvertByRule(fs, args.RuleString, input)
   case "profile":
     fmt.Println("Convert by profile")
-    rnm.ConvertByProfile(fs, ".", args.ConfigPath, args.ProfileName, input)
+    rnm.ConvertByProfile(
+      fs,
+      args.TargetDir,
+      args.ConfigPath,
+      args.ProfileName,
+      input,
+    )
   case "editor":
     fmt.Println("Convert by editor")
     conversion = StartEditor(input)
