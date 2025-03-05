@@ -184,6 +184,30 @@ var suites = []gt.TestSuite{
         },
         ExpectedValue: FIND_TXT_SHAPES_ONLY,
       },
+      {
+        TestName: "main_convert-by-profile_no-dir-dot_00",
+        IsMulti:  true,
+        InputArr: []string{
+          "fruits",         // path to working directory.
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue: FIND_TXT_FRUITS_ONLY,
+      },
+      {
+        TestName: "main_convert-by-profile_no-dir-dot_01",
+        IsMulti:  true,
+        InputArr: []string{
+          "shapes",         // path to working directory.
+          "config",         // config path.
+          "general.config", // config name.
+          "prettify-txt",   // profile name.
+          BASIC_CONF,       // config content.
+        },
+        ExpectedValue: FIND_TXT_SHAPES_ONLY,
+      },
     },
   },
 
