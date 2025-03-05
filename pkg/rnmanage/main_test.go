@@ -30,12 +30,12 @@ var (
   `      conversions     = "caA"            ` + NL +
   `      modes_string    = ""               ` + NL +
   `                                         `
-  FIND_ORIGINAL =
+  FIND_TXT_BANANAS =
   "config/"               + NL +
   "config/general.config" + NL +
   "fruits/"               + NL +
+  "fruits/BANANAS.txt"    + NL +
   "fruits/apples.txt"     + NL +
-  "fruits/bananas.txt"    + NL +
   "fruits/coconuts.txt"   + NL +
   "notes.txt"             + NL +
   "shapes/"               + NL +
@@ -260,25 +260,25 @@ var suites = []gt.TestSuite{
         TestName: "main_convert-by-profile_wdir-not-a-dir_00",
         IsMulti:  true,
         InputArr: []string{
-          "fruits/BANANAS.txt", // path to working directory.
+          "fruits/bananas.txt", // path to working directory.
           "config",             // config path.
           "general.config",     // config name.
           "prettify-txt",       // profile name.
           BASIC_CONF,           // config content.
         },
-        ExpectedValue: FIND_ORIGINAL,
+        ExpectedValue: FIND_TXT_BANANAS,
       },
       {
         TestName: "main_convert-by-profile_wdir-not-a-dir_01",
         IsMulti:  true,
         InputArr: []string{
-          "fruits/BANANAS",     // path to working directory.
+          "fruits/bananas",     // path to working directory.
           "config",             // config path.
           "general.config",     // config name.
           "prettify-txt",       // profile name.
           BASIC_CONF,           // config content.
         },
-        ExpectedValue: FIND_ORIGINAL,
+        ExpectedValue: FIND_TXT_BANANAS,
       },
     },
   },
