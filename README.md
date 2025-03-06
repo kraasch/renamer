@@ -1,17 +1,25 @@
 
-# !!! UNFINISHED WORK !!!
-
-This program doesn't work and can delete files.
-
-## renamer
+# renamer
 
 ## demo
 
-coming up.
+<p align="center">
+  <img src="./resources/demo.gif" width="300"/>
+</p>
 
 ## features
 
-coming up.
+Rename files with renaming rule string (search files)
+
+```bash
+renamer -i recursive -s all -o apply -c rule -r " ()||-|_|cAa|"
+```
+
+Rename files with renaming rule string (from pipe)
+
+```bash
+find | renamer -i pipe -o apply -c rule -r " ()||-|_|cAa|"
+```
 
 ## overview
 
@@ -37,23 +45,7 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
 
 ## tasks
 
-  - INPUT. Main functionality:
-    - [ ] get file list from pipe, ie allow these inputs:
-      - [ ] `ls | grep -E 'mp3$' | renamer -edit`
-      - [ ] `find | grep -E '.ogg$' | renamer -profile music_ogg`
-    - [ ] if nothing is piped in, have two search modes: `recusvie` and `list`
-      - [ ] `renamer -list=all   -profile music_ogg` list all in pwd (default).
-      - [ ] `renamer -list=files -profile music_ogg` list all files in pwd.
-      - [ ] `renamer -list=dirs  -profile music_ogg` list all directories in pwd.
-      - [ ] `renamer -recursive=all   -profile music_ogg` as above, but recursive (default)
-      - [ ] `renamer -recursive=files -profile music_ogg` as above, but recursive.
-      - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
-      - [ ] `renamer -recursive=dirs  -profile music_ogg` as above, but recursive.
-    - [ ] allow a way to rename by providing a rule string on CLI.
-      - [ ] ie `renamer -rule " ()||-|_|caA|"`
-      - [ ] ie `renamer -rule " ();;-;_;caA;" -separator=";"` for a different separator than a comma.
-
-  - RENAMING. Main functionality:
+  - renaming: main functionality.
     - [ ] different ways of renaming.
       - [ ] -edit opens editor
       - [ ] -auto just applies the profile
@@ -67,7 +59,7 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
     - [ ] implement interactive renaming.
       - [ ] for each file choose method: edit, profile or apply some scripts.
 
-  - RENAMING. Features:
+  - renaming: features.
     - [ ] automatically prefix, infix, suffix before file ending:
       - [ ] individual files.
         - [ ] add the current date or file creation date.
@@ -80,7 +72,7 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
         - [ ] rename in different order (`afbecd` to `abcdef`) for scanned
               pages (first front side, then backsides in reverse).
 
-  - RENAMING. Pitfalls:
+  - renaming: pitfalls.
     - [ ] test various types circular renames: eg `(a->b,b->a)`
           should not delete anything, but should execute.
     - [ ] test over-naming renames: `(a->c,c->c)`,
@@ -88,22 +80,49 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
     - [ ] test colliding renames: `(a->c,b->c)`
           should not delete anything, should not execute.
 
-  - OUTPUT. Main functionality:
-    - [ ] allow a `-action` flag to specify how to apply a name change (profile/editor)
-      - [ ] have a `-action=validate` flag which in conjunction with `-profile` checks if
-            any file breaks the profile, but doesn't apply the profile.
-      - [ ] default to `-action=apply` flag which applies the renaming rules specified in profile.
-
-  - MISC:
+  - misc:
     - [ ] create my own config manager at https://github.com/kraasch/goconf
       - [ ] check if config file exists.
       - [ ] if it doesn't create default config.
       - [ ] if it does exist read it's content to text blob.
 
+Maybe:
+
+  - [ ] Allow separator for rule strings `renamer -rule " ();;-;_;caA;" -separator=";" ...` for a different separator than a pipe.
+
 Done:
 
-  - [X] use this to parse toml config: https://github.com/BurntSushi/toml/tree/master
-  - [X] use this for filesystem mocks: https://github.com/spf13/afero
+  - misc.
+    - [X] use this to parse toml config: https://github.com/BurntSushi/toml/tree/master
+    - [X] use this for filesystem mocks: https://github.com/spf13/afero
+  - input: main functionality.
+    - [X] get file list from pipe, ie allow these inputs:
+      - [X] `ls | grep -E 'mp3$' | renamer -edit`
+      - [ ] `find | grep -E '.ogg$' | renamer -profile music_ogg`
+    - [X] if nothing is piped in, have two search modes: `recusvie` and `dir`
+      - [X] `renamer -i dir       -s all   ...` list all in pwd (default).
+      - [X] `renamer -i dir       -s files ...` list all files in pwd.
+      - [X] `renamer -i dir       -s dirs  ...` list all directories in pwd.
+      - [X] `renamer -i recursive -s all   ...` as above, but recursive (default)
+      - [X] `renamer -i recursive -s files ...` as above, but recursive.
+      - [X] `renamer -i recursive -s dirs  ...` as above, but recursive.
+      - [X] `renamer -i recursive -s dirs  ...` as above, but recursive.
+    - [X] allow a way to rename by providing a rule string on CLI.
+      - [X] ie `renamer -rule " ()||-|_|caA| ..."`
+  - output: main functionality.
+    - [X] allow a `-action` flag to specify how to apply a name change (profile/editor)
+      - [X] have a `-action=validate` flag which in conjunction with `-profile` checks if
+            any file breaks the profile, but doesn't apply the profile.
+      - [X] default to `-action=apply` flag which applies the renaming rules specified in profile.
+
+## word of caution
+
+This is work in progress.
+This program is
+
+  - powerful: interprets small input,
+  - risky: might delete by renaming,
+  - not tested enough yet.
 
 ## notes
 

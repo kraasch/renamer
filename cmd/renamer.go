@@ -111,27 +111,27 @@ func main() {
   p := arg.MustParse(&args)
   // input.
   if args.InputMode != "pipe" && args.InputMode != "dir" && args.InputMode != "recursive" {
-    p.Fail("InputMode must be one of {pipe,dir,recursive}")
+    p.Fail("InputMode must be one of -i {pipe,dir,recursive}")
   }
   if (args.InputMode == "dir" || args.InputMode == "recursive") && args.SelectionMode == "" {
-    p.Fail("InputModes {dir,recursive} need a SelectionMode {all,files,dirs}")
+    p.Fail("InputModes -i {dir,recursive} need a SelectionMode -s {all,files,dirs}")
   }
   // conversion.
   if args.ConversionMode != "rule" && args.ConversionMode != "profile" && args.ConversionMode != "editor" && args.ConversionMode != "interactive" {
-    p.Fail("ConversionMode must be one of {rule,profile,editor,interactive}")
+    p.Fail("ConversionMode must be one of -c {rule,profile,editor,interactive}")
   }
   if args.ConversionMode == "rule" && args.RuleString == "" {
-    p.Fail("ConversionMode {rule} needs a RuleString argument")
+    p.Fail("ConversionMode -c {rule} needs a RuleString -r 'x|y|z' argument")
   }
   if args.ConversionMode == "profile" && args.ProfileName == "" {
-    p.Fail("ConversionMode {profile} needs a ProfileName argument")
+    p.Fail("ConversionMode -c {profile} needs a ProfileName -p 'name' argument")
   }
   if args.ConversionMode != "profile" && args.ConfigPath != "" {
-    p.Fail("Only ConversionMode {profile} needs a ConfigPath argument")
+    p.Fail("Only ConversionMode -c {profile} needs a ConfigPath -C 'path' argument")
   }
   // output.
   if args.OutputMode != "apply" && args.OutputMode != "validate" && args.OutputMode != "print" {
-    p.Fail("OutputMode must be one of {apply,validate}")
+    p.Fail("OutputMode must be one of -o {apply,validate,print}")
   }
 
   // read input.
