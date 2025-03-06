@@ -21,6 +21,28 @@ Rename files with renaming rule string (from pipe)
 find | renamer -i pipe -o apply -c rule -r " ()||-|_|cAa|"
 ```
 
+Edit files with your editor (for example vim or emacs)
+
+```bash
+renamer -i recursive -s all -o apply -c editor
+```
+
+Different ways to use `renamer`:
+
+  - input:
+    - [X] dir: list directory (like `ls`)
+    - [X] recursive: search directory tree (like `find`)
+    - [X] pipe: pipe in the input.
+  - input:
+    - [X] rule: provide a rule string.
+    - [X] editor: edit the input yourself.
+    - [X] config+profile: provide a config file with renaming profiles.
+    - [ ] interactive: apply rules and profiles with a TUI application.
+  - output:
+    - [X] apply: rename according to given pattern.
+    - [X] print: print what would be done, if apply option was given.
+    - [X] validate: print if file system conforms to given rules (i.e. no renaming needed.)
+
 ## overview
 
 The CLI program is `cmd/renamer.go` and compiles to `renamer`.
@@ -98,7 +120,7 @@ Done:
   - input: main functionality.
     - [X] get file list from pipe, ie allow these inputs:
       - [X] `ls | grep -E 'mp3$' | renamer -edit`
-      - [ ] `find | grep -E '.ogg$' | renamer -profile music_ogg`
+      - [X] `find | grep -E '.ogg$' | renamer -profile music_ogg`
     - [X] if nothing is piped in, have two search modes: `recusvie` and `dir`
       - [X] `renamer -i dir       -s all   ...` list all in pwd (default).
       - [X] `renamer -i dir       -s files ...` list all files in pwd.
@@ -111,8 +133,7 @@ Done:
       - [X] ie `renamer -rule " ()||-|_|caA| ..."`
   - output: main functionality.
     - [X] allow a `-action` flag to specify how to apply a name change (profile/editor)
-      - [X] have a `-action=validate` flag which in conjunction with `-profile` checks if
-            any file breaks the profile, but doesn't apply the profile.
+      - [X] have a `-action=validate` flag which in conjunction with `-profile` checks if any file breaks the profile, but doesn't apply the profile.
       - [X] default to `-action=apply` flag which applies the renaming rules specified in profile.
 
 ## word of caution
