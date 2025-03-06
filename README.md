@@ -44,7 +44,7 @@ Different ways to use `renamer`:
     - [X] validate: print if file system conforms to given rules (i.e. no renaming needed.)
 
 The profile and the rule format are equally powerful, i.e. can be converted into each other.
-For now see the (rename)[https://github.com/kraasch/renamer/blob/main/pkg/rename/main_test.go] package to see features of rules and profiles.
+For now see the [rename](https://github.com/kraasch/renamer/blob/main/pkg/rename/main_test.go) package to see features of rules and profiles.
 
 Example configuration file format:
 
