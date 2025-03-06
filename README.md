@@ -120,7 +120,7 @@ Done:
 This is work in progress.
 This program is
 
-  - powerful: interprets small input,
+  - powerful: interprets little input to do big things,
   - risky: might delete by renaming,
   - not tested enough yet.
 
