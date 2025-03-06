@@ -124,17 +124,17 @@ var (
   "shapes/SQUARE.txt"     + NL +
   "shapes/TRIANGLE.txt"
   FIND_ALL_FORMATTED =
-  "notes.txt             => NOTES.txt"             + NL +
   "config/               => config/"               + NL +
   "config/general.config => config/GENERAL.config" + NL +
   "fruits/               => fruits/"               + NL +
   "fruits/apples.txt     => fruits/APPLES.txt"     + NL +
   "fruits/bananas.txt    => fruits/BANANAS.txt"    + NL +
   "fruits/coconuts.txt   => fruits/COCONUTS.txt"   + NL +
+  "notes.txt             => NOTES.txt"             + NL +
   "shapes/               => shapes/"               + NL +
   "shapes/circle.txt     => shapes/CIRCLE.txt"     + NL +
   "shapes/square.txt     => shapes/SQUARE.txt"     + NL +
-  "shapes/triangle.txt   => shapes/TRIANGLE.txt"
+  "shapes/triangle.txt   => shapes/TRIANGLE.txt"   + NL
   FIND_BANANA_FORMATTED =
   "notes.txt             => notes.txt"             + NL +
   "config/               => config/"               + NL +
@@ -204,7 +204,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "rulestr_00",
+        TestName: "path-list_00",
         IsMulti:  true,
         InputArr: []string{
           ".",                // path to working directory.

@@ -9,7 +9,11 @@ import (
 
   // external packages.
   "github.com/spf13/afero"
+
+  // standard packages.
   "fmt"
+  "bytes"
+  "strings"
 )
 
 var (
@@ -49,7 +53,22 @@ func ExecuteByValidating() bool {
 }
 
 func ExecuteByFormatting() string {
-  return "Have to implement" // TODO: test and implement.
+  var buf bytes.Buffer
+  iis := strings.Split(theInput, "\n")
+  ccs := strings.Split(conversion, "\n")
+  maxLen := 0
+  for _, input := range iis {
+    l := len(input)
+    if l > maxLen {
+      maxLen = l
+    }
+  }
+  for i, input := range iis {
+    conv := ccs[i]
+    str := fmt.Sprintf("%-*s => %s\n", maxLen, input, conv)
+    buf.WriteString(str)
+  }
+  return buf.String()
 }
 
 func ExecuteByApplying() string {
