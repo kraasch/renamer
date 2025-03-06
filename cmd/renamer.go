@@ -19,6 +19,7 @@ import (
   // local packages.
   dir "github.com/kraasch/renamer/pkg/dir"
   rnm "github.com/kraasch/renamer/pkg/rnmanage"
+  edit "github.com/kraasch/renamer/pkg/edit"
 )
 
 // 1) InputMode      (req) = {pipe,dir[+selection],recursive[+selection]}.
@@ -98,10 +99,6 @@ func StartInteractiveGui(fs afero.Fs, in string) string {
   return output
 }
 
-func StartEditor(in, workDir string) string {
-  return "Have to implement." // TODO: implement.
-}
-
 func main() {
   // use operating system's file system, wrapped in afero.
   fs   := afero.NewOsFs()
@@ -170,10 +167,8 @@ func main() {
     )
   case "editor":
     fmt.Println("Convert by editor")
-    conversion = StartEditor(
-      args.TargetDir,
-      input,
-    )
+    // TODO: also pass in args.TargetDir for more editor awareness.
+    conversion = edit.ManualRename(input)
     rnm.ConvertByPathList(
       fs,
       args.TargetDir,
