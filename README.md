@@ -4,7 +4,7 @@
 ## demo
 
 <p align="center">
-  <img src="./resources/demo.gif" width="300"/>
+  <img src="./resources/demo.gif" />
 </p>
 
 ## features
