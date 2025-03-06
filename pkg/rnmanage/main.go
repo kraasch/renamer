@@ -17,19 +17,23 @@ import (
 )
 
 var (
-  theFs      afero.Fs
-  theInput   string
-  conversion string
+  theFs         afero.Fs
+  theInput      string
+  theConversion string
 )
 
-func ConvertByPathList(fs afero.Fs, workDir, conversion, input string) string {
-  fmt.Println() // TODO: remove this line later.
-  return "Have to implement" // TODO: test and implement.
+func ConvertByPathList(fs afero.Fs, workDir, conv, input string) string {
+  theFs         = fs
+  theInput      = input
+  theConversion = conv
+  return "" // TODO: remove return.
 }
 
 func ConvertByRule(fs afero.Fs, workDir, ruleString, input string) string {
-  fmt.Println() // TODO: remove this line later.
-  return "Have to implement" // TODO: test and implement.
+  theFs         = fs
+  theInput      = input
+  theConversion = auto.ConvertWithRule(workDir, ruleString, input, fs)
+  return "" // TODO: remove return.
 }
 
 func ConvertByProfile(fs afero.Fs, workDir, configPath, profileName, input string) string {
@@ -43,19 +47,29 @@ func ConvertByProfile(fs afero.Fs, workDir, configPath, profileName, input strin
   // parse TOML and apply defined profiles.
   var a auto.AutoRenamer
   a.Parse(rawToml)
-  conversion = a.ConvertWith(workDir, profileName, input, fs)
+  theConversion = a.ConvertWith(workDir, profileName, input, fs)
   // return result.
-  return ""
+  return "" // TODO: remove return.
 }
 
 func ExecuteByValidating() bool {
-  return false // TODO: test and implement.
+  allEqual := true
+  iis := strings.Split(theInput, "\n")
+  ccs := strings.Split(theConversion, "\n")
+  for i, input := range iis {
+    conv := ccs[i]
+    if conv != input {
+      allEqual = false
+      break
+    }
+  }
+  return allEqual
 }
 
 func ExecuteByFormatting() string {
   var buf bytes.Buffer
   iis := strings.Split(theInput, "\n")
-  ccs := strings.Split(conversion, "\n")
+  ccs := strings.Split(theConversion, "\n")
   maxLen := 0
   for _, input := range iis {
     l := len(input)
@@ -73,7 +87,7 @@ func ExecuteByFormatting() string {
 
 func ExecuteByApplying() string {
   // apply renames to file system.
-  fsmg.DirRename(theFs, theInput, conversion)
+  fsmg.DirRename(theFs, theInput, theConversion)
   // return result.
   return ""
 }

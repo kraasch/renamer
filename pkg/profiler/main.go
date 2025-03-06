@@ -7,9 +7,14 @@ import (
 
   // other packages.
   "bytes"
+  "strings"
 
   // local packages.
   rn "github.com/kraasch/renamer/pkg/rename"
+)
+
+const (
+  PIPE = "|"
 )
 
 type Config struct {
@@ -56,6 +61,24 @@ func (c *Config) ToToml() string {
     panic(err)
   }
   return buf.String()
+}
+
+func ProfileFromRuleString(ruleString string) Profile {
+  // decode rule string.
+  ss := strings.Split(ruleString, PIPE) // TODO: throw error if split is too long or short.
+  rule := Rule {
+    WordSeparators: ss[0],
+    DeleteChars:    ss[1],
+    SmallGapMark:   ss[2],
+    BigGapMark:     ss[3],
+    Conversions:    ss[4],
+    ModesString:    ss[5],
+  }
+  profile := Profile{
+    Name:        "converted from rule #000", // TODO: increase number.
+    ProfileRule: rule,
+  }
+  return profile
 }
 
 func ReadRawProfileConfig(tomlBlob string) Config {

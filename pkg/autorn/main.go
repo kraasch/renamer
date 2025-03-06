@@ -2,14 +2,17 @@
 package autorn
 
 import (
+  // standard packages.
   "os"
   "bytes"
   "strings"
   "time"
   "path/filepath"
   "fmt"
+
   // local packages.
   pro "github.com/kraasch/renamer/pkg/profiler"
+
   // external packages.
   "github.com/spf13/afero"
 )
@@ -68,6 +71,7 @@ func convertLine(line, workDir string, profile *pro.Profile, metaInfo FileInfo) 
   return line
 }
 
+// TODO: extract function which operates on profile. (1/2)
 func (a *AutoRenamer) ConvertWith(workDir, profileName, targetString string, fs afero.Fs) string {
   // TODO: implement FileInfo.
   // - for [id^], [id.] and [id$] add the CurrentDate().
@@ -87,4 +91,19 @@ func (a *AutoRenamer) ConvertWith(workDir, profileName, targetString string, fs 
   return buf.String()
 }
 
+// TODO: extract function which operates on profile. (2/2)
+func ConvertWithRule(workDir, ruleString, targetString string, fs afero.Fs) string {
+  profile := pro.ProfileFromRuleString(ruleString)
+  var buf bytes.Buffer
+  lines := strings.Split(targetString, "\n")
+  for i, line := range lines {
+    buff := convertLine(line, workDir, &profile, FileInfo{})
+    buf.WriteString(buff)
+    if i < len(lines) - 1 {  // no line break for the last line.
+      buf.WriteString(NLine) // break line.
+    }
+  }
+  // return result.
+  return buf.String()
+}
 

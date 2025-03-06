@@ -136,17 +136,17 @@ var (
   "shapes/square.txt     => shapes/SQUARE.txt"     + NL +
   "shapes/triangle.txt   => shapes/TRIANGLE.txt"   + NL
   FIND_BANANA_FORMATTED =
-  "notes.txt             => notes.txt"             + NL +
   "config/               => config/"               + NL +
   "config/general.config => config/general.config" + NL +
   "fruits/               => fruits/"               + NL +
   "fruits/apples.txt     => fruits/apples.txt"     + NL +
   "fruits/bananas.txt    => fruits/BANANAS.txt"    + NL +
   "fruits/coconuts.txt   => fruits/coconuts.txt"   + NL +
+  "notes.txt             => notes.txt"             + NL +
   "shapes/               => shapes/"               + NL +
   "shapes/circle.txt     => shapes/circle.txt"     + NL +
   "shapes/square.txt     => shapes/square.txt"     + NL +
-  "shapes/triangle.txt   => shapes/triangle.txt"
+  "shapes/triangle.txt   => shapes/triangle.txt"   + NL
 )
 
 func TestAll(t *testing.T) {
@@ -251,7 +251,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "rulestr_00",
+        TestName: "rule-str_00",
         IsMulti:  true,
         InputArr: []string{
           ".",              // path to working directory.
