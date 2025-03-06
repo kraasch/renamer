@@ -43,6 +43,16 @@ Different ways to use `renamer`:
     - [X] print: print what would be done, if apply option was given.
     - [X] validate: print if file system conforms to given rules (i.e. no renaming needed.)
 
+## tip
+
+Set an alias for your common renames in your `~/.bashrc`.
+
+```bash
+alias rename_mp3='renamer -i recursive -s all -o apply -c rule -r " ()||-|_|cAa|"'
+```
+
+This is an alternative to setting up a config file with profiles.
+
 ## overview
 
 The CLI program is `cmd/renamer.go` and compiles to `renamer`.
