@@ -36,19 +36,51 @@ Different ways to use `renamer`:
   - input:
     - [X] rule: provide a rule string.
     - [X] editor: edit the input yourself.
-    - [X] config+profile: provide a config file with renaming profiles.
+    - [X] config+profile: provide a configuration file with renaming profiles.
     - [ ] interactive: apply rules and profiles with a TUI application.
   - output:
     - [X] apply: rename according to given pattern.
     - [X] print: print what would be done, if apply option was given.
     - [X] validate: print if file system conforms to given rules (i.e. no renaming needed.)
 
+The profile and the rule format are equally powerful, i.e. can be converted into each other.
+For now see the (rename)[https://github.com/kraasch/renamer/blob/main/pkg/rename/main_test.go] package to see features of rules and profiles.
+
+Example configuration file format:
+
+```toml
+# An Example Config
+title = "Some Example"
+
+[profiles]
+[profiles.toast-txt]
+    name            = "n0"
+    [profiles.toast-txt.profile_rule]
+    word_separators = " ()"
+    delete_chars    = ""
+    small_gap_mark  = "-"
+    big_gap_mark    = "_"
+    conversions     = "caA"
+    modes_string    = ""
+[profiles.prettify-txt]
+    name            = "n1"
+    [profiles.prettify-txt.profile_rule]
+    word_separators = " ()"
+    delete_chars    = ""
+    small_gap_mark  = "-"
+    big_gap_mark    = "_"
+    conversions     = "cAa"
+    modes_string    = ""
+```
+
 ## tip
 
 Set an alias for your common renames in your `~/.bashrc`.
 
 ```bash
-alias rename_mp3='renamer -i recursive -s all -o apply -c rule -r " ()||-|_|cAa|"'
+alias rn_mp3='renamer -i recursive -s all -o apply -c rule -r " ()||-|_|cAa|"'
+alias rn_txt='renamer -i recursive -s all -o apply -c rule -r " ()||-|_|caA|"'
+alias rename='renamer -i recursive -s all -o apply -c editor'
 ```
 
 This is an alternative to setting up a config file with profiles.
