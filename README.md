@@ -111,7 +111,6 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
   - renaming: main functionality.
     - [ ] implement interactive renaming.
       - [ ] for each file choose method: edit, profile or apply some scripts.
-
   - renaming: features.
     - [ ] automatically prefix, infix, suffix before file ending:
       - [ ] individual files.
@@ -136,7 +135,6 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
           should not delete anything, should not execute.
     - [ ] test colliding renames: `(a->c,b->c)`
           should not delete anything, should not execute.
-
   - misc.
     - [ ] also pull out `testutil` package.
 
