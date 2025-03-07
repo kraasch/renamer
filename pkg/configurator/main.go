@@ -6,6 +6,7 @@ import (
   "path/filepath"
   "strings"
   "errors"
+  "fmt"
 )
 
 const (
@@ -23,6 +24,14 @@ type Configurator struct {
   DefaultConfig  string
 }
 
+func (c *Configurator) getConfigPath() string {
+  return root + "/" + c.PathToConfig
+}
+
+func (c *Configurator) getFullConfigPath() string {
+  return root + "/" + c.PathToConfig + "/" + c.ConfigFileName
+}
+
 func (c *Configurator) AutoReadConfig() string {
   if !c.ExistsDefaultConfig() {
     c.CreateDefaultConfig()
@@ -35,15 +44,15 @@ func (c *Configurator) SetRoot(path string) {
 }
 
 func (c *Configurator) ExistsDefaultConfig() bool {
-  return FileExists(root + "/" + c.PathToConfig)
+  return FileExists(c.getFullConfigPath())
 }
 
 func (c *Configurator) CreateDefaultConfig() { // TODO: return error.
-  CreateFile(root + "/" + c.PathToConfig, c.ConfigFileName, c.DefaultConfig)
+  CreateFile(c.getConfigPath(), c.ConfigFileName, c.DefaultConfig)
 }
 
 func (c *Configurator) ReadConfig() string {
-  return ReadConfig(root + "/" + c.PathToConfig)
+  return ReadConfig(c.getFullConfigPath())
 }
 
 func FileExists(path string) bool {
@@ -58,6 +67,7 @@ func FileExists(path string) bool {
 }
 
 func ReadConfig(configPath string) string {
+  fmt.Println("HENLLO", configPath)
   dat, err := os.ReadFile(configPath)
   if err != nil {
     {} // TODO: report failure.
