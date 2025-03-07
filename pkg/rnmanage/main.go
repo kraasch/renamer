@@ -37,12 +37,12 @@ func ConvertByRule(fs afero.Fs, workDir, ruleString, input string) string {
 }
 
 func ConvertByProfile(fs afero.Fs, workDir, configPath, profileName, input string) string {
-  if configPath == "" {
-    configPath = ctor.PathToDefaultConfig()
-  }
   theFs    = fs
   theInput = input
   // open raw content.
+  // TODO: use this here:
+  // c := Configurator{ ... }
+  // c.AutoReadConfig()
   rawToml := ctor.ReadConfig(configPath)
   // parse TOML and apply defined profiles.
   var a auto.AutoRenamer

@@ -46,10 +46,6 @@ func (c *Configurator) ReadConfig() string {
   return ReadConfig(root + "/" + c.PathToConfig)
 }
 
-func PathToDefaultConfig() string {
-  return "Have to implement" // TODO: test and implement.
-}
-
 func FileExists(path string) bool {
   if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
     return false
