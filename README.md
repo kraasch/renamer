@@ -114,27 +114,27 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
   - renaming: features.
     - [ ] automatically prefix, infix, suffix before file ending:
       - [ ] individual files.
-        - [ ] add the current date or file creation date.
+        - [ ] add the current date.
+          - [ ] yyyy-mm-dd.
+          - [ ] yyyy-mm-dd_HH-MM.
+          - [ ] precise nano-second-timestamp.
+        - [ ] add the file creation date.
           - [ ] yyyy-mm-dd.
           - [ ] yyyy-mm-dd_HH-MM.
           - [ ] precise nano-second-timestamp.
         - [ ] add a random id (decimal, hexadecimal, alphanumerical)
-      - [ ] groups of files.
-        - [ ] add incrementing id to list of files, also with prefixed zeroes.
-        - [ ] rename in different order (`afbecd` to `abcdef`) for scanned
-              pages (first front side, then backsides in reverse).
+    - [ ] groups of files.
+      - [ ] add incrementing id to list of files, also with prefixed zeroes.
     - [ ] rename scanned pages.
+      - [ ] rename in different order (`afbecd` to `abcdef`) for scanned pages (first front side, then backsides in reverse).
       - [ ] example sorting for 6 PNG files: ABCDEF
       - [ ] split the files in first and second half: --> ABC and DEF
       - [ ] reverse order of second half: --> ABC and FED
       - [ ] alternatingly merge the two halfs back together: --> AFBECD.
   - renaming: pitfalls.
-    - [ ] test various types circular renames: eg `(a->b,b->a)`
-          should not delete anything, but should execute.
-    - [ ] test over-naming renames: `(a->c,c->c)`,
-          should not delete anything, should not execute.
-    - [ ] test colliding renames: `(a->c,b->c)`
-          should not delete anything, should not execute.
+    - [ ] test various types circular renames: eg `(a->b,b->a)` should not delete anything, but should execute.
+    - [ ] test over-naming renames: `(a->c,c->c)`, should not delete anything, should not execute.
+    - [ ] test colliding renames: `(a->c,b->c)` should not delete anything, should not execute.
   - misc.
     - [ ] also pull out `testutil` package.
 
