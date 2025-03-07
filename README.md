@@ -124,7 +124,11 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
         - [ ] add incrementing id to list of files, also with prefixed zeroes.
         - [ ] rename in different order (`afbecd` to `abcdef`) for scanned
               pages (first front side, then backsides in reverse).
-
+    - [ ] rename scanned pages.
+      - [ ] example sorting for 6 PNG files: ABCDEF
+      - [ ] split the files in first and second half: --> ABC and DEF
+      - [ ] reverse order of second half: --> ABC and FED
+      - [ ] alternatingly merge the two halfs back together: --> AFBECD.
   - renaming: pitfalls.
     - [ ] test various types circular renames: eg `(a->b,b->a)`
           should not delete anything, but should execute.
