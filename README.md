@@ -97,7 +97,6 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
 │   └── renamer.go // CLI program
 └── pkg
     └── rnmanage          // orchestrate renaming (editing, automatic) and file system. 
-        ├── configurator  // reads the config file.
         ├── edit          // calls editor.
         ├── fsmanage      // deals with file system.
         │   ├── dir       // lists directories.
@@ -133,6 +132,9 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
           should not delete anything, should not execute.
     - [ ] test colliding renames: `(a->c,b->c)`
           should not delete anything, should not execute.
+
+  - misc.
+    - [ ] also pull out `testutil` package.
 
 Maybe:
 
