@@ -9,6 +9,7 @@ import (
   "bytes"
   "strings"
   "fmt"
+  "slices"
 
   // local packages.
   rn "github.com/kraasch/renamer/pkg/rename"
@@ -41,6 +42,42 @@ type Rule struct {
 
 func (r Rule) String() string {
   return fmt.Sprintf("%s%s|%s|%s|%s|%s|%s%s", BEG, r.WordSeparators, r.DeleteChars, r.SmallGapMark, r.BigGapMark, r.Conversions, r.ModesString, END)
+}
+
+func (c Config) String() string {
+  res := []string{}
+  profiles := c.Profiles
+  maxNameLen := 0
+  maxIdLen   := 0
+  for pid := range profiles { // get length of longest profile id.
+    idl   := len(fmt.Sprintf("%+v\n", pid))
+    namel := len(profiles[pid].Name)
+    if idl > maxIdLen {
+      maxIdLen = idl
+    }
+    if namel > maxNameLen {
+      maxNameLen = namel
+    }
+  }
+  longestLineLen := 0
+  for pid := range profiles {
+    pname := profiles[pid].Name
+    prule := profiles[pid].ProfileRule
+    formatted := fmt.Sprintf("%+-*v(%-*s) %s\n", maxIdLen, pid, maxNameLen, pname, prule)
+    res = append(res, formatted)
+    // see which line is the longest.
+    if len(formatted) > longestLineLen {
+      longestLineLen = len(formatted)
+    }
+  }
+  // sort and format.
+  slices.Sort(res)
+  out := c.Title + ":\n"
+  out += strings.Repeat("-", longestLineLen) + "\n"
+  for _, r := range res {
+    out += r
+  }
+  return out
 }
 
 func (c *Config) AddProfileToConfig(p *Profile, name string) Config {

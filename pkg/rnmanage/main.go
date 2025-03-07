@@ -68,7 +68,7 @@ func ListProfiles() string {
   rawToml := CONFIG.ReadConfig()
   var a auto.AutoRenamer
   a.Parse(rawToml)
-  return a.ListProfiles()
+  return a.Config().String()
 }
 
 func ConvertByPathList(fs afero.Fs, workDir, conv, input string) string {

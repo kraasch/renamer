@@ -234,6 +234,8 @@ var suites = []gt.TestSuite{
           BIG_CONF,           // config content.
         },
         ExpectedValue:
+        `Basic Conf:` + NL +
+        `-----------------------------------------------` + NL +
         `abc-mp3      (LowerCase  ) 【 []||-|_|cAa|】` + NL +
         `lcase-wav    (LowerCase  ) 【 ()||-|_|cAa|】` + NL +
         `prettify-txt (SomeProfile) 【 ()||-|_|caA|】` + NL,

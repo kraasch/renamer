@@ -9,7 +9,6 @@ import (
   "time"
   "path/filepath"
   "fmt"
-  "slices"
 
   // local packages.
   pro "github.com/kraasch/renamer/pkg/profiler"
@@ -40,33 +39,8 @@ type AutoRenamer struct {
   config pro.Config
 }
 
-func (a *AutoRenamer) ListProfiles() string {
-  res := []string{}
-  profiles := a.config.Profiles
-  maxNameLen := 0
-  maxIdLen   := 0
-  for pid := range profiles { // get length of longest profile id.
-    idl   := len(fmt.Sprintf("%+v\n", pid))
-    namel := len(profiles[pid].Name)
-    if idl > maxIdLen {
-      maxIdLen = idl
-    }
-    if namel > maxNameLen {
-      maxNameLen = namel
-    }
-  }
-  for pid := range profiles {
-    pname := profiles[pid].Name
-    prule := profiles[pid].ProfileRule
-    formatted := fmt.Sprintf("%+-*v(%-*s) %s\n", maxIdLen, pid, maxNameLen, pname, prule)
-    res = append(res, formatted)
-  }
-  slices.Sort(res)
-  out := ""
-  for _, r := range res {
-    out += r
-  }
-  return out
+func (a *AutoRenamer) Config() pro.Config {
+  return a.config
 }
 
 func (a *AutoRenamer) Parse(toml string) {
