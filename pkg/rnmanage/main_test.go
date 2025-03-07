@@ -7,7 +7,6 @@ import (
   gt "github.com/kraasch/gotest/gotest"
 
   // cli testing.
-  "fmt"
   "os/exec"
   "strings"
 
@@ -16,7 +15,37 @@ import (
 )
 
 var (
-  NL = fmt.Sprintln()
+  BIG_CONF =
+  `title = "Basic Conf"                     ` + NL +
+  `[profiles]                               ` + NL +
+  `  [profiles.lcase-wav]                   ` + NL +
+  `    name = "LowerCase"                   ` + NL +
+  `    [profiles.lcase-wav.profile_rule]    ` + NL +
+  `      word_separators = " ()"            ` + NL +
+  `      delete_chars    = ""               ` + NL +
+  `      small_gap_mark  = "-"              ` + NL +
+  `      big_gap_mark    = "_"              ` + NL +
+  `      conversions     = "cAa"            ` + NL +
+  `      modes_string    = ""               ` + NL +
+  `  [profiles.abc-mp3]                     ` + NL +
+  `    name = "LowerCase"                   ` + NL +
+  `    [profiles.abc-mp3.profile_rule]      ` + NL +
+  `      word_separators = " []"            ` + NL +
+  `      delete_chars    = ""               ` + NL +
+  `      small_gap_mark  = "-"              ` + NL +
+  `      big_gap_mark    = "_"              ` + NL +
+  `      conversions     = "cAa"            ` + NL +
+  `      modes_string    = ""               ` + NL +
+  `  [profiles.prettify-txt]                ` + NL +
+  `    name = "SomeProfile"                 ` + NL +
+  `    [profiles.prettify-txt.profile_rule] ` + NL +
+  `      word_separators = " ()"            ` + NL +
+  `      delete_chars    = ""               ` + NL +
+  `      small_gap_mark  = "-"              ` + NL +
+  `      big_gap_mark    = "_"              ` + NL +
+  `      conversions     = "caA"            ` + NL +
+  `      modes_string    = ""               ` + NL +
+  `                                         `
   BASIC_CONF =
   `title = "Basic Conf"                     ` + NL +
   `[profiles]                               ` + NL +
@@ -171,6 +200,46 @@ func simulatePipe(commands CommandList, path string, t *testing.T) string {
 }
 
 var suites = []gt.TestSuite{
+
+  /*
+  * Test ListProfiles()
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      // set test variables.
+      configPath    := in.InputArr[0]
+      configName    := in.InputArr[1]
+      configContent := in.InputArr[2]
+      // create test file system.
+      mdir          := tu.ManageDir()
+      mdir.FillFile(configPath, configName, configContent)
+      oldRoot := SetTestConfig(mdir.Path(), configPath, configName)
+      // main test.
+      out := ListProfiles()
+      // remove test file system.
+      _ = SetTestRoot(oldRoot)
+      mdir.CleanUp()
+      // return.
+      return out
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "list-profiles_00",
+        IsMulti:  true,
+        InputArr: []string{
+          "config",           // config path.
+          "general.config",   // config name.
+          BIG_CONF,           // config content.
+        },
+        ExpectedValue:
+        `abc-mp3      (LowerCase  ) 【 []||-|_|cAa|】` + NL +
+        `lcase-wav    (LowerCase  ) 【 ()||-|_|cAa|】` + NL +
+        `prettify-txt (SomeProfile) 【 ()||-|_|caA|】` + NL,
+      },
+    },
+  },
 
   /*
   * Test ConvertByPathList() and ExecuteByFormatting()

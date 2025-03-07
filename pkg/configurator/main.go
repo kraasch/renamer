@@ -6,7 +6,6 @@ import (
   "path/filepath"
   "strings"
   "errors"
-  "fmt"
 )
 
 const (
@@ -15,7 +14,7 @@ const (
 )
 
 var (
-  root = "~" // TODO: read the home directory from operating system.
+  root, _ = os.UserHomeDir()
 )
 
 type Configurator struct {
@@ -43,6 +42,10 @@ func (c *Configurator) SetRoot(path string) {
   root = path
 }
 
+func (c *Configurator) Root() string {
+  return root
+}
+
 func (c *Configurator) ExistsDefaultConfig() bool {
   return FileExists(c.getFullConfigPath())
 }
@@ -67,7 +70,6 @@ func FileExists(path string) bool {
 }
 
 func ReadConfig(configPath string) string {
-  fmt.Println("HENLLO", configPath)
   dat, err := os.ReadFile(configPath)
   if err != nil {
     {} // TODO: report failure.

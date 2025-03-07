@@ -8,13 +8,16 @@ import (
   // other packages.
   "bytes"
   "strings"
+  "fmt"
 
   // local packages.
   rn "github.com/kraasch/renamer/pkg/rename"
 )
 
 const (
-  PIPE = "|"
+  PIPE  = "|"
+  BEG   = "【"
+  END   = "】"
 )
 
 type Config struct {
@@ -34,6 +37,10 @@ type Rule struct {
   BigGapMark     string        `toml:"big_gap_mark"`
   Conversions    string        `toml:"conversions"`
   ModesString    string        `toml:"modes_string"`
+}
+
+func (r Rule) String() string {
+  return fmt.Sprintf("%s%s|%s|%s|%s|%s|%s%s", BEG, r.WordSeparators, r.DeleteChars, r.SmallGapMark, r.BigGapMark, r.Conversions, r.ModesString, END)
 }
 
 func (c *Config) AddProfileToConfig(p *Profile, name string) Config {

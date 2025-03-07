@@ -11,16 +11,65 @@ import (
   "github.com/spf13/afero"
 
   // standard packages.
-  "fmt"
   "bytes"
   "strings"
+  "fmt"
 )
 
 var (
   theFs         afero.Fs
   theInput      string
   theConversion string
+  NL = fmt.Sprintln()
+  DEFAULT_CONFIG_NAME = "renamer.toml"
+  DEFAULT_CONFIG_PATH = ".config/renamer/"
+  DEFAULT_CONFIG_TEXT =
+    `title = "Basic Conf"                     ` + NL +
+    `[profiles]                               ` + NL +
+    `  [profiles.lcase-txt]                   ` + NL +
+    `    name = "LowerCase"                   ` + NL +
+    `    [profiles.lcase-txt.profile_rule]    ` + NL +
+    `      word_separators = " ()"            ` + NL +
+    `      delete_chars    = ""               ` + NL +
+    `      small_gap_mark  = "-"              ` + NL +
+    `      big_gap_mark    = "_"              ` + NL +
+    `      conversions     = "cAa"            ` + NL +
+    `      modes_string    = ""               ` + NL +
+    `  [profiles.prettify-txt]                ` + NL +
+    `    name = "SomeProfile"                 ` + NL +
+    `    [profiles.prettify-txt.profile_rule] ` + NL +
+    `      word_separators = " ()"            ` + NL +
+    `      delete_chars    = ""               ` + NL +
+    `      small_gap_mark  = "-"              ` + NL +
+    `      big_gap_mark    = "_"              ` + NL +
+    `      conversions     = "caA"            ` + NL +
+    `      modes_string    = ""               ` + NL +
+    `                                         `
+  CONFIG = ctor.Configurator{
+    ConfigFileName: DEFAULT_CONFIG_NAME,
+    PathToConfig:   DEFAULT_CONFIG_PATH,
+    DefaultConfig:  DEFAULT_CONFIG_TEXT,
+  }
 )
+
+func SetTestRoot(newRoot string) string  {
+  root := CONFIG.Root()
+  CONFIG.SetRoot(newRoot)
+  return root
+}
+
+func SetTestConfig(newRoot, configPath, configName string) string  {
+  CONFIG.PathToConfig = configPath
+  CONFIG.ConfigFileName = configName
+  return SetTestRoot(newRoot)
+}
+
+func ListProfiles() string {
+  rawToml := CONFIG.ReadConfig()
+  var a auto.AutoRenamer
+  a.Parse(rawToml)
+  return a.ListProfiles()
+}
 
 func ConvertByPathList(fs afero.Fs, workDir, conv, input string) string {
   theFs         = fs
@@ -40,10 +89,7 @@ func ConvertByProfile(fs afero.Fs, workDir, configPath, profileName, input strin
   theFs    = fs
   theInput = input
   // open raw content.
-  // TODO: use this here:
-  // c := Configurator{ ... }
-  // c.AutoReadConfig()
-  rawToml := ctor.ReadConfig(configPath)
+  rawToml := CONFIG.AutoReadConfig()
   // parse TOML and apply defined profiles.
   var a auto.AutoRenamer
   a.Parse(rawToml)

@@ -40,6 +40,10 @@ func ManageDir() ManagedDir {
   return md
 }
 
+func (md *ManagedDir) Path() string {
+  return md.path
+}
+
 func (md *ManagedDir) FillFile(path, name, content string) {
   CreateFile(md.path, path, name, content)
 }
