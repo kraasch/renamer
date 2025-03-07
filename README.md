@@ -80,7 +80,7 @@ Set an alias for your common renames in your `~/.bashrc`.
 ```bash
 alias rn_mp3='renamer -i recursive -s all -o apply -c rule -r " ()||-|_|cAa|"'
 alias rn_txt='renamer -i recursive -s all -o apply -c rule -r " ()||-|_|caA|"'
-alias rename='renamer -i recursive -s all -o apply -c editor'
+alias rename='renamer -i dir       -s all -o apply -c editor'
 ```
 
 This is an alternative to setting up a config file with profiles.
