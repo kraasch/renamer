@@ -110,11 +110,7 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
 ## tasks
 
   - renaming: main functionality.
-    - [ ] different ways of renaming.
-      - [X] -edit opens editor
-      - [X] -auto just applies the profile
-      - [ ] -interactive lets user choose a profile for each file or manually edit it
-    - [ ] implement interactive renaming.
+   - [ ] implement interactive renaming.
       - [ ] for each file choose method: edit, profile or apply some scripts.
 
   - renaming: features.
