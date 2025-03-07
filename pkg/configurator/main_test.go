@@ -151,7 +151,6 @@ var suites = []gt.TestSuite{
       // start test.
       CreateFile(full, configName, configContent)
       output := ReadConfig(full + "/" + configName)
-      fmt.Println("TOAST", full)
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.
