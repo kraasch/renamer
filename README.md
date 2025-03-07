@@ -111,15 +111,9 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
 
   - renaming: main functionality.
     - [ ] different ways of renaming.
-      - [ ] -edit opens editor
-      - [ ] -auto just applies the profile
+      - [X] -edit opens editor
+      - [X] -auto just applies the profile
       - [ ] -interactive lets user choose a profile for each file or manually edit it
-    - [ ] implement renaming profiles.
-      - [ ] run `renamer -profile media` to rename media files with specified
-            conversion (named `media`, for renaming music, video, etc).
-      - [ ] default to `renamer -profile default` if no profile is specified.
-    - [ ] implement pure editor version (use native editor, eg vi, emacs)
-      - [ ] run `renamer -edit` to rename with editor.
     - [ ] implement interactive renaming.
       - [ ] for each file choose method: edit, profile or apply some scripts.
 
@@ -177,6 +171,13 @@ Done:
     - [X] allow a `-action` flag to specify how to apply a name change (profile/editor)
       - [X] have a `-action=validate` flag which in conjunction with `-profile` checks if any file breaks the profile, but doesn't apply the profile.
       - [X] default to `-action=apply` flag which applies the renaming rules specified in profile.
+  - renaming: main functionality.
+    - [X] implement renaming profiles.
+      - [X] run `renamer -profile media` to rename media files with specified
+            conversion (named `media`, for renaming music, video, etc).
+      - [X] default to `renamer -profile default` if no profile is specified.
+    - [X] implement pure editor version (use native editor, eg vi, emacs)
+      - [X] run `renamer -edit` to rename with editor.
 
 ## word of caution
 
