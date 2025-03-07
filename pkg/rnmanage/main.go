@@ -4,11 +4,11 @@ package rnmanage
 import (
   // local packages.
   auto "github.com/kraasch/renamer/pkg/autorn"
-  ctor "github.com/kraasch/renamer/pkg/configurator"
   fsmg "github.com/kraasch/renamer/pkg/fsmanage"
 
   // external packages.
   "github.com/spf13/afero"
+  ctor "github.com/kraasch/goconf/pkg/configurator"
 
   // standard packages.
   "bytes"

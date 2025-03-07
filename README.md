@@ -134,12 +134,6 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
     - [ ] test colliding renames: `(a->c,b->c)`
           should not delete anything, should not execute.
 
-  - misc:
-    - [ ] create my own config manager at https://github.com/kraasch/goconf
-      - [ ] check if config file exists.
-      - [ ] if it doesn't create default config.
-      - [ ] if it does exist read it's content to text blob.
-
 Maybe:
 
   - [ ] Allow separator for rule strings `renamer -rule " ();;-;_;caA;" -separator=";" ...` for a different separator than a pipe.
@@ -149,6 +143,10 @@ Done:
   - misc.
     - [X] use this to parse toml config: https://github.com/BurntSushi/toml/tree/master
     - [X] use this for filesystem mocks: https://github.com/spf13/afero
+    - [X] create my own config manager at https://github.com/kraasch/goconf
+      - [X] check if config file exists.
+      - [X] if it doesn't create default config.
+      - [X] if it does exist read it's content to text blob.
   - input: main functionality.
     - [X] get file list from pipe, ie allow these inputs:
       - [X] `ls | grep -E 'mp3$' | renamer -edit`
