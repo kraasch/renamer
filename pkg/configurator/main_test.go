@@ -73,7 +73,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "configurator_basic-test_00",
+        TestName: "configurator_auto-test_00",
         IsMulti:  true,
         InputArr: []string{
           ".config/renamer/", // config path.
@@ -122,7 +122,7 @@ var suites = []gt.TestSuite{
     Tests:
     []gt.TestList{
       {
-        TestName: "configurator_basic-test_00",
+        TestName: "configurator_complex-test_00",
         IsMulti:  true,
         InputArr: []string{
           ".config/renamer/", // config path.
