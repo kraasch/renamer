@@ -32,14 +32,15 @@ import (
 //              targetDir = STRING
 var args struct {
   Verbose        bool   `arg:"-v"`
-	InputMode      string `arg:"-i,required"`
-	ConversionMode string `arg:"-c,required"`
-	OutputMode     string `arg:"-o,required"`
+	InputMode      string `arg:"-i"`
+	ConversionMode string `arg:"-c"`
+	OutputMode     string `arg:"-o"`
   SelectionMode  string `arg:"-s"`
   RuleString     string `arg:"-r"`
   ProfileName    string `arg:"-p"`
 	ConfigPath     string `arg:"-C"`
 	TargetDir      string `arg:"-t"`
+  ListProfiles   bool   `arg:"-l"`
 }
 
 var (
@@ -106,6 +107,17 @@ func main() {
 
   // parse flags.
   p := arg.MustParse(&args)
+
+  // list.
+  if args.ListProfiles && ( args.InputMode      != "" || args.ConversionMode != "" || args.OutputMode     != "" || args.SelectionMode  != "" || args.RuleString     != "" || args.ProfileName    != "" || args.ConfigPath     != "" || args.TargetDir      != "") {
+    p.Fail("ListProfiles -l must be the only argument.")
+  }
+  // list profiles.
+  if args.ListProfiles {
+    fmt.Println(rnm.ListProfiles())
+    return
+  }
+
   // input.
   if args.InputMode != "pipe" && args.InputMode != "dir" && args.InputMode != "recursive" {
     p.Fail("InputMode must be one of -i {pipe,dir,recursive}")
@@ -130,6 +142,7 @@ func main() {
   if args.OutputMode != "apply" && args.OutputMode != "validate" && args.OutputMode != "print" {
     p.Fail("OutputMode must be one of -o {apply,validate,print}")
   }
+
 
   // read input.
   input := ""
