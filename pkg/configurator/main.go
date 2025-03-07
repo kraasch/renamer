@@ -5,6 +5,7 @@ import (
   "os"
   "path/filepath"
   "strings"
+  "errors"
 )
 
 const (
@@ -12,8 +13,52 @@ const (
   FILEPERM = 0644
 )
 
+var (
+  root = "~" // TODO: read the home directory from operating system.
+)
+
+type Configurator struct {
+  ConfigFileName string
+  PathToConfig   string
+  DefaultConfig  string
+}
+
+func (c *Configurator) AutoReadConfig() string {
+  if !c.ExistsDefaultConfig() {
+    c.CreateDefaultConfig()
+  }
+  return c.ReadConfig()
+}
+
+func (c *Configurator) SetRoot(path string) {
+  root = path
+}
+
+func (c *Configurator) ExistsDefaultConfig() bool {
+  return FileExists(root + "/" + c.PathToConfig)
+}
+
+func (c *Configurator) CreateDefaultConfig() { // TODO: return error.
+  CreateFile(root + "/" + c.PathToConfig, c.ConfigFileName, c.DefaultConfig)
+}
+
+func (c *Configurator) ReadConfig() string {
+  return ReadConfig(root + "/" + c.PathToConfig)
+}
+
 func PathToDefaultConfig() string {
   return "Have to implement" // TODO: test and implement.
+}
+
+func FileExists(path string) bool {
+  if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+    return false
+  } else if err == nil {
+    return true
+  } else {
+    // TODO: return error.
+    return false
+  }
 }
 
 func ReadConfig(configPath string) string {

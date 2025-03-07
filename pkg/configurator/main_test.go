@@ -15,6 +15,19 @@ import (
 
 var (
   NL = fmt.Sprintln()
+  BASIC_CONF =
+    `title = "Basic Conf"                     ` + NL +
+    `[profiles]                               ` + NL +
+    `  [profiles.prettify-txt]                ` + NL +
+    `    name = "SomeProfile"                 ` + NL +
+    `    [profiles.prettify-txt.profile_rule] ` + NL +
+    `      word_separators = " ()"            ` + NL +
+    `      delete_chars    = ""               ` + NL +
+    `      small_gap_mark  = "-"              ` + NL +
+    `      big_gap_mark    = "_"              ` + NL +
+    `      conversions     = "caA"            ` + NL +
+    `      modes_string    = ""               ` + NL +
+    `                                         `
 )
 
 func TestAll(t *testing.T) {
@@ -33,6 +46,96 @@ func TestAll(t *testing.T) {
 var suites = []gt.TestSuite{
 
   /*
+  * Test AutoReadConfig().
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      // set test variables.
+      configPath    := in.InputArr[0]
+      configName    := in.InputArr[1]
+      configContent := in.InputArr[2]
+      // run test setup.
+      path := tu.MakeEmptyRealTestFs()
+      // start test.
+      c := Configurator{
+        ConfigFileName: configName,
+        PathToConfig:   configPath,
+        DefaultConfig:  configContent,
+      }
+      c.SetRoot(path)
+      output := c.AutoReadConfig()
+      // clean up test setup.
+      tu.CleanUpRealTestFs(path)
+      // return.
+      return output
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "configurator_basic-test_00",
+        IsMulti:  true,
+        InputArr: []string{
+          ".config/renamer/", // config path.
+          "renamer.toml",     // config name.
+          BASIC_CONF,         // config content.
+        },
+        ExpectedValue:
+          BASIC_CONF,
+      },
+    },
+  },
+
+  /*
+  * Test configurator:
+  *  - Configurator{}
+  *  - SetRoot()
+  *  - ExistsDefaultConfig()
+  *  - CreateDefaultConfig()
+  *  - ReadConfig()
+  */
+  {
+    TestingFunction:
+    func(t *testing.T, in gt.TestList) string {
+      // set test variables.
+      configPath    := in.InputArr[0]
+      configName    := in.InputArr[1]
+      configContent := in.InputArr[2]
+      // run test setup.
+      path := tu.MakeEmptyRealTestFs()
+      // start test.
+      c := Configurator{
+        ConfigFileName: configName,
+        PathToConfig:   configPath,
+        DefaultConfig:  configContent,
+      }
+      c.SetRoot(path)
+      if !c.ExistsDefaultConfig() {
+        c.CreateDefaultConfig()
+      }
+      output := c.ReadConfig()
+      // clean up test setup.
+      tu.CleanUpRealTestFs(path)
+      // return.
+      return output
+    },
+    Tests:
+    []gt.TestList{
+      {
+        TestName: "configurator_basic-test_00",
+        IsMulti:  true,
+        InputArr: []string{
+          ".config/renamer/", // config path.
+          "renamer.toml",     // config name.
+          BASIC_CONF,         // config content.
+        },
+        ExpectedValue:
+          BASIC_CONF,
+      },
+    },
+  },
+
+  /*
   * Test configurator CreateFile(), ReadConfig().
   */
   {
@@ -45,9 +148,10 @@ var suites = []gt.TestSuite{
       // run test setup.
       path := tu.MakeEmptyRealTestFs()
       full := path + "/" + configPath
-      CreateFile(full, configName, configContent)
       // start test.
+      CreateFile(full, configName, configContent)
       output := ReadConfig(full + "/" + configName)
+      fmt.Println("TOAST", full)
       // clean up test setup.
       tu.CleanUpRealTestFs(path)
       // return.
@@ -61,33 +165,10 @@ var suites = []gt.TestSuite{
         InputArr: []string{
           "config",         // config path.
           "general.config", // config name.
-          // config content.
-          `title = "Basic Conf"                     ` + NL +
-          `[profiles]                               ` + NL +
-          `  [profiles.prettify-txt]                ` + NL +
-          `    name = "SomeProfile"                 ` + NL +
-          `    [profiles.prettify-txt.profile_rule] ` + NL +
-          `      word_separators = " ()"            ` + NL +
-          `      delete_chars    = ""               ` + NL +
-          `      small_gap_mark  = "-"              ` + NL +
-          `      big_gap_mark    = "_"              ` + NL +
-          `      conversions     = "caA"            ` + NL +
-          `      modes_string    = ""               ` + NL +
-          `                                         `,
+          BASIC_CONF,       // config content.
         },
         ExpectedValue:
-          `title = "Basic Conf"                     ` + NL +
-          `[profiles]                               ` + NL +
-          `  [profiles.prettify-txt]                ` + NL +
-          `    name = "SomeProfile"                 ` + NL +
-          `    [profiles.prettify-txt.profile_rule] ` + NL +
-          `      word_separators = " ()"            ` + NL +
-          `      delete_chars    = ""               ` + NL +
-          `      small_gap_mark  = "-"              ` + NL +
-          `      big_gap_mark    = "_"              ` + NL +
-          `      conversions     = "caA"            ` + NL +
-          `      modes_string    = ""               ` + NL +
-          `                                         `,
+          BASIC_CONF,
       },
     },
   },
