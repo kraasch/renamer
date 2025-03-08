@@ -190,13 +190,14 @@ func main() {
     )
   case "interactive":
     fmt.Println("Convert interactively")
-    conversion = StartInteractiveGui(fs, input)
-    rnm.ConvertByPathList(
-      fs,
-      args.TargetDir,
-      conversion,
-      input,
-    )
+    // TODO: implement interactive TUI.
+    StartInteractiveGui(fs, input)
+    // rnm.ConvertByPathList(
+    //   fs,
+    //   args.TargetDir,
+    //   conversion,
+    //   input,
+    // )
   }
 
   // give output.
