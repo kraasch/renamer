@@ -108,6 +108,8 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
 
 ## tasks
 
+  - features.
+    - [ ] give the choice to exclude (or include) hidden files (prefixed with `.` or `_`).
   - renaming: main functionality.
     - [ ] implement interactive renaming.
       - [ ] for each file choose method: edit, profile or apply some scripts.
