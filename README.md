@@ -33,7 +33,7 @@ Different ways to use `renamer`:
     - [X] dir: list directory (like `ls`)
     - [X] recursive: search directory tree (like `find`)
     - [X] pipe: pipe in the input.
-  - input:
+  - renaming:
     - [X] rule: provide a rule string.
     - [X] editor: edit the input yourself.
     - [X] config+profile: provide a configuration file with renaming profiles.
@@ -108,6 +108,9 @@ In the below tree, the `pkg` tree is loosely representing the packages' dependen
 
 ## tasks
 
+  - next.
+    - [ ] implement some pipe tests, to make sure renamer doesn't delete anything.
+      - meaning: in a directory with files a, b and c with `ls a b | renamer ...` only a and b get renamed.
   - features.
     - [ ] give the choice to exclude (or include) hidden files (prefixed with `.` or `_`).
   - renaming: main functionality.
