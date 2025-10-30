@@ -182,6 +182,69 @@ Done:
     - [X] implement pure editor version (use native editor, eg vi, emacs)
       - [X] run `renamer -edit` to rename with editor.
 
+## goal
+
+Replace bash scripts like this one:
+
+```bash
+function myUmlautRemove() {
+  sed 's/ä/ae/g' |
+    sed 's/ö/oe/g' |
+    sed 's/ü/ue/g' |
+    sed 's/ß/ss/g' |
+    sed 's/Ä/Ae/g' |
+    sed 's/Ö/Oe/g' |
+    sed 's/Ü/Ue/g' |
+    sed 's/ß/SS/g'
+}
+
+function mytoxfreename() {
+  sed 's/[^\.[:alnum:]]/-/g' |         # remove all non-alphanumeric characters (except dots) by replacing with hyphens .
+    sed 's/[(\[\]){}]/-/g' |           # replace all kinds of brackets with spaces .
+    sed 's/--[-]*/_/g' |               # remove all groups of hyphens by replacing with underscores .
+    sed 's/^[-]*//g' |                 # remove hyphens from the beginning of file names .
+    sed 's/[^[:alnum:]]\././g' |       # remove non-alphanumeric character next to dots (if there is any, eg one hyphen left to one dot) .
+    myUmlautRemove |                   # remove Ä, ä, Ö, ö, Ü, ü and ß .
+    iconv -f utf8 -t ascii//TRANSLIT | # remove diacritica .
+    tr 'A-Z' 'a-z'                     # make lower case .
+}
+
+function myDateIt() {
+  echo "Dating file '"$(ls -lasdh $1)"'."
+  # read parameter from command line with '$1' .
+  newname=$(mydate)_$1
+  # mv option '-n' prevents overwriting existing files; '-v' returns string with non-zero length on success.
+  success=$(mv -nv $1 $newname)
+  # test option '-n' tests for strings to be of non-zero length .
+  if $(test -n "$success"); then
+    echo "$success"
+    echo "Now at '"$(ls -lasdh $newname)"'."
+  else
+    echo "Dating failed (check if target file already exists: '$newname')"
+  fi
+}
+
+function mytoxremove() {
+  for x in *; do
+    newName=$(echo $x | mytoxfreename)
+    mv -vib "$x" "$newName"
+    myDateIt "$newName"
+  done
+}
+
+mytoxremove
+
+for x in *-by-*; do
+  mv "$x" "$(echo $x |
+    sed 's/\+/-/g' |
+    sed 's/\([^_]*\)_\(.*\)-by-\([^\.]*\).\(.*\)$/\1+\3+\2.\4/' |
+    tr '_' '-' |
+    tr '+' '_' |
+    sed 's/-_/_/g' |
+    sed 's/_-/_/g')"
+done
+```
+
 ## word of caution
 
 This is work in progress.
