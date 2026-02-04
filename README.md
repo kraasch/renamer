@@ -184,7 +184,7 @@ Done:
 
 ## goal
 
-Replace bash scripts like this one:
+Replace bash scripts like these below.
 
 ```bash
 function myUmlautRemove() {
@@ -232,17 +232,18 @@ function mytoxremove() {
   done
 }
 
-mytoxremove
+function make_names_nice() {
+  for x in *-by-*; do
+    mv "$x" "$(echo $x |
+      sed 's/\+/-/g' |
+      sed 's/\([^_]*\)_\(.*\)-by-\([^\.]*\).\(.*\)$/\1+\3+\2.\4/' |
+      tr '_' '-' |
+      tr '+' '_' |
+      sed 's/-_/_/g' |
+      sed 's/_-/_/g')"
+      done
+}
 
-for x in *-by-*; do
-  mv "$x" "$(echo $x |
-    sed 's/\+/-/g' |
-    sed 's/\([^_]*\)_\(.*\)-by-\([^\.]*\).\(.*\)$/\1+\3+\2.\4/' |
-    tr '_' '-' |
-    tr '+' '_' |
-    sed 's/-_/_/g' |
-    sed 's/_-/_/g')"
-done
 ```
 
 ## word of caution
