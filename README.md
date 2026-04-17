@@ -7,6 +7,14 @@
   <img src="./resources/demo.gif" />
 </p>
 
+## install 
+
+Install by running the following.
+
+```bash
+go install github.com/kraasch/renamer/cmd/renamer@latest
+```
+
 ## features
 
 Rename files with renaming rule string (search files)
